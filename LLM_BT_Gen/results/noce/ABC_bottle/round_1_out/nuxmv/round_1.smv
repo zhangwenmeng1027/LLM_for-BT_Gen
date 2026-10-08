@@ -1,0 +1,187 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.atPosA.status = success) | (system.atPosA.status = failure)));
+LTLSPEC G(((system.atPosA.status = failure) -> X(((system.atPosB.status = success) | (system.atPosB.status = failure)))));
+LTLSPEC G(((system.atPosB.status = success) -> X(((system.empty.status = success) | (system.empty.status = failure)))));
+LTLSPEC G(((system.empty.status = success) -> X(((system.pickUp.status = success) | (system.pickUp.status = failure) | (system.pickUp.status = running)))));
+LTLSPEC G(((system.atPosC.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.atKitchen.status = success) -> X(((system.locateBottle.status = success) | (system.locateBottle.status = failure) | (system.locateBottle.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        atPosA : atPosA_module(atPosA_v_stage_0);
+        atPosB : atPosB_module(atPosB_v_stage_0);
+        c2 : composite_selector_without_memory_2(atPosA, atPosB);
+        empty : empty_module(empty_v_stage_0);
+        pickUp : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_3(c2, empty, pickUp);
+        atPosC : atPosC_module(atPosC_v_stage_0);
+        doTaskA : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_2(atPosC, doTaskA);
+        atKitchen : atKitchen_module(atKitchen_v_stage_0);
+        locateBottle : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_2(atKitchen, locateBottle);
+        c0 : composite_selector_without_memory_3(c1, c3, c4);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        atPosA_v_stage_0 : boolean;
+        atPosB_v_stage_0 : boolean;
+        empty_v_stage_0 : boolean;
+        atPosC_v_stage_0 : boolean;
+        atKitchen_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(atPosA_v_stage_0) := {TRUE, FALSE};
+        init(atPosB_v_stage_0) := {TRUE, FALSE};
+        init(empty_v_stage_0) := {TRUE, FALSE};
+        init(atPosC_v_stage_0) := {TRUE, FALSE};
+        init(atKitchen_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(atPosA_v_stage_0) :=
+            case
+                !(c0.active) : atPosA_v_stage_0;
+                TRUE : atPosA_v_stage_0;
+            esac;
+        next(atPosB_v_stage_0) :=
+            case
+                !(c0.active) : atPosB_v_stage_0;
+                TRUE : atPosB_v_stage_0;
+            esac;
+        next(empty_v_stage_0) :=
+            case
+                !(c0.active) : empty_v_stage_0;
+                TRUE : empty_v_stage_0;
+            esac;
+        next(atPosC_v_stage_0) :=
+            case
+                !(c0.active) : atPosC_v_stage_0;
+                TRUE : atPosC_v_stage_0;
+            esac;
+        next(atKitchen_v_stage_0) :=
+            case
+                !(c0.active) : atKitchen_v_stage_0;
+                TRUE : atKitchen_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        c2 := 2;
+        atPosA := 3;
+        atPosB := 4;
+        empty := 5;
+        pickUp := 6;
+        c3 := 7;
+        atPosC := 8;
+        doTaskA := 9;
+        c4 := 10;
+        atKitchen := 11;
+        locateBottle := 12;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE atPosA_module(atPosA_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosA_v_stage_0) ? success : failure;
+MODULE atPosB_module(atPosB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosB_v_stage_0) ? success : failure;
+MODULE empty_module(empty_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (empty_v_stage_0) ? success : failure;
+MODULE atPosC_module(atPosC_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosC_v_stage_0) ? success : failure;
+MODULE atKitchen_module(atKitchen_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atKitchen_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

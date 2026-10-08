@@ -1,0 +1,66 @@
+configuration {} enumerations {} constants {}
+variables {
+}
+environment_update {
+}
+checks {}
+environment_checks {
+}
+actions {
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskE
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskD
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            doTaskA {}
+        composite {
+            c1 selector
+            children {
+            composite {
+                c2 sequence
+                children {
+                    doTaskB {}
+                    doTaskC {}
+                }
+            }
+            composite {
+                c3 selector
+                children {
+                    doTaskE {}
+                    doTaskD {}
+                }
+            }
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskB), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))}
+    LTLSPEC {(globally, (implies, (failure, doTaskB), (next, (or, (success, doTaskE), (failure, doTaskE), (running, doTaskE)))))}
+    LTLSPEC {(globally, (implies, (failure, doTaskE), (next, (or, (success, doTaskD), (failure, doTaskD), (running, doTaskD)))))}
+}

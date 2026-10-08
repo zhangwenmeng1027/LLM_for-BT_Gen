@@ -1,0 +1,238 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.placedB.status = success) | (system.placedB.status = failure)));
+LTLSPEC G(((system.placedB.status = success) -> X(((system.placedB.status = success) | (system.placedB.status = failure)))));
+LTLSPEC G(((system.placedB.status = failure) -> X(((system.empty.status = success) | (system.empty.status = failure)))));
+LTLSPEC G(((system.empty.status = success) -> X(((system.atPosA.status = success) | (system.atPosA.status = failure)))));
+LTLSPEC G(((system.empty.status = failure) -> X(((system.placedB.status = success) | (system.placedB.status = failure)))));
+LTLSPEC G(((system.atPosA.status = success) -> X(((system.picked.status = success) | (system.picked.status = failure)))));
+LTLSPEC G(((system.atPosA.status = failure) -> X(((system.noCollision.status = success) | (system.noCollision.status = failure)))));
+LTLSPEC G(((system.noCollision.status = success) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.noCollision.status = failure) -> X(((system.placedB.status = success) | (system.placedB.status = failure)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.pickUp.status = success) | (system.pickUp.status = failure) | (system.pickUp.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.picked.status = success) | (system.picked.status = failure)))));
+LTLSPEC G(((system.picked.status = success) -> X(((system.atPosB.status = success) | (system.atPosB.status = failure)))));
+LTLSPEC G(((system.picked.status = failure) -> X(((system.placedB.status = success) | (system.placedB.status = failure)))));
+LTLSPEC G(((system.atPosB.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.atPosB.status = failure) -> X(((system.noCollision_2.status = success) | (system.noCollision_2.status = failure)))));
+LTLSPEC G(((system.noCollision_2.status = success) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.noCollision_2.status = failure) -> X(((system.placedB.status = success) | (system.placedB.status = failure)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.putDown.status = success) -> X(((system.placedB.status = success) | (system.placedB.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        placedB : placedB_module(placedB_v_stage_0);
+        empty : empty_module(empty_v_stage_0);
+        atPosA : atPosA_module(atPosA_v_stage_0);
+        noCollision : noCollision_module(noCollision_v_stage_0);
+        goToPosA : success_DEFAULT_module();
+        pickUp : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_3(noCollision, goToPosA, pickUp);
+        c2 : composite_selector_without_memory_2(atPosA, c3);
+        picked : picked_module(picked_v_stage_0);
+        atPosB : atPosB_module(atPosB_v_stage_0);
+        noCollision_2 : noCollision_2_module(noCollision_2_v_stage_0);
+        goToPosB : success_DEFAULT_module();
+        c5 : composite_sequence_without_memory_2(noCollision_2, goToPosB);
+        c4 : composite_selector_without_memory_2(atPosB, c5);
+        putDown : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_5(empty, c2, picked, c4, putDown);
+        c0 : composite_selector_without_memory_2(placedB, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        placedB_v_stage_0 : boolean;
+        empty_v_stage_0 : boolean;
+        atPosA_v_stage_0 : boolean;
+        picked_v_stage_0 : boolean;
+        noCollision_v_stage_0 : boolean;
+        noCollision_2_v_stage_0 : boolean;
+        atPosB_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(placedB_v_stage_0) := {TRUE, FALSE};
+        init(empty_v_stage_0) := {TRUE, FALSE};
+        init(atPosA_v_stage_0) := {TRUE, FALSE};
+        init(picked_v_stage_0) := {TRUE, FALSE};
+        init(noCollision_v_stage_0) := {TRUE, FALSE};
+        init(noCollision_2_v_stage_0) := {TRUE, FALSE};
+        init(atPosB_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(placedB_v_stage_0) :=
+            case
+                !(c0.active) : placedB_v_stage_0;
+                TRUE : placedB_v_stage_0;
+            esac;
+        next(empty_v_stage_0) :=
+            case
+                !(c0.active) : empty_v_stage_0;
+                TRUE : empty_v_stage_0;
+            esac;
+        next(atPosA_v_stage_0) :=
+            case
+                !(c0.active) : atPosA_v_stage_0;
+                TRUE : atPosA_v_stage_0;
+            esac;
+        next(picked_v_stage_0) :=
+            case
+                !(c0.active) : picked_v_stage_0;
+                TRUE : picked_v_stage_0;
+            esac;
+        next(noCollision_v_stage_0) :=
+            case
+                !(c0.active) : noCollision_v_stage_0;
+                TRUE : noCollision_v_stage_0;
+            esac;
+        next(noCollision_2_v_stage_0) :=
+            case
+                !(c0.active) : noCollision_2_v_stage_0;
+                TRUE : noCollision_2_v_stage_0;
+            esac;
+        next(atPosB_v_stage_0) :=
+            case
+                !(c0.active) : atPosB_v_stage_0;
+                TRUE : atPosB_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        placedB := 1;
+        c1 := 2;
+        empty := 3;
+        c2 := 4;
+        atPosA := 5;
+        c3 := 6;
+        noCollision := 7;
+        goToPosA := 8;
+        pickUp := 9;
+        picked := 10;
+        c4 := 11;
+        atPosB := 12;
+        c5 := 13;
+        noCollision_2 := 14;
+        goToPosB := 15;
+        putDown := 16;
+MODULE composite_sequence_without_memory_5(child_0, child_1, child_2, child_3, child_4)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE placedB_module(placedB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (placedB_v_stage_0) ? success : failure;
+MODULE empty_module(empty_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (empty_v_stage_0) ? success : failure;
+MODULE atPosA_module(atPosA_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosA_v_stage_0) ? success : failure;
+MODULE noCollision_module(noCollision_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (noCollision_v_stage_0) ? success : failure;
+MODULE picked_module(picked_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (picked_v_stage_0) ? success : failure;
+MODULE atPosB_module(atPosB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosB_v_stage_0) ? success : failure;
+MODULE noCollision_2_module(noCollision_2_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (noCollision_2_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

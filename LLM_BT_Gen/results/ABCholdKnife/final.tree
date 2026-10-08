@@ -1,0 +1,59 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env holdKnife_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ holdKnife_v assign{result{holdKnife_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { holdKnife arguments {} read_variables {holdKnife_v} condition{holdKnife_v} }
+}
+actions {
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToKitchen
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            composite {
+                c1 selector
+                children {
+                    doTaskA {}
+                    doTaskB {}
+                }
+            }
+            goToKitchen {}
+            composite {
+                c2 sequence
+                children {
+                    holdKnife {}
+                    doTaskC {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(globally, (implies, (failure, doTaskA), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))}
+    LTLSPEC {(globally, (implies, (success, goToKitchen), (next, (or, (success, holdKnife), (failure, holdKnife)))))}
+    LTLSPEC {(globally, (implies, (success, holdKnife), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))}
+}

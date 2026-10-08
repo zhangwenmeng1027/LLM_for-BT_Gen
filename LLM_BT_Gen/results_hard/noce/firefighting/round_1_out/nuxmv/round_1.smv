@@ -1,0 +1,117 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)));
+LTLSPEC G(((system.hasVictim.status = success) -> X(((system.saveVictim.status = success) | (system.saveVictim.status = failure) | (system.saveVictim.status = running)))));
+LTLSPEC G(((system.hasVictim.status = failure) -> X(((system.hasFire.status = success) | (system.hasFire.status = failure)))));
+LTLSPEC G(((system.saveVictim.status = success) -> X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)))));
+LTLSPEC G(((system.hasFire.status = success) -> X(((system.useExtinguisher.status = success) | (system.useExtinguisher.status = failure) | (system.useExtinguisher.status = running)))));
+LTLSPEC G(((system.hasFire.status = failure) -> X(((system.moveToOtherRoom.status = success) | (system.moveToOtherRoom.status = failure) | (system.moveToOtherRoom.status = running)))));
+LTLSPEC G(((system.useExtinguisher.status = success) -> X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)))));
+LTLSPEC G(((system.moveToOtherRoom.status = success) -> X(((system.Rescue.status = success) | (system.Rescue.status = failure) | (system.Rescue.status = running)))));
+LTLSPEC G(((system.Rescue.status = success) -> X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        hasVictim : hasVictim_module(hasVictim_v_stage_0);
+        saveVictim : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_2(hasVictim, saveVictim);
+        hasFire : hasFire_module(hasFire_v_stage_0);
+        useExtinguisher : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(hasFire, useExtinguisher);
+        moveToOtherRoom : success_DEFAULT_module();
+        Rescue : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_2(moveToOtherRoom, Rescue);
+        c0 : composite_selector_without_memory_3(c1, c2, c3);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        hasVictim_v_stage_0 : boolean;
+        hasFire_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(hasVictim_v_stage_0) := {TRUE, FALSE};
+        init(hasFire_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(hasVictim_v_stage_0) :=
+            case
+                !(c0.active) : hasVictim_v_stage_0;
+                TRUE : hasVictim_v_stage_0;
+            esac;
+        next(hasFire_v_stage_0) :=
+            case
+                !(c0.active) : hasFire_v_stage_0;
+                TRUE : hasFire_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        hasVictim := 2;
+        saveVictim := 3;
+        c2 := 4;
+        hasFire := 5;
+        useExtinguisher := 6;
+        c3 := 7;
+        moveToOtherRoom := 8;
+        Rescue := 9;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE hasVictim_module(hasVictim_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasVictim_v_stage_0) ? success : failure;
+MODULE hasFire_module(hasFire_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasFire_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

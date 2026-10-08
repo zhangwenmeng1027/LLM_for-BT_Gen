@@ -1,0 +1,114 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)));
+LTLSPEC G(((system.lowBattery.status = success) -> X(((system.unfoldPanels.status = success) | (system.unfoldPanels.status = failure) | (system.unfoldPanels.status = running)))));
+LTLSPEC G(((system.lowBattery.status = failure) -> X(((system.storm.status = success) | (system.storm.status = failure)))));
+LTLSPEC G(((system.storm.status = success) -> X(((system.foldPanels.status = success) | (system.foldPanels.status = failure) | (system.foldPanels.status = running)))));
+LTLSPEC G(((system.storm.status = failure) -> X(((system.getData.status = success) | (system.getData.status = failure) | (system.getData.status = running)))));
+LTLSPEC G(((system.getData.status = success) -> X(((system.send.status = success) | (system.send.status = failure) | (system.send.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        lowBattery : lowBattery_module(lowBattery_v_stage_0);
+        unfoldPanels : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_2(lowBattery, unfoldPanels);
+        storm : storm_module(storm_v_stage_0);
+        foldPanels : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_2(storm, foldPanels);
+        getData : success_DEFAULT_module();
+        send : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_2(getData, send);
+        c2 : composite_selector_without_memory_2(c3, c4);
+        c0 : composite_selector_without_memory_2(c1, c2);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        lowBattery_v_stage_0 : boolean;
+        storm_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(lowBattery_v_stage_0) := {TRUE, FALSE};
+        init(storm_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(lowBattery_v_stage_0) :=
+            case
+                !(c0.active) : lowBattery_v_stage_0;
+                TRUE : lowBattery_v_stage_0;
+            esac;
+        next(storm_v_stage_0) :=
+            case
+                !(c0.active) : storm_v_stage_0;
+                TRUE : storm_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        lowBattery := 2;
+        unfoldPanels := 3;
+        c2 := 4;
+        c3 := 5;
+        storm := 6;
+        foldPanels := 7;
+        c4 := 8;
+        getData := 9;
+        send := 10;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE lowBattery_module(lowBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (lowBattery_v_stage_0) ? success : failure;
+MODULE storm_module(storm_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (storm_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

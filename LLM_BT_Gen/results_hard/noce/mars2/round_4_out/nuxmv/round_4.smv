@@ -1,0 +1,185 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.haveData.status = success) | (system.haveData.status = failure)));
+LTLSPEC G(((system.haveData.status = success) -> X(((system.haveData.status = success) | (system.haveData.status = failure)))));
+LTLSPEC G(((system.hasSample.status = success) -> X(((system.analyze.status = success) | (system.analyze.status = failure) | (system.analyze.status = running)))));
+LTLSPEC G(((system.hasSample.status = failure) -> X(((system.holdItem.status = success) | (system.holdItem.status = failure)))));
+LTLSPEC G(((system.analyze.status = success) -> X(((system.haveData.status = success) | (system.haveData.status = failure)))));
+LTLSPEC G(((system.holdItem.status = success) -> X(((system.atStation.status = success) | (system.atStation.status = failure)))));
+LTLSPEC G(((system.holdItem.status = failure) -> X(((system.pickUp.status = success) | (system.pickUp.status = failure) | (system.pickUp.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.atStation.status = success) | (system.atStation.status = failure)))));
+LTLSPEC G(((system.atStation.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.atStation.status = failure) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.putDown.status = success) -> X(((system.analyze_2.status = success) | (system.analyze_2.status = failure) | (system.analyze_2.status = running)))));
+LTLSPEC G(((system.analyze_2.status = success) -> X(((system.haveData.status = success) | (system.haveData.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        haveData : haveData_module(hasData_v_stage_0);
+        hasSample : hasSample_module(hasSample_v_stage_0);
+        analyze : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_2(hasSample, analyze);
+        holdItem : holdItem_module(holdItem_v_stage_0);
+        pickUp : success_DEFAULT_module();
+        c3 : composite_selector_without_memory_2(holdItem, pickUp);
+        atStation : atStation_module(atStation_v_stage_0);
+        goToStation : success_DEFAULT_module();
+        c4 : composite_selector_without_memory_2(atStation, goToStation);
+        putDown : success_DEFAULT_module();
+        analyze_2 : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_4(c3, c4, putDown, analyze_2);
+        c0 : composite_selector_without_memory_3(haveData, c1, c2);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        hasData_v_stage_0 : boolean;
+        hasSample_v_stage_0 : boolean;
+        holdItem_v_stage_0 : boolean;
+        atStation_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(hasData_v_stage_0) := {TRUE, FALSE};
+        init(hasSample_v_stage_0) := {TRUE, FALSE};
+        init(holdItem_v_stage_0) := {TRUE, FALSE};
+        init(atStation_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(hasData_v_stage_0) :=
+            case
+                !(c0.active) : hasData_v_stage_0;
+                TRUE : hasData_v_stage_0;
+            esac;
+        next(hasSample_v_stage_0) :=
+            case
+                !(c0.active) : hasSample_v_stage_0;
+                TRUE : hasSample_v_stage_0;
+            esac;
+        next(holdItem_v_stage_0) :=
+            case
+                !(c0.active) : holdItem_v_stage_0;
+                TRUE : holdItem_v_stage_0;
+            esac;
+        next(atStation_v_stage_0) :=
+            case
+                !(c0.active) : atStation_v_stage_0;
+                TRUE : atStation_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        haveData := 1;
+        c1 := 2;
+        hasSample := 3;
+        analyze := 4;
+        c2 := 5;
+        c3 := 6;
+        holdItem := 7;
+        pickUp := 8;
+        c4 := 9;
+        atStation := 10;
+        goToStation := 11;
+        putDown := 12;
+        analyze_2 := 13;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE haveData_module(hasData_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasData_v_stage_0) ? success : failure;
+MODULE hasSample_module(hasSample_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasSample_v_stage_0) ? success : failure;
+MODULE holdItem_module(holdItem_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (holdItem_v_stage_0) ? success : failure;
+MODULE atStation_module(atStation_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atStation_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

@@ -1,0 +1,135 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.roomKnown.status = success) | (system.roomKnown.status = failure)));
+LTLSPEC G(((system.roomKnown.status = success) -> X(((system.goToRoom.status = success) | (system.goToRoom.status = failure) | (system.goToRoom.status = running)))));
+LTLSPEC G(((system.roomKnown.status = failure) -> X(((system.followHuman.status = success) | (system.followHuman.status = failure) | (system.followHuman.status = running)))));
+LTLSPEC G(((system.goToRoom.status = success) -> X(((system.findBottle.status = success) | (system.findBottle.status = failure) | (system.findBottle.status = running)))));
+LTLSPEC G(((system.findBottle.status = success) -> X(((system.fetchBottle.status = success) | (system.fetchBottle.status = failure) | (system.fetchBottle.status = running)))));
+LTLSPEC G(((system.fetchBottle.status = success) -> X(((system.findGlass.status = success) | (system.findGlass.status = failure) | (system.findGlass.status = running)))));
+LTLSPEC G(((system.findGlass.status = success) -> X(((system.fetchGlass.status = success) | (system.fetchGlass.status = failure) | (system.fetchGlass.status = running)))));
+LTLSPEC G(((system.fetchGlass.status = success) -> X(((system.pourDrink.status = success) | (system.pourDrink.status = failure) | (system.pourDrink.status = running)))));
+LTLSPEC G(((system.fetchGlass.status = failure) -> X(((system.askHelp.status = success) | (system.askHelp.status = failure) | (system.askHelp.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        roomKnown : roomKnown_module(roomKnown_v_stage_0);
+        goToRoom : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_2(roomKnown, goToRoom);
+        followHuman : success_DEFAULT_module();
+        c2 : composite_selector_without_memory_2(c3, followHuman);
+        findBottle : success_DEFAULT_module();
+        fetchBottle : success_DEFAULT_module();
+        findGlass : success_DEFAULT_module();
+        fetchGlass : success_DEFAULT_module();
+        pourDrink : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_5(findBottle, fetchBottle, findGlass, fetchGlass, pourDrink);
+        c1 : composite_sequence_without_memory_2(c2, c4);
+        askHelp : _DEFAULT_module();
+        c0 : composite_selector_without_memory_2(c1, askHelp);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        roomKnown_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(roomKnown_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(roomKnown_v_stage_0) :=
+            case
+                !(c0.active) : roomKnown_v_stage_0;
+                TRUE : roomKnown_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        c2 := 2;
+        c3 := 3;
+        roomKnown := 4;
+        goToRoom := 5;
+        followHuman := 6;
+        c4 := 7;
+        findBottle := 8;
+        fetchBottle := 9;
+        findGlass := 10;
+        fetchGlass := 11;
+        pourDrink := 12;
+        askHelp := 13;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_5(child_0, child_1, child_2, child_3, child_4)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+MODULE roomKnown_module(roomKnown_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (roomKnown_v_stage_0) ? success : failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

@@ -1,0 +1,365 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.lowBattery.status = success | system.lowBattery.status = failure)  is true
+-- specification  G (system.lowBattery.status = success ->  X (system.invValid.status = success | system.invValid.status = failure))  is true
+-- specification  G (system.invValid.status = success ->  X ((system.acceptInput.status = success | system.acceptInput.status = failure) | system.acceptInput.status = running))  is true
+-- specification  G (system.invValid.status = failure ->  X ((system.computInv.status = success | system.computInv.status = failure) | system.computInv.status = running))  is true
+-- specification  G (system.computInv.status = success ->  X ((system.acceptInput.status = success | system.acceptInput.status = failure) | system.acceptInput.status = running))  is true
+-- specification  G (system.acceptInput.status = success ->  X ((system.searchAns.status = success | system.searchAns.status = failure) | system.searchAns.status = running))  is true
+-- specification  G (system.searchAns.status = success ->  X (system.roomKnown.status = success | system.roomKnown.status = failure))  is true
+-- specification  G (system.roomKnown.status = success ->  X ((system.goToRoom.status = success | system.goToRoom.status = failure) | system.goToRoom.status = running))  is true
+-- specification  G (system.goToRoom.status = success ->  X ((system.sleeping.status = success | system.sleeping.status = failure) | system.sleeping.status = running))  is true
+-- specification  G (system.sleeping.status = success ->  X (system.atKitchen.status = success | system.atKitchen.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.lowBattery_v_stage_0 = TRUE
+    system.invValid_v_stage_0 = FALSE
+    system.roomKnown_v_stage_0 = TRUE
+    system.alarm_v_stage_0 = FALSE
+    system.atKitchen_v_stage_0 = FALSE
+    system.holdTools_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.waitCharge = 23
+    system.node_names.useExtinguisher = 22
+    system.node_names.goToKitchen = 21
+    system.node_names.holdTools = 20
+    system.node_names.c8 = 19
+    system.node_names.c7 = 18
+    system.node_names.alarm = 17
+    system.node_names.c6 = 16
+    system.node_names.doTaskA = 15
+    system.node_names.atKitchen = 14
+    system.node_names.c5 = 13
+    system.node_names.sleeping = 12
+    system.node_names.goToRoom = 11
+    system.node_names.roomKnown = 10
+    system.node_names.c4 = 9
+    system.node_names.c3 = 8
+    system.node_names.searchAns = 7
+    system.node_names.acceptInput = 6
+    system.node_names.computInv = 5
+    system.node_names.invValid = 4
+    system.node_names.c2 = 3
+    system.node_names.lowBattery = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.lowBattery.internal_status = success
+    system.lowBattery.status = success
+    system.invValid.internal_status = failure
+    system.invValid.status = failure
+    system.computInv.internal_status = success
+    system.computInv.status = success
+    system.computInv.active = TRUE
+    system.invValid.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.acceptInput.internal_status = success
+    system.acceptInput.status = success
+    system.searchAns.internal_status = success
+    system.searchAns.status = success
+    system.roomKnown.internal_status = success
+    system.roomKnown.status = success
+    system.goToRoom.internal_status = success
+    system.goToRoom.status = success
+    system.sleeping.internal_status = success
+    system.sleeping.status = success
+    system.sleeping.active = TRUE
+    system.goToRoom.active = TRUE
+    system.roomKnown.active = TRUE
+    system.c4.internal_status = success
+    system.c4.status = success
+    system.atKitchen.internal_status = failure
+    system.atKitchen.status = invalid
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = invalid
+    system.doTaskA.active = FALSE
+    system.atKitchen.active = FALSE
+    system.c5.internal_status = failure
+    system.c5.status = invalid
+    system.c5.active = FALSE
+    system.c4.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.searchAns.active = TRUE
+    system.acceptInput.active = TRUE
+    system.c2.active = TRUE
+    system.lowBattery.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.alarm.internal_status = failure
+    system.alarm.status = invalid
+    system.holdTools.internal_status = failure
+    system.holdTools.status = invalid
+    system.goToKitchen.internal_status = success
+    system.goToKitchen.status = invalid
+    system.useExtinguisher.internal_status = success
+    system.useExtinguisher.status = invalid
+    system.useExtinguisher.active = FALSE
+    system.goToKitchen.active = FALSE
+    system.holdTools.active = FALSE
+    system.c8.internal_status = failure
+    system.c8.status = invalid
+    system.waitCharge.internal_status = success
+    system.waitCharge.status = invalid
+    system.waitCharge.active = FALSE
+    system.c8.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.alarm.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.c6.active = FALSE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.atKitchen.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))  is true
+-- specification  G (system.doTaskA.status = success ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.lowBattery.status = failure ->  X (system.alarm.status = success | system.alarm.status = failure))  is true
+-- specification  G (system.roomKnown.status = failure ->  X (system.alarm.status = success | system.alarm.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 2.1 <-
+    system.lowBattery_v_stage_0 = TRUE
+    system.invValid_v_stage_0 = FALSE
+    system.roomKnown_v_stage_0 = FALSE
+    system.alarm_v_stage_0 = FALSE
+    system.atKitchen_v_stage_0 = TRUE
+    system.holdTools_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.waitCharge = 23
+    system.node_names.useExtinguisher = 22
+    system.node_names.goToKitchen = 21
+    system.node_names.holdTools = 20
+    system.node_names.c8 = 19
+    system.node_names.c7 = 18
+    system.node_names.alarm = 17
+    system.node_names.c6 = 16
+    system.node_names.doTaskA = 15
+    system.node_names.atKitchen = 14
+    system.node_names.c5 = 13
+    system.node_names.sleeping = 12
+    system.node_names.goToRoom = 11
+    system.node_names.roomKnown = 10
+    system.node_names.c4 = 9
+    system.node_names.c3 = 8
+    system.node_names.searchAns = 7
+    system.node_names.acceptInput = 6
+    system.node_names.computInv = 5
+    system.node_names.invValid = 4
+    system.node_names.c2 = 3
+    system.node_names.lowBattery = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.lowBattery.internal_status = success
+    system.lowBattery.status = success
+    system.invValid.internal_status = failure
+    system.invValid.status = failure
+    system.computInv.internal_status = success
+    system.computInv.status = success
+    system.computInv.active = TRUE
+    system.invValid.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.acceptInput.internal_status = success
+    system.acceptInput.status = success
+    system.searchAns.internal_status = success
+    system.searchAns.status = success
+    system.roomKnown.internal_status = failure
+    system.roomKnown.status = failure
+    system.goToRoom.internal_status = success
+    system.goToRoom.status = invalid
+    system.sleeping.internal_status = success
+    system.sleeping.status = invalid
+    system.sleeping.active = FALSE
+    system.goToRoom.active = FALSE
+    system.roomKnown.active = TRUE
+    system.c4.internal_status = failure
+    system.c4.status = failure
+    system.atKitchen.internal_status = success
+    system.atKitchen.status = success
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = success
+    system.doTaskA.active = TRUE
+    system.atKitchen.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.c5.active = TRUE
+    system.c4.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.searchAns.active = TRUE
+    system.acceptInput.active = TRUE
+    system.c2.active = TRUE
+    system.lowBattery.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.alarm.internal_status = failure
+    system.alarm.status = invalid
+    system.holdTools.internal_status = failure
+    system.holdTools.status = invalid
+    system.goToKitchen.internal_status = success
+    system.goToKitchen.status = invalid
+    system.useExtinguisher.internal_status = success
+    system.useExtinguisher.status = invalid
+    system.useExtinguisher.active = FALSE
+    system.goToKitchen.active = FALSE
+    system.holdTools.active = FALSE
+    system.c8.internal_status = failure
+    system.c8.status = invalid
+    system.waitCharge.internal_status = success
+    system.waitCharge.status = invalid
+    system.waitCharge.active = FALSE
+    system.c8.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.alarm.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.c6.active = FALSE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 2.2 <-
+-- specification  G (system.atKitchen.status = failure ->  X (system.alarm.status = success | system.alarm.status = failure))  is true
+-- specification  G (system.alarm.status = success ->  X (system.holdTools.status = success | system.holdTools.status = failure))  is true
+-- specification  G (system.alarm.status = failure ->  X ((system.waitCharge.status = success | system.waitCharge.status = failure) | system.waitCharge.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 3.1 <-
+    system.lowBattery_v_stage_0 = TRUE
+    system.invValid_v_stage_0 = FALSE
+    system.roomKnown_v_stage_0 = FALSE
+    system.alarm_v_stage_0 = FALSE
+    system.atKitchen_v_stage_0 = FALSE
+    system.holdTools_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.waitCharge = 23
+    system.node_names.useExtinguisher = 22
+    system.node_names.goToKitchen = 21
+    system.node_names.holdTools = 20
+    system.node_names.c8 = 19
+    system.node_names.c7 = 18
+    system.node_names.alarm = 17
+    system.node_names.c6 = 16
+    system.node_names.doTaskA = 15
+    system.node_names.atKitchen = 14
+    system.node_names.c5 = 13
+    system.node_names.sleeping = 12
+    system.node_names.goToRoom = 11
+    system.node_names.roomKnown = 10
+    system.node_names.c4 = 9
+    system.node_names.c3 = 8
+    system.node_names.searchAns = 7
+    system.node_names.acceptInput = 6
+    system.node_names.computInv = 5
+    system.node_names.invValid = 4
+    system.node_names.c2 = 3
+    system.node_names.lowBattery = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.lowBattery.internal_status = success
+    system.lowBattery.status = success
+    system.invValid.internal_status = failure
+    system.invValid.status = failure
+    system.computInv.internal_status = success
+    system.computInv.status = success
+    system.computInv.active = TRUE
+    system.invValid.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.acceptInput.internal_status = success
+    system.acceptInput.status = success
+    system.searchAns.internal_status = success
+    system.searchAns.status = success
+    system.roomKnown.internal_status = failure
+    system.roomKnown.status = failure
+    system.goToRoom.internal_status = success
+    system.goToRoom.status = invalid
+    system.sleeping.internal_status = success
+    system.sleeping.status = invalid
+    system.sleeping.active = FALSE
+    system.goToRoom.active = FALSE
+    system.roomKnown.active = TRUE
+    system.c4.internal_status = failure
+    system.c4.status = failure
+    system.atKitchen.internal_status = failure
+    system.atKitchen.status = failure
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = invalid
+    system.doTaskA.active = FALSE
+    system.atKitchen.active = TRUE
+    system.c5.internal_status = failure
+    system.c5.status = failure
+    system.c5.active = TRUE
+    system.c4.active = TRUE
+    system.c3.internal_status = failure
+    system.c3.status = failure
+    system.c3.active = TRUE
+    system.searchAns.active = TRUE
+    system.acceptInput.active = TRUE
+    system.c2.active = TRUE
+    system.lowBattery.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.alarm.internal_status = failure
+    system.alarm.status = failure
+    system.holdTools.internal_status = failure
+    system.holdTools.status = invalid
+    system.goToKitchen.internal_status = success
+    system.goToKitchen.status = invalid
+    system.useExtinguisher.internal_status = success
+    system.useExtinguisher.status = invalid
+    system.useExtinguisher.active = FALSE
+    system.goToKitchen.active = FALSE
+    system.holdTools.active = FALSE
+    system.c8.internal_status = failure
+    system.c8.status = invalid
+    system.waitCharge.internal_status = success
+    system.waitCharge.status = invalid
+    system.waitCharge.active = FALSE
+    system.c8.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.alarm.active = TRUE
+    system.c6.internal_status = failure
+    system.c6.status = failure
+    system.c6.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 3.2 <-
+-- specification  G (system.holdTools.status = success ->  X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running))  is true
+-- specification  G (system.holdTools.status = failure ->  X ((system.waitCharge.status = success | system.waitCharge.status = failure) | system.waitCharge.status = running))  is true
+-- specification  G (system.goToKitchen.status = success ->  X ((system.useExtinguisher.status = success | system.useExtinguisher.status = failure) | system.useExtinguisher.status = running))  is true
+-- specification  G (system.useExtinguisher.status = success ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.waitCharge.status = success ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true

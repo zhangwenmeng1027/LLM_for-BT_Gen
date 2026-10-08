@@ -1,0 +1,128 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env BatteryOK_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env TargetFound_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env TargetCaptured_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ BatteryOK_v assign{result{BatteryOK_v}} }
+    variable_statement{ TargetFound_v assign{result{TargetFound_v}} }
+    variable_statement{ TargetCaptured_v assign{result{TargetCaptured_v}} }
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { BatteryOK arguments {} read_variables {BatteryOK_v} condition{BatteryOK_v} }
+    environment_check { TargetFound arguments {} read_variables {TargetFound_v} condition{TargetFound_v} }
+    environment_check { TargetCaptured arguments {} read_variables {TargetCaptured_v} condition{TargetCaptured_v} }
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} }
+}
+actions {
+    action { acceptInput
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { setValue
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { openGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToTarRoom
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            acceptInput {}
+            setValue {}
+        composite {
+            c1 selector
+            children {
+            composite {
+                c2 sequence
+                children {
+                    BatteryOK {}
+                    searchTarget {}
+                composite {
+                    c3 selector
+                    children {
+                    composite {
+                        c4 sequence
+                        children {
+                            TargetFound {}
+                            openGripper {}
+                            pickUp {}
+                            closeGripper {}
+                        }
+                    }
+                    composite {
+                        c5 sequence
+                        children {
+                            TargetCaptured {}
+                            goToTarRoom {}
+                            putDown {}
+                        }
+                    }
+                    }
+                }
+                }
+            }
+            composite {
+                c6 sequence
+                children {
+                    lowBattery {}
+                    goToStation {}
+                    charging {}
+                }
+            }
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(globally, (implies, (success, acceptInput), (next, (or, (success, setValue), (failure, setValue), (running, setValue)))))}
+    LTLSPEC {(globally, (implies, (success, setValue), (next, (or, (success, BatteryOK), (failure, BatteryOK)))))}
+    LTLSPEC {(globally, (implies, (success, BatteryOK), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))}
+    LTLSPEC {(globally, (implies, (success, searchTarget), (next, (or, (success, TargetFound), (failure, TargetFound)))))}
+    LTLSPEC {(globally, (implies, (success, TargetFound), (next, (or, (success, openGripper), (failure, openGripper), (running, openGripper)))))}
+    LTLSPEC {(globally, (implies, (success, openGripper), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))}
+    LTLSPEC {(globally, (implies, (success, TargetCaptured), (next, (or, (success, goToTarRoom), (failure, goToTarRoom), (running, goToTarRoom)))))}
+    LTLSPEC {(globally, (implies, (success, goToTarRoom), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+}

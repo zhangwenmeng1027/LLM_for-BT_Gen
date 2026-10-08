@@ -1,0 +1,126 @@
+88 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+101 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.8
+101 INFO: Python: 3.12.7 (conda)
+126 INFO: Platform: Windows-11-10.0.26200-SP0
+126 INFO: Python environment: D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\behaverify_venv
+126 INFO: wrote D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\LLM_BT_Gen\BTRun.spec
+128 INFO: Removing temporary files and cleaning cache in C:\Users\Lenovo\AppData\Local\pyinstaller
+76 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\遘醍能LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+798 WARNING: collect_data_files - skipping data collection for module 'textX' as it is not a package.
+798 WARNING: collect_dynamic_libs - skipping library collection for module 'textX' as it is not a package.
+1264 INFO: Module search paths (PYTHONPATH):
+['D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\LLM_BT_Gen',
+ 'D:\\software\\anaconda\\python312.zip',
+ 'D:\\software\\anaconda\\DLLs',
+ 'D:\\software\\anaconda\\Lib',
+ 'D:\\software\\anaconda',
+ 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv',
+ 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages',
+ 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify\\src',
+ 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\LLM_BT_Gen',
+ 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify\\src']
+67 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\遘醍能LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+1540 INFO: Appending 'binaries' from .spec
+1540 INFO: Appending 'datas' from .spec
+1542 INFO: checking Analysis
+1542 INFO: Building Analysis because Analysis-00.toc is non existent
+1542 INFO: Looking for Python shared library...
+1542 INFO: Using Python shared library: D:\software\anaconda\python312.dll
+1542 INFO: Running Analysis Analysis-00.toc
+1542 INFO: Target bytecode optimization level: 0
+1542 INFO: Initializing module dependency graph...
+1543 INFO: Initializing module graph hook caches...
+1554 INFO: Analyzing modules for base_library.zip ...
+72 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\遘醍能LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+65 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\遘醍能LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+65 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\遘醍能LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+2579 INFO: Processing standard module hook 'hook-encodings.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+85 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\遘醍能LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+3182 INFO: Processing standard module hook 'hook-math.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+4777 INFO: Processing standard module hook 'hook-pickle.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+5993 INFO: Processing standard module hook 'hook-heapq.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+6629 INFO: Caching module dependency graph...
+6695 INFO: Analyzing D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\LLM_BT_Gen\bt_bench_run.py
+6791 INFO: Processing standard module hook 'hook-openpyxl.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+6952 INFO: Processing standard module hook 'hook-numpy.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+7406 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+7407 INFO: SetuptoolsInfo: initializing cached setuptools info...
+224 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\遘醍能LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+8200 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+8423 INFO: Processing standard module hook 'hook-xml.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+8766 INFO: Processing standard module hook 'hook-_ctypes.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+9654 INFO: Processing standard module hook 'hook-platform.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+9829 INFO: Processing standard module hook 'hook-sysconfig.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+10070 INFO: Processing standard module hook 'hook-webbrowser.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+11661 INFO: Processing standard module hook 'hook-difflib.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+13254 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+13744 INFO: Processing standard module hook 'hook-PIL.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+13904 INFO: Processing standard module hook 'hook-PIL.Image.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+73 WARNING: Assuming this is not an Anaconda environment or an additional venv/pipenv/... environment manager is being used on top, because the conda-meta folder D:\遘醍能LLM_for_BT_Gen\behaverify_venv\conda-meta does not exist.
+14730 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+16187 INFO: Processing pre-safe-import-module hook 'hook-importlib_metadata.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+16188 INFO: Setuptools: 'importlib_metadata' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.importlib_metadata'!
+16196 INFO: Processing standard module hook 'hook-setuptools.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+16211 INFO: Processing pre-safe-import-module hook 'hook-distutils.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+16249 INFO: Processing pre-safe-import-module hook 'hook-jaraco.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+16250 INFO: Setuptools: 'jaraco' appears to be a full setuptools-vendored copy - creating alias to 'setuptools._vendor.jaraco'!
+16266 INFO: Processing pre-safe-import-module hook 'hook-more_itertools.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+16267 INFO: Setuptools: 'more_itertools' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.more_itertools'!
+16454 INFO: Processing standard module hook 'hook-_osx_support.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+16473 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+16842 INFO: Processing standard module hook 'hook-setuptools._vendor.jaraco.text.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+16844 INFO: Processing pre-safe-import-module hook 'hook-importlib_resources.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+16855 INFO: Processing pre-safe-import-module hook 'hook-backports.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+16856 INFO: Setuptools: 'backports' appears to be a full setuptools-vendored copy - creating alias to 'setuptools._vendor.backports'!
+17565 INFO: Processing pre-safe-import-module hook 'hook-tomli.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+17565 INFO: Setuptools: 'tomli' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.tomli'!
+18326 INFO: Processing pre-safe-import-module hook 'hook-wheel.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+18327 INFO: Setuptools: 'wheel' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.wheel'!
+18402 INFO: Processing standard module hook 'hook-setuptools._vendor.importlib_metadata.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+18431 INFO: Processing pre-safe-import-module hook 'hook-zipp.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+18432 INFO: Setuptools: 'zipp' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.zipp'!
+18480 INFO: Processing standard module hook 'hook-onnxruntime.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+18564 INFO: Processing pre-safe-import-module hook 'hook-tensorflow.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\pre_safe_import_module'
+20561 INFO: Analyzing hidden import 'behaverify.__main__'
+20562 INFO: Analyzing hidden import 'behaverify.grid_world_draw.default_dictionary'
+20563 INFO: Analyzing hidden import 'behaverify.grid_world_draw.misc_util'
+20565 INFO: Analyzing hidden import 'behaverify.model_to_dsl'
+20585 INFO: Processing module hooks (post-graph stage)...
+20964 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks'
+21165 INFO: Performing binary vs. data reclassification (131 entries)
+21186 INFO: Looking for ctypes DLLs
+21242 INFO: Analyzing run-time hooks ...
+21251 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+21254 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+21259 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+21263 INFO: Including run-time hook 'pyi_rth_setuptools.py' from 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+21291 INFO: Creating base_library.zip...
+21320 INFO: Looking for dynamic libraries
+21876 INFO: Extra DLL search directories (AddDllDirectory): ['D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\numpy.libs', 'D:\\ｿﾆﾑﾐ\\LLM_for_BT_Gen\\behaverify_venv\\Lib\\site-packages\\ml_dtypes.libs']
+21876 INFO: Extra DLL search directories (PATH): []
+23009 INFO: Warnings written to D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\LLM_BT_Gen\build\BTRun\warn-BTRun.txt
+23133 INFO: Graph cross-reference written to D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\LLM_BT_Gen\build\BTRun\xref-BTRun.html
+23189 INFO: checking PYZ
+23189 INFO: Building PYZ because PYZ-00.toc is non existent
+23189 INFO: Building PYZ (ZlibArchive) D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\LLM_BT_Gen\build\BTRun\PYZ-00.pyz
+24154 INFO: Building PYZ (ZlibArchive) D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\LLM_BT_Gen\build\BTRun\PYZ-00.pyz completed successfully.
+24194 INFO: checking PKG
+24194 INFO: Building PKG because PKG-00.toc is non existent
+24194 INFO: Building PKG (CArchive) BTRun.pkg
+24244 INFO: Building PKG (CArchive) BTRun.pkg completed successfully.
+24245 INFO: Bootloader D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\behaverify_venv\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+24245 INFO: checking EXE
+24245 INFO: Building EXE because EXE-00.toc is non existent
+24245 INFO: Building EXE from EXE-00.toc
+24245 INFO: Copying bootloader EXE to D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\LLM_BT_Gen\build\BTRun\BTRun.exe
+24251 INFO: Copying icon to EXE
+24255 INFO: Copying 0 resources to EXE
+24255 INFO: Embedding manifest in EXE
+24258 INFO: Appending PKG archive to EXE
+24266 INFO: Fixing EXE headers
+24407 INFO: Building EXE from EXE-00.toc completed successfully.
+24413 INFO: checking COLLECT
+24413 INFO: Building COLLECT because COLLECT-00.toc is non existent
+24413 INFO: Building COLLECT COLLECT-00.toc
+24803 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+24814 INFO: Build complete! The results are available in: D:\ｿﾆﾑﾐ\LLM_for_BT_Gen\LLM_BT_Gen\dist

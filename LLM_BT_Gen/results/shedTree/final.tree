@@ -1,0 +1,100 @@
+configuration {}
+enumerations {}
+constants {}
+variables {
+    variable { env isOnPasture_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isDay_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isInShed_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isNight_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isOnPasture_v assign{result{isOnPasture_v}} }
+    variable_statement{ isDay_v assign{result{isDay_v}} }
+    variable_statement{ isInShed_v assign{result{isInShed_v}} }
+    variable_statement{ isNight_v assign{result{isNight_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isOnPasture arguments {} read_variables {isOnPasture_v} condition{isOnPasture_v} }
+    environment_check { isDay arguments {} read_variables {isDay_v} condition{isDay_v} }
+    environment_check { isInShed arguments {} read_variables {isInShed_v} condition{isInShed_v} }
+    environment_check { isNight arguments {} read_variables {isNight_v} condition{isNight_v} }
+}
+actions {
+    action { leaveShed
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findRandomPastureField
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { randomMove
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findShed
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToDestination
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { enterShed
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { randomMove_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            isOnPasture {}
+            composite {
+                c1 selector
+                children {
+                    composite {
+                        c2 sequence
+                        children {
+                            isDay {}
+                            isInShed {}
+                            leaveShed {}
+                            findRandomPastureField {}
+                            randomMove {}
+                        }
+                    }
+                    composite {
+                        c3 sequence
+                        children {
+                            isNight {}
+                            findShed {}
+                            moveToDestination {}
+                            enterShed {}
+                        }
+                    }
+                    randomMove_2 {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isOnPasture), (failure, isOnPasture)))}
+    LTLSPEC {(globally, (implies, (success, isOnPasture), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, isDay), (next, (or, (success, isInShed), (failure, isInShed)))))}
+    LTLSPEC {(globally, (implies, (success, isInShed), (next, (or, (success, leaveShed), (failure, leaveShed), (running, leaveShed)))))}
+    LTLSPEC {(globally, (implies, (success, leaveShed), (next, (or, (success, findRandomPastureField), (failure, findRandomPastureField), (running, findRandomPastureField)))))}
+    LTLSPEC {(globally, (implies, (success, findRandomPastureField), (next, (or, (or, (success, randomMove), (success, randomMove_2)), (or, (failure, randomMove), (failure, randomMove_2)), (or, (running, randomMove), (running, randomMove_2))))))}
+    LTLSPEC {(globally, (implies, (failure, isDay), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, isNight), (next, (or, (success, findShed), (failure, findShed), (running, findShed)))))}
+    LTLSPEC {(globally, (implies, (success, findShed), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))}
+    LTLSPEC {(globally, (implies, (success, moveToDestination), (next, (or, (success, enterShed), (failure, enterShed), (running, enterShed)))))}
+    LTLSPEC {(globally, (implies, (failure, isNight), (next, (or, (or, (success, randomMove), (success, randomMove_2)), (or, (failure, randomMove), (failure, randomMove_2)), (or, (running, randomMove), (running, randomMove_2))))))}
+}

@@ -1,0 +1,134 @@
+configuration {} 
+enumerations {} 
+constants {}
+variables {
+    variable { env roomKnown_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env invValid_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env TargetAdjacent_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ roomKnown_v assign{result{roomKnown_v}} }
+    variable_statement{ invValid_v assign{result{invValid_v}} }
+    variable_statement{ TargetAdjacent_v assign{result{TargetAdjacent_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { roomKnown arguments {} read_variables {roomKnown_v} condition{roomKnown_v} }
+    environment_check { invValid arguments {} read_variables {invValid_v} condition{invValid_v} }
+    environment_check { TargetAdjacent arguments {} read_variables {TargetAdjacent_v} condition{TargetAdjacent_v} }
+}
+actions {
+    action { goToTarRoom
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { acceptData
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { activateProcess
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { attackTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pushP
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { sleeping
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    roomKnown {}
+                    goToTarRoom {}
+                    doTaskA {}
+                    doTaskB {}
+                    doTaskC {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    invValid {}
+                    acceptData {}
+                    searchTarget {}
+                    composite {
+                        c3 selector
+                        children {
+                            composite {
+                                c4 sequence
+                                children {
+                                    TargetAdjacent {}
+                                    activateProcess {}
+                                    attackTarget {}
+                                }
+                            }
+                            pushP {}
+                        }
+                    }
+                }
+            }
+            composite {
+                c5 sequence
+                children {
+                    pushP {}
+                    goToStation {}
+                    sleeping {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, roomKnown), (failure, roomKnown)))}
+    LTLSPEC {(globally, (implies, (success, roomKnown), (next, (or, (success, goToTarRoom), (failure, goToTarRoom), (running, goToTarRoom)))))}
+    LTLSPEC {(globally, (implies, (failure, roomKnown), (next, (or, (success, invValid), (failure, invValid)))))}
+    LTLSPEC {(globally, (implies, (success, goToTarRoom), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskB), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskC), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (success, invValid), (next, (or, (success, acceptData), (failure, acceptData), (running, acceptData)))))}
+    LTLSPEC {(globally, (implies, (failure, invValid), (next, (or, (success, pushP), (failure, pushP), (running, pushP)))))}
+    LTLSPEC {(globally, (implies, (success, acceptData), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))}
+    LTLSPEC {(globally, (implies, (success, searchTarget), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))}
+    LTLSPEC {(globally, (implies, (success, TargetAdjacent), (next, (or, (success, activateProcess), (failure, activateProcess), (running, activateProcess)))))}
+    LTLSPEC {(globally, (implies, (failure, TargetAdjacent), (next, (or, (success, pushP), (failure, pushP), (running, pushP)))))}
+    LTLSPEC {(globally, (implies, (success, activateProcess), (next, (or, (success, attackTarget), (failure, attackTarget), (running, attackTarget)))))}
+    LTLSPEC {(globally, (implies, (success, attackTarget), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (success, pushP), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, sleeping), (failure, sleeping), (running, sleeping)))))}
+    LTLSPEC {(globally, (implies, (success, sleeping), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+}

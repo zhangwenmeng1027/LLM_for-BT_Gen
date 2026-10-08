@@ -1,0 +1,51 @@
+configuration {} enumerations {} constants {}
+variables {
+}
+environment_update {
+}
+checks {}
+environment_checks {
+}
+actions {
+    action { goToKitchen
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { locateBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { fetchBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { askHelp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+        composite {
+            c1 sequence
+            children {
+                goToKitchen {}
+                locateBottle {}
+                fetchBottle {}
+            }
+        }
+            askHelp {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, goToKitchen), (failure, goToKitchen)))}
+    LTLSPEC {(globally, (implies, (success, goToKitchen), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))}
+    LTLSPEC {(globally, (implies, (success, locateBottle), (next, (or, (success, fetchBottle), (failure, fetchBottle), (running, fetchBottle)))))}
+    LTLSPEC {(globally, (implies, (success, fetchBottle), (next, (or, (success, goToKitchen), (failure, goToKitchen)))))}
+    LTLSPEC {(globally, (implies, (success, askHelp), (next, (or, (success, goToKitchen), (failure, goToKitchen)))))}
+}

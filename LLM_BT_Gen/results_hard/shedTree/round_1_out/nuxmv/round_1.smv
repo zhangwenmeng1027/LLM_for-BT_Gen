@@ -1,0 +1,196 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.isOnPasture.status = success) | (system.isOnPasture.status = failure)));
+LTLSPEC G(((system.isOnPasture.status = success) -> X(((system.isDay.status = success) | (system.isDay.status = failure)))));
+LTLSPEC G(((system.isOnPasture.status = failure) -> X(((system.isOnPasture.status = success) | (system.isOnPasture.status = failure)))));
+LTLSPEC G(((system.isDay.status = success) -> X(((system.isInShed.status = success) | (system.isInShed.status = failure)))));
+LTLSPEC G(((system.isDay.status = failure) -> X(((system.isNight.status = success) | (system.isNight.status = failure)))));
+LTLSPEC G(((system.isInShed.status = success) -> X(((system.leaveShed.status = success) | (system.leaveShed.status = failure) | (system.leaveShed.status = running)))));
+LTLSPEC G(((system.isInShed.status = failure) -> X(((system.isNight.status = success) | (system.isNight.status = failure)))));
+LTLSPEC G(((system.leaveShed.status = success) -> X(((system.findRandomPastureField.status = success) | (system.findRandomPastureField.status = failure) | (system.findRandomPastureField.status = running)))));
+LTLSPEC G(((system.findRandomPastureField.status = success) -> X(((system.randomMove.status = success) | (system.randomMove.status = failure) | (system.randomMove.status = running)))));
+LTLSPEC G(((system.randomMove.status = success) -> X(((system.isOnPasture.status = success) | (system.isOnPasture.status = failure)))));
+LTLSPEC G(((system.isNight.status = success) -> X(((system.findShed.status = success) | (system.findShed.status = failure) | (system.findShed.status = running)))));
+LTLSPEC G(((system.isNight.status = failure) -> X(((system.randomMove_2.status = success) | (system.randomMove_2.status = failure) | (system.randomMove_2.status = running)))));
+LTLSPEC G(((system.findShed.status = success) -> X(((system.moveToDestination.status = success) | (system.moveToDestination.status = failure) | (system.moveToDestination.status = running)))));
+LTLSPEC G(((system.moveToDestination.status = success) -> X(((system.enterShed.status = success) | (system.enterShed.status = failure) | (system.enterShed.status = running)))));
+LTLSPEC G(((system.enterShed.status = success) -> X(((system.isOnPasture.status = success) | (system.isOnPasture.status = failure)))));
+LTLSPEC G(((system.randomMove_2.status = success) -> X(((system.isOnPasture.status = success) | (system.isOnPasture.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        isOnPasture : isOnPasture_module(isOnPasture_v_stage_0);
+        isDay : isDay_module(isDay_v_stage_0);
+        isInShed : isInShed_module(isInShed_v_stage_0);
+        leaveShed : success_DEFAULT_module();
+        findRandomPastureField : success_DEFAULT_module();
+        randomMove : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_5(isDay, isInShed, leaveShed, findRandomPastureField, randomMove);
+        isNight : isNight_module(isNight_v_stage_0);
+        findShed : success_DEFAULT_module();
+        moveToDestination : success_DEFAULT_module();
+        enterShed : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_4(isNight, findShed, moveToDestination, enterShed);
+        randomMove_2 : success_DEFAULT_module();
+        c1 : composite_selector_without_memory_3(c2, c3, randomMove_2);
+        c0 : composite_sequence_without_memory_2(isOnPasture, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        isOnPasture_v_stage_0 : boolean;
+        isDay_v_stage_0 : boolean;
+        isInShed_v_stage_0 : boolean;
+        isNight_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(isOnPasture_v_stage_0) := {TRUE, FALSE};
+        init(isDay_v_stage_0) := {TRUE, FALSE};
+        init(isInShed_v_stage_0) := {TRUE, FALSE};
+        init(isNight_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(isOnPasture_v_stage_0) :=
+            case
+                !(c0.active) : isOnPasture_v_stage_0;
+                TRUE : isOnPasture_v_stage_0;
+            esac;
+        next(isDay_v_stage_0) :=
+            case
+                !(c0.active) : isDay_v_stage_0;
+                TRUE : isDay_v_stage_0;
+            esac;
+        next(isInShed_v_stage_0) :=
+            case
+                !(c0.active) : isInShed_v_stage_0;
+                TRUE : isInShed_v_stage_0;
+            esac;
+        next(isNight_v_stage_0) :=
+            case
+                !(c0.active) : isNight_v_stage_0;
+                TRUE : isNight_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        isOnPasture := 1;
+        c1 := 2;
+        c2 := 3;
+        isDay := 4;
+        isInShed := 5;
+        leaveShed := 6;
+        findRandomPastureField := 7;
+        randomMove := 8;
+        c3 := 9;
+        isNight := 10;
+        findShed := 11;
+        moveToDestination := 12;
+        enterShed := 13;
+        randomMove_2 := 14;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE composite_sequence_without_memory_5(child_0, child_1, child_2, child_3, child_4)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE isOnPasture_module(isOnPasture_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isOnPasture_v_stage_0) ? success : failure;
+MODULE isDay_module(isDay_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isDay_v_stage_0) ? success : failure;
+MODULE isInShed_module(isInShed_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isInShed_v_stage_0) ? success : failure;
+MODULE isNight_module(isNight_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isNight_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

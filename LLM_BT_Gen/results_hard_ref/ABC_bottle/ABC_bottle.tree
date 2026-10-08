@@ -1,0 +1,90 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env atPosA_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPosB_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env empty_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPosC_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atKitchen_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ atPosA_v assign{result{atPosA_v}} }
+    variable_statement{ atPosB_v assign{result{atPosB_v}} }
+    variable_statement{ empty_v assign{result{empty_v}} }
+    variable_statement{ atPosC_v assign{result{atPosC_v}} }
+    variable_statement{ atKitchen_v assign{result{atKitchen_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { atPosA arguments {} read_variables {atPosA_v} condition{atPosA_v} }
+    environment_check { atPosB arguments {} read_variables {atPosB_v} condition{atPosB_v} }
+    environment_check { empty arguments {} read_variables {empty_v} condition{empty_v} }
+    environment_check { atPosC arguments {} read_variables {atPosC_v} condition{atPosC_v} }
+    environment_check { atKitchen arguments {} read_variables {atKitchen_v} condition{atKitchen_v} }
+}
+actions {
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { locateBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+        composite {
+            c1 sequence
+            children {
+            composite {
+                c2 selector
+                children {
+                    atPosA {}
+                    atPosB {}
+                }
+            }
+                empty {}
+                pickUp {}
+            }
+        }
+        composite {
+            c3 sequence
+            children {
+                atPosC {}
+                doTaskA {}
+            }
+        }
+        composite {
+            c4 sequence
+            children {
+                atKitchen {}
+                locateBottle {}
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, atPosA), (failure, atPosA)))}
+    LTLSPEC {(globally, (implies, (success, atPosA), (next, (or, (success, empty), (failure, empty)))))}
+    LTLSPEC {(globally, (implies, (failure, atPosA), (next, (or, (success, atPosB), (failure, atPosB)))))}
+    LTLSPEC {(globally, (implies, (success, atPosB), (next, (or, (success, empty), (failure, empty)))))}
+    LTLSPEC {(globally, (implies, (failure, atPosB), (next, (or, (success, atPosC), (failure, atPosC)))))}
+    LTLSPEC {(globally, (implies, (success, empty), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (failure, empty), (next, (or, (success, atPosC), (failure, atPosC)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, atPosA), (failure, atPosA)))))}
+    LTLSPEC {(globally, (implies, (success, atPosC), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (failure, atPosC), (next, (or, (success, atKitchen), (failure, atKitchen)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, atPosA), (failure, atPosA)))))}
+    LTLSPEC {(globally, (implies, (success, atKitchen), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))}
+    LTLSPEC {(globally, (implies, (failure, atKitchen), (next, (or, (success, atPosA), (failure, atPosA)))))}
+    LTLSPEC {(globally, (implies, (success, locateBottle), (next, (or, (success, atPosA), (failure, atPosA)))))}
+}

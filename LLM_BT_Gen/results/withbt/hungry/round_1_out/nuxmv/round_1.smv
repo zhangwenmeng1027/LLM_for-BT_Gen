@@ -1,0 +1,101 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.isHungry.status = success) | (system.isHungry.status = failure)));
+LTLSPEC G(((system.isHungry.status = success) -> X(((system.findFood.status = success) | (system.findFood.status = failure) | (system.findFood.status = running)))));
+LTLSPEC G(((system.findFood.status = success) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.findTableware.status = success) | (system.findTableware.status = failure) | (system.findTableware.status = running)))));
+LTLSPEC G(((system.findTableware.status = success) -> X(((system.eatfood.status = success) | (system.eatfood.status = failure) | (system.eatfood.status = running)))));
+LTLSPEC G(((system.isHungry.status = failure) -> X(((system.followHuman.status = success) | (system.followHuman.status = failure) | (system.followHuman.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        isHungry : isHungry_module(isHungry_v_stage_0);
+        findFood : success_DEFAULT_module();
+        goToPosA : success_DEFAULT_module();
+        findTableware : success_DEFAULT_module();
+        eatfood : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_5(isHungry, findFood, goToPosA, findTableware, eatfood);
+        followHuman : success_DEFAULT_module();
+        c0 : composite_selector_without_memory_2(c1, followHuman);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        isHungry_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(isHungry_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(isHungry_v_stage_0) :=
+            case
+                !(c0.active) : isHungry_v_stage_0;
+                TRUE : isHungry_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        isHungry := 2;
+        findFood := 3;
+        goToPosA := 4;
+        findTableware := 5;
+        eatfood := 6;
+        followHuman := 7;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_5(child_0, child_1, child_2, child_3, child_4)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+MODULE isHungry_module(isHungry_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isHungry_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

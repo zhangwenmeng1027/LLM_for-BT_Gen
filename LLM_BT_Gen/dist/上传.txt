@@ -1,0 +1,39 @@
+ # 1. 把 BTRun-linux-x64.tar.gz 传到目标机（scp/U盘均可），然后【必须在 Linux 上解压】以保留可执行权限
+  tar xzf BTRun-linux-x64.tar.gz
+  cd BTRun-linux
+
+  # 2. 工具链自检（不花钱）：NuSMV + behaverify 真实验证参考树
+  ./BTRun --selftest
+
+  # 3. 可选：测一次真实 API 连通（一次极小调用）
+  ./BTRun --selftest --api
+
+  # 4. 全量实验（默认：hard+complex 两套 × 3 模型 × 3 基线 × 5 重复，按模型 3 进程并行）
+  ./BTRun
+
+  常用变体：
+
+  ./BTRun --suite hard                                # 只跑 70 题加难版
+  ./BTRun --suite complex                             # 只跑 10 题复杂版
+  ./BTRun --parallel baselines                        # 改为按基线并行
+  ./BTRun --parallel none                             # 单进程顺序
+  ./BTRun --repeat 1                                  # 试点：每组合只跑 1 遍
+  ./BTRun --limit 5 --repeat 1                        # 冒烟：每套前 5 题
+  ./BTRun --tasks ABC3,CX1_deep_delivery              # 指定任务
+  ./BTRun --models gpt-4o,gpt-5.5,claude-opus-4-6     # 指定模型（默认全部三个）
+  ./BTRun --baselines full,noce,withbt                # 指定基线（默认全部三个）
+  ./BTRun --results_root /data/bt_out                 # 结果输出到别处
+
+  结果：results_hard/、results_complex/ 下每组合生成 summary_<model>[_<baseline>]_<N>.json/.xlsx（N
+  自动接续递增，中断后重跑同一命令会自动补跑缺失的重复，不会覆盖已有结果）；每任务过程树在 results_<suite>/<模型>/[<基线>/]<任务>/round_*.tree 与
+  final.tree。Ctrl+C 随时停止，已完成的重复已在磁盘上。
+
+  若曾绕过 tar 直接复制文件（+x 丢失），执行一次：chmod +x BTRun NuSMV/bin/*
+
+  已验证（WSL Ubuntu 22.04 实测）
+
+  - --selftest：PASSED（behaverify+NuSMV 链 7 true / 0 false）
+  - --selftest --api：gpt-4o 与 claude-opus-4-6 均直连回复 OK
+  - 冒烟实验 1：ABC3（hard）→ 1 轮 SUCCESS（13 true / 0 false），summary 正确落盘
+  - 冒烟实验 2：CX1（complex）→ 5 轮未解（LLM 生成重名节点的失败反馈路径按设计工作），summary 正确落盘
+  - --help 确认默认值：max_rounds 10 / llm_attempts 30 / llm_retry_wait 1.0

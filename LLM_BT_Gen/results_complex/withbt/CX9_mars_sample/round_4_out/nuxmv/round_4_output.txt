@@ -1,0 +1,542 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.isNight.status = success | system.isNight.status = failure)  is true
+-- specification  G (system.isNight.status = success ->  X ((system.foldPanels.status = success | system.foldPanels.status = failure) | system.foldPanels.status = running))  is true
+-- specification  G (system.foldPanels.status = success ->  X (system.atStation.status = success | system.atStation.status = failure))  is true
+-- specification  G (system.atStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))  is true
+-- specification  G (system.atStation.status = failure ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))  is true
+-- specification  G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))  is true
+-- specification  G (system.charging.status = success ->  X (system.isNight.status = success | system.isNight.status = failure))  is true
+-- specification  G (system.isNight.status = failure ->  X (system.isDay.status = success | system.isDay.status = failure))  is true
+-- specification  G (system.isDay.status = success ->  X ((system.unfoldPanels.status = success | system.unfoldPanels.status = failure) | system.unfoldPanels.status = running))  is true
+-- specification  G (system.isDay.status = failure ->  X (system.isNight.status = success | system.isNight.status = failure))  is true
+-- specification  G (system.unfoldPanels.status = success ->  X (system.hasSample.status = success | system.hasSample.status = failure))  is true
+-- specification  G (system.hasSample.status = failure ->  X ((system.getData.status = success | system.getData.status = failure) | system.getData.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.isNight_v_stage_0 = FALSE
+    system.isDay_v_stage_0 = TRUE
+    system.atStation_v_stage_0 = FALSE
+    system.hasSample_v_stage_0 = FALSE
+    system.TargetFound_v_stage_0 = FALSE
+    system.checkReachable_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.goToPos3 = 21
+    system.node_names.checkReachable = 20
+    system.node_names.c7 = 19
+    system.node_names.searchTarget = 18
+    system.node_names.TargetFound = 17
+    system.node_names.c6 = 16
+    system.node_names.send = 15
+    system.node_names.getData = 14
+    system.node_names.hasSample = 13
+    system.node_names.c5 = 12
+    system.node_names.c4 = 11
+    system.node_names.unfoldPanels = 10
+    system.node_names.isDay = 9
+    system.node_names.c3 = 8
+    system.node_names.charging = 7
+    system.node_names.goToStation = 6
+    system.node_names.atStation = 5
+    system.node_names.c2 = 4
+    system.node_names.foldPanels = 3
+    system.node_names.isNight = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.isNight.internal_status = failure
+    system.isNight.status = failure
+    system.foldPanels.internal_status = success
+    system.foldPanels.status = invalid
+    system.atStation.internal_status = failure
+    system.atStation.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.atStation.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.charging.internal_status = success
+    system.charging.status = invalid
+    system.charging.active = FALSE
+    system.c2.active = FALSE
+    system.foldPanels.active = FALSE
+    system.isNight.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.isDay.internal_status = success
+    system.isDay.status = success
+    system.unfoldPanels.internal_status = success
+    system.unfoldPanels.status = success
+    system.hasSample.internal_status = failure
+    system.hasSample.status = failure
+    system.getData.internal_status = success
+    system.getData.status = invalid
+    system.send.internal_status = success
+    system.send.status = invalid
+    system.send.active = FALSE
+    system.getData.active = FALSE
+    system.hasSample.active = TRUE
+    system.c5.internal_status = failure
+    system.c5.status = failure
+    system.TargetFound.internal_status = failure
+    system.TargetFound.status = failure
+    system.searchTarget.internal_status = success
+    system.searchTarget.status = invalid
+    system.searchTarget.active = FALSE
+    system.TargetFound.active = TRUE
+    system.c6.internal_status = failure
+    system.c6.status = failure
+    system.c6.active = TRUE
+    system.c5.active = TRUE
+    system.c4.internal_status = failure
+    system.c4.status = failure
+    system.checkReachable.internal_status = failure
+    system.checkReachable.status = invalid
+    system.goToPos3.internal_status = success
+    system.goToPos3.status = invalid
+    system.goToPos3.active = FALSE
+    system.checkReachable.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.c4.active = TRUE
+    system.unfoldPanels.active = TRUE
+    system.isDay.active = TRUE
+    system.c3.internal_status = failure
+    system.c3.status = failure
+    system.c3.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 1.2 <-
+-- specification  G (system.getData.status = success ->  X ((system.send.status = success | system.send.status = failure) | system.send.status = running))  is true
+-- specification  G (system.hasSample.status = success ->  X (system.TargetFound.status = success | system.TargetFound.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 2.1 <-
+    system.isNight_v_stage_0 = FALSE
+    system.isDay_v_stage_0 = TRUE
+    system.atStation_v_stage_0 = FALSE
+    system.hasSample_v_stage_0 = TRUE
+    system.TargetFound_v_stage_0 = FALSE
+    system.checkReachable_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.goToPos3 = 21
+    system.node_names.checkReachable = 20
+    system.node_names.c7 = 19
+    system.node_names.searchTarget = 18
+    system.node_names.TargetFound = 17
+    system.node_names.c6 = 16
+    system.node_names.send = 15
+    system.node_names.getData = 14
+    system.node_names.hasSample = 13
+    system.node_names.c5 = 12
+    system.node_names.c4 = 11
+    system.node_names.unfoldPanels = 10
+    system.node_names.isDay = 9
+    system.node_names.c3 = 8
+    system.node_names.charging = 7
+    system.node_names.goToStation = 6
+    system.node_names.atStation = 5
+    system.node_names.c2 = 4
+    system.node_names.foldPanels = 3
+    system.node_names.isNight = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.isNight.internal_status = failure
+    system.isNight.status = failure
+    system.foldPanels.internal_status = success
+    system.foldPanels.status = invalid
+    system.atStation.internal_status = failure
+    system.atStation.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.atStation.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.charging.internal_status = success
+    system.charging.status = invalid
+    system.charging.active = FALSE
+    system.c2.active = FALSE
+    system.foldPanels.active = FALSE
+    system.isNight.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.isDay.internal_status = success
+    system.isDay.status = success
+    system.unfoldPanels.internal_status = success
+    system.unfoldPanels.status = success
+    system.hasSample.internal_status = success
+    system.hasSample.status = success
+    system.getData.internal_status = success
+    system.getData.status = success
+    system.send.internal_status = success
+    system.send.status = success
+    system.send.active = TRUE
+    system.getData.active = TRUE
+    system.hasSample.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.TargetFound.internal_status = failure
+    system.TargetFound.status = invalid
+    system.searchTarget.internal_status = success
+    system.searchTarget.status = invalid
+    system.searchTarget.active = FALSE
+    system.TargetFound.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.c6.active = FALSE
+    system.c5.active = TRUE
+    system.c4.internal_status = success
+    system.c4.status = success
+    system.checkReachable.internal_status = failure
+    system.checkReachable.status = failure
+    system.goToPos3.internal_status = success
+    system.goToPos3.status = success
+    system.goToPos3.active = TRUE
+    system.checkReachable.active = TRUE
+    system.c7.internal_status = success
+    system.c7.status = success
+    system.c7.active = TRUE
+    system.c4.active = TRUE
+    system.unfoldPanels.active = TRUE
+    system.isDay.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 2.2 <-
+-- specification  G (system.send.status = success ->  X (system.TargetFound.status = success | system.TargetFound.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 3.1 <-
+    system.isNight_v_stage_0 = FALSE
+    system.isDay_v_stage_0 = TRUE
+    system.atStation_v_stage_0 = FALSE
+    system.hasSample_v_stage_0 = TRUE
+    system.TargetFound_v_stage_0 = FALSE
+    system.checkReachable_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.goToPos3 = 21
+    system.node_names.checkReachable = 20
+    system.node_names.c7 = 19
+    system.node_names.searchTarget = 18
+    system.node_names.TargetFound = 17
+    system.node_names.c6 = 16
+    system.node_names.send = 15
+    system.node_names.getData = 14
+    system.node_names.hasSample = 13
+    system.node_names.c5 = 12
+    system.node_names.c4 = 11
+    system.node_names.unfoldPanels = 10
+    system.node_names.isDay = 9
+    system.node_names.c3 = 8
+    system.node_names.charging = 7
+    system.node_names.goToStation = 6
+    system.node_names.atStation = 5
+    system.node_names.c2 = 4
+    system.node_names.foldPanels = 3
+    system.node_names.isNight = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.isNight.internal_status = failure
+    system.isNight.status = failure
+    system.foldPanels.internal_status = success
+    system.foldPanels.status = invalid
+    system.atStation.internal_status = failure
+    system.atStation.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.atStation.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.charging.internal_status = success
+    system.charging.status = invalid
+    system.charging.active = FALSE
+    system.c2.active = FALSE
+    system.foldPanels.active = FALSE
+    system.isNight.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.isDay.internal_status = success
+    system.isDay.status = success
+    system.unfoldPanels.internal_status = success
+    system.unfoldPanels.status = success
+    system.hasSample.internal_status = success
+    system.hasSample.status = success
+    system.getData.internal_status = success
+    system.getData.status = success
+    system.send.internal_status = success
+    system.send.status = success
+    system.send.active = TRUE
+    system.getData.active = TRUE
+    system.hasSample.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.TargetFound.internal_status = failure
+    system.TargetFound.status = invalid
+    system.searchTarget.internal_status = success
+    system.searchTarget.status = invalid
+    system.searchTarget.active = FALSE
+    system.TargetFound.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.c6.active = FALSE
+    system.c5.active = TRUE
+    system.c4.internal_status = success
+    system.c4.status = success
+    system.checkReachable.internal_status = failure
+    system.checkReachable.status = failure
+    system.goToPos3.internal_status = success
+    system.goToPos3.status = success
+    system.goToPos3.active = TRUE
+    system.checkReachable.active = TRUE
+    system.c7.internal_status = success
+    system.c7.status = success
+    system.c7.active = TRUE
+    system.c4.active = TRUE
+    system.unfoldPanels.active = TRUE
+    system.isDay.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 3.2 <-
+-- specification  G (system.TargetFound.status = failure ->  X ((system.searchTarget.status = success | system.searchTarget.status = failure) | system.searchTarget.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 4.1 <-
+    system.isNight_v_stage_0 = FALSE
+    system.isDay_v_stage_0 = TRUE
+    system.atStation_v_stage_0 = FALSE
+    system.hasSample_v_stage_0 = FALSE
+    system.TargetFound_v_stage_0 = FALSE
+    system.checkReachable_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.goToPos3 = 21
+    system.node_names.checkReachable = 20
+    system.node_names.c7 = 19
+    system.node_names.searchTarget = 18
+    system.node_names.TargetFound = 17
+    system.node_names.c6 = 16
+    system.node_names.send = 15
+    system.node_names.getData = 14
+    system.node_names.hasSample = 13
+    system.node_names.c5 = 12
+    system.node_names.c4 = 11
+    system.node_names.unfoldPanels = 10
+    system.node_names.isDay = 9
+    system.node_names.c3 = 8
+    system.node_names.charging = 7
+    system.node_names.goToStation = 6
+    system.node_names.atStation = 5
+    system.node_names.c2 = 4
+    system.node_names.foldPanels = 3
+    system.node_names.isNight = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.isNight.internal_status = failure
+    system.isNight.status = failure
+    system.foldPanels.internal_status = success
+    system.foldPanels.status = invalid
+    system.atStation.internal_status = failure
+    system.atStation.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.atStation.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.charging.internal_status = success
+    system.charging.status = invalid
+    system.charging.active = FALSE
+    system.c2.active = FALSE
+    system.foldPanels.active = FALSE
+    system.isNight.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.isDay.internal_status = success
+    system.isDay.status = success
+    system.unfoldPanels.internal_status = success
+    system.unfoldPanels.status = success
+    system.hasSample.internal_status = failure
+    system.hasSample.status = failure
+    system.getData.internal_status = success
+    system.getData.status = invalid
+    system.send.internal_status = success
+    system.send.status = invalid
+    system.send.active = FALSE
+    system.getData.active = FALSE
+    system.hasSample.active = TRUE
+    system.c5.internal_status = failure
+    system.c5.status = failure
+    system.TargetFound.internal_status = failure
+    system.TargetFound.status = failure
+    system.searchTarget.internal_status = success
+    system.searchTarget.status = invalid
+    system.searchTarget.active = FALSE
+    system.TargetFound.active = TRUE
+    system.c6.internal_status = failure
+    system.c6.status = failure
+    system.c6.active = TRUE
+    system.c5.active = TRUE
+    system.c4.internal_status = failure
+    system.c4.status = failure
+    system.checkReachable.internal_status = failure
+    system.checkReachable.status = invalid
+    system.goToPos3.internal_status = success
+    system.goToPos3.status = invalid
+    system.goToPos3.active = FALSE
+    system.checkReachable.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.c4.active = TRUE
+    system.unfoldPanels.active = TRUE
+    system.isDay.active = TRUE
+    system.c3.internal_status = failure
+    system.c3.status = failure
+    system.c3.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 4.2 <-
+-- specification  G (system.TargetFound.status = success ->  X (system.checkReachable.status = success | system.checkReachable.status = failure))  is true
+-- specification  G (system.searchTarget.status = success ->  X (system.checkReachable.status = success | system.checkReachable.status = failure))  is true
+-- specification  G (system.checkReachable.status = success ->  X ((system.goToPos3.status = success | system.goToPos3.status = failure) | system.goToPos3.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 5.1 <-
+    system.isNight_v_stage_0 = FALSE
+    system.isDay_v_stage_0 = TRUE
+    system.atStation_v_stage_0 = FALSE
+    system.hasSample_v_stage_0 = TRUE
+    system.TargetFound_v_stage_0 = FALSE
+    system.checkReachable_v_stage_0 = TRUE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.goToPos3 = 21
+    system.node_names.checkReachable = 20
+    system.node_names.c7 = 19
+    system.node_names.searchTarget = 18
+    system.node_names.TargetFound = 17
+    system.node_names.c6 = 16
+    system.node_names.send = 15
+    system.node_names.getData = 14
+    system.node_names.hasSample = 13
+    system.node_names.c5 = 12
+    system.node_names.c4 = 11
+    system.node_names.unfoldPanels = 10
+    system.node_names.isDay = 9
+    system.node_names.c3 = 8
+    system.node_names.charging = 7
+    system.node_names.goToStation = 6
+    system.node_names.atStation = 5
+    system.node_names.c2 = 4
+    system.node_names.foldPanels = 3
+    system.node_names.isNight = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.isNight.internal_status = failure
+    system.isNight.status = failure
+    system.foldPanels.internal_status = success
+    system.foldPanels.status = invalid
+    system.atStation.internal_status = failure
+    system.atStation.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.atStation.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.charging.internal_status = success
+    system.charging.status = invalid
+    system.charging.active = FALSE
+    system.c2.active = FALSE
+    system.foldPanels.active = FALSE
+    system.isNight.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.isDay.internal_status = success
+    system.isDay.status = success
+    system.unfoldPanels.internal_status = success
+    system.unfoldPanels.status = success
+    system.hasSample.internal_status = success
+    system.hasSample.status = success
+    system.getData.internal_status = success
+    system.getData.status = success
+    system.send.internal_status = success
+    system.send.status = success
+    system.send.active = TRUE
+    system.getData.active = TRUE
+    system.hasSample.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.TargetFound.internal_status = failure
+    system.TargetFound.status = invalid
+    system.searchTarget.internal_status = success
+    system.searchTarget.status = invalid
+    system.searchTarget.active = FALSE
+    system.TargetFound.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.c6.active = FALSE
+    system.c5.active = TRUE
+    system.c4.internal_status = success
+    system.c4.status = success
+    system.checkReachable.internal_status = success
+    system.checkReachable.status = success
+    system.goToPos3.internal_status = success
+    system.goToPos3.status = invalid
+    system.goToPos3.active = FALSE
+    system.checkReachable.active = TRUE
+    system.c7.internal_status = success
+    system.c7.status = success
+    system.c7.active = TRUE
+    system.c4.active = TRUE
+    system.unfoldPanels.active = TRUE
+    system.isDay.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 5.2 <-
+-- specification  G (system.checkReachable.status = failure ->  X (system.isNight.status = success | system.isNight.status = failure))  is true
+-- specification  G (system.goToPos3.status = success ->  X (system.isNight.status = success | system.isNight.status = failure))  is true

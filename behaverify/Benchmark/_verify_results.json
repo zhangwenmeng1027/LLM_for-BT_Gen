@@ -1,0 +1,2318 @@
+{
+ "ABC3": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "G (system.atPosA.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = failure ->  X (system.atPosB.status = success | system.atPosB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosC.status = failure ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = failure ->  X (system.atPosC.status = success | system.atPosC.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPos3.status = failure ->  X ((system.goToPos3.status = success | system.goToPos3.status = failure) | system.goToPos3.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosC.status = failure ->  X (system.atPos3.status = success | system.atPos3.status = failure))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "ABC_bottle": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.atPosA.status = success | system.atPosA.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = failure ->  X (system.atPosB.status = success | system.atPosB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = success ->  X (system.empty.status = success | system.empty.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.empty.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosC.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atKitchen.status = success ->  X ((system.locateBottle.status = success | system.locateBottle.status = failure) | system.locateBottle.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "ABCholdKnife": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "G (system.doTaskA.status = failure ->  X ((system.doTaskB.status = success | system.doTaskB.status = failure) | system.doTaskB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskA.status = success ->  X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = success ->  X (system.holdKnife.status = success | system.holdKnife.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.holdKnife.status = success ->  X ((system.doTaskC.status = success | system.doTaskC.status = failure) | system.doTaskC.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "acceptDoOtherTask": {
+  "rc": 0,
+  "n_specs": 16,
+  "specs": [
+   {
+    "spec": "G (system.lowBattery.status = success ->  X ((system.closeGripper.status = success | system.closeGripper.status = failure) | system.closeGripper.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.closeGripper.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskA.status = success ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.doTaskB.status = success | system.doTaskB.status = failure) | system.doTaskB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskB.status = success ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosC.status = success ->  X ((system.doTaskC.status = success | system.doTaskC.status = failure) | system.doTaskC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskC.status = success ->  X (system.hasInput.status = success | system.hasInput.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasInput.status = failure ->  X ((system.waitInput.status = success | system.waitInput.status = failure) | system.waitInput.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.invValid.status = failure ->  X ((system.computInv.status = success | system.computInv.status = failure) | system.computInv.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasInput.status = success ->  X (system.invValid.status = success | system.invValid.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.invValid.status = success ->  X ((system.searchTarget.status = success | system.searchTarget.status = failure) | system.searchTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.computInv.status = success ->  X ((system.searchTarget.status = success | system.searchTarget.status = failure) | system.searchTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.searchTarget.status = success ->  X ((system.activeManipulator.status = success | system.activeManipulator.status = failure) | system.activeManipulator.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 16,
+  "n_false": 0
+ },
+ "acceptMoveFinger": {
+  "rc": 0,
+  "n_specs": 2,
+  "specs": [
+   {
+    "spec": "X ((system.acceptInput.status = success | system.acceptInput.status = failure) | system.acceptInput.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.acceptInput.status = success ->  X ((system.moveFingerToTargetPosition.status = success | system.moveFingerToTargetPosition.status = failure) | system.moveFingerToTargetPosition.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 2,
+  "n_false": 0
+ },
+ "alarm1": {
+  "rc": 0,
+  "n_specs": 3,
+  "specs": [
+   {
+    "spec": "G (((system.alarm.status = success | system.alarm_2.status = success) | system.alarm_3.status = success) ->  X ((((((system.taskFinishedA.status = success | system.taskFinishedA.status = failure) | system.atPosA.status = success) | system.atPosA.status = failure) | system.goToPosA.status = success) | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = success ->  X (((system.doTaskA.status = success | system.doTaskA_2.status = success) | (system.doTaskA.status = failure | system.doTaskA_2.status = failure)) | (system.doTaskA.status = running | system.doTaskA_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X (((system.doTaskA.status = success | system.doTaskA_2.status = success) | (system.doTaskA.status = failure | system.doTaskA_2.status = failure)) | (system.doTaskA.status = running | system.doTaskA_2.status = running)))",
+    "result": "true"
+   }
+  ],
+  "n_true": 3,
+  "n_false": 0
+ },
+ "alarm2": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X (system.alarm.status = success | system.alarm.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.alarm.status = success ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.placeB.status = success | system.placeB.status = failure) | system.placeB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.alarm.status = failure ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosC.status = success ->  X ((system.placeC.status = success | system.placeC.status = failure) | system.placeC.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "alarm3": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "G (system.alarm.status = success ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.alarm.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "alarm4": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "G (system.alarm.status = success ->  X (system.taskFinishedA.status = success | system.taskFinishedA.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.taskFinishedA.status = failure ->  X (system.atPosA.status = success | system.atPosA.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.alarm.status = failure ->  X (system.taskFinishedB.status = success | system.taskFinishedB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.taskFinishedB.status = failure ->  X (system.atPosB.status = success | system.atPosB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.doTaskB.status = success | system.doTaskB.status = failure) | system.doTaskB.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ },
+ "alarm5": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "G (system.alarm.status = success ->  X (system.taskFinishedA.status = success | system.taskFinishedA.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.taskFinishedA.status = failure ->  X (system.atPosA.status = success | system.atPosA.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = success ->  X (((system.doTaskA.status = success | system.doTaskA_2.status = success) | (system.doTaskA.status = failure | system.doTaskA_2.status = failure)) | (system.doTaskA.status = running | system.doTaskA_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X (((system.doTaskA.status = success | system.doTaskA_2.status = success) | (system.doTaskA.status = failure | system.doTaskA_2.status = failure)) | (system.doTaskA.status = running | system.doTaskA_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.alarm.status = failure ->  X (system.taskFinishedB.status = success | system.taskFinishedB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.taskFinishedB.status = failure ->  X (system.atPosB.status = success | system.atPosB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = success ->  X (((system.doTaskB.status = success | system.doTaskB_2.status = success) | (system.doTaskB.status = failure | system.doTaskB_2.status = failure)) | (system.doTaskB.status = running | system.doTaskB_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X (((system.doTaskB.status = success | system.doTaskB_2.status = success) | (system.doTaskB.status = failure | system.doTaskB_2.status = failure)) | (system.doTaskB.status = running | system.doTaskB_2.status = running)))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ },
+ "attack": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X ((system.getTarget.status = success | system.getTarget.status = failure) | system.getTarget.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.getTarget.status = success ->  X ((system.approachTarget.status = success | system.approachTarget.status = failure) | system.approachTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.approachTarget.status = success ->  X (system.TargetAdjacent.status = success | system.TargetAdjacent.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.TargetAdjacent.status = success ->  X ((system.attackTarget.status = success | system.attackTarget.status = failure) | system.attackTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.getTarget.status = failure ->  X ((system.followHuman.status = success | system.followHuman.status = failure) | system.followHuman.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "attack2": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X ((system.getTarget.status = success | system.getTarget.status = failure) | system.getTarget.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.getTarget.status = success ->  X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToDestination.status = success ->  X (system.TargetAdjacent.status = success | system.TargetAdjacent.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.TargetAdjacent.status = success ->  X ((system.attackTarget.status = success | system.attackTarget.status = failure) | system.attackTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.getTarget.status = failure ->  X ((system.randomMove.status = success | system.randomMove.status = failure) | system.randomMove.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "attackTarget": {
+  "rc": 0,
+  "n_specs": 9,
+  "specs": [
+   {
+    "spec": "X ((system.getTarget.status = success | system.getTarget.status = failure) | system.getTarget.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.getTarget.status = success ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findFood.status = success ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.findTableware.status = success | system.findTableware.status = failure) | system.findTableware.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findTableware.status = success ->  X ((system.eatfood.status = success | system.eatfood.status = failure) | system.eatfood.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X (system.TargetAdjacent.status = success | system.TargetAdjacent.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.TargetAdjacent.status = success ->  X ((system.attackTarget.status = success | system.attackTarget.status = failure) | system.attackTarget.status = running))",
+    "result": "false"
+   },
+   {
+    "spec": "G (system.isHungry.status = success ->  X ((system.findFood.status = success | system.findFood.status = failure) | system.findFood.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isHungry.status = failure ->  X ((system.followHuman.status = success | system.followHuman.status = failure) | system.followHuman.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 1
+ },
+ "attack_taskA": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "X (system.atPosA.status = success | system.atPosA.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskA.status = success ->  X ((system.getTarget.status = success | system.getTarget.status = failure) | system.getTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.getTarget.status = success ->  X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToDestination.status = success ->  X (system.TargetAdjacent.status = success | system.TargetAdjacent.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.TargetAdjacent.status = success ->  X ((system.attackTarget.status = success | system.attackTarget.status = failure) | system.attackTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.attackTarget.status = success ->  X (system.taskFinishedA.status = success | system.taskFinishedA.status = failure))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "autonomus": {
+  "rc": 0,
+  "n_specs": 10,
+  "specs": [
+   {
+    "spec": "G (system.followHuman.status = failure ->  X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "X (system.roomKnown.status = success | system.roomKnown.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.computInv.status = success ->  X (system.RobotAtInvPose.status = success | system.RobotAtInvPose.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.RobotAtInvPose.status = failure ->  X ((system.goToInvPose.status = success | system.goToInvPose.status = failure) | system.goToInvPose.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.roomKnown.status = success ->  X (system.robotInRoom.status = success | system.robotInRoom.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.robotInRoom.status = failure ->  X ((system.goToRoom.status = success | system.goToRoom.status = failure) | system.goToRoom.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G ((system.bottleFound.status = failure | system.bottleFound_2.status = failure) ->  X (((system.findBottle.status = success | system.findBottle_2.status = success) | (system.findBottle.status = failure | system.findBottle_2.status = failure)) | (system.findBottle.status = running | system.findBottle_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToInvPose.status = success ->  X ((system.bottleFound.status = success | system.bottleFound_2.status = success) | (system.bottleFound.status = failure | system.bottleFound_2.status = failure)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.ballGrasped.status = failure ->  X (system.invValid.status = success | system.invValid.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.invValid.status = success ->  X ((system.computInv.status = success | system.computInv.status = failure) | system.computInv.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 10,
+  "n_false": 0
+ },
+ "ballFound": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "X (system.ballFound.status = success | system.ballFound.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.ballFound.status = failure ->  X ((system.searchForBall.status = success | system.searchForBall.status = failure) | system.searchForBall.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.ballClose.status = failure ->  X ((system.closeToBall.status = success | system.closeToBall.status = failure) | system.closeToBall.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.ballGrasped.status = failure ->  X ((system.graspBall.status = success | system.graspBall.status = failure) | system.graspBall.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.boxFound.status = failure ->  X ((system.searchForBox.status = success | system.searchForBox.status = failure) | system.searchForBox.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.boxNear.status = failure ->  X ((system.closeToBox.status = success | system.closeToBox.status = failure) | system.closeToBox.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.closeToBox.status = success ->  X (system.ballPlaced.status = success | system.ballPlaced.status = failure))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "charge": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X (system.lowBattery.status = success | system.lowBattery.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = success ->  X (system.atCharge.status = success | system.atCharge.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atCharge.status = failure ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "chargeFull": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "X (system.fullBattery.status = success | system.fullBattery.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.fullBattery.status = success ->  X (system.isCharge.status = success | system.isCharge.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isCharge.status = success ->  X ((system.stopCharge.status = success | system.stopCharge.status = failure) | system.stopCharge.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.fullBattery.status = failure ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = success ->  X ((system.connectToStation.status = success | system.connectToStation.status = failure) | system.connectToStation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.connectToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.askHelp.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStation.status = success ->  X ((system.waitCharge.status = success | system.waitCharge.status = failure) | system.waitCharge.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ },
+ "checkBattery_ABC": {
+  "rc": 0,
+  "n_specs": 10,
+  "specs": [
+   {
+    "spec": "X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X (((system.pickUp.status = success | system.pickUp_2.status = success) | (system.pickUp.status = failure | system.pickUp_2.status = failure)) | (system.pickUp.status = running | system.pickUp_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.checkBattery.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosC.status = success ->  X ((system.doTaskC.status = success | system.doTaskC.status = failure) | system.doTaskC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = success ->  X (system.empty.status = success | system.empty.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.empty.status = success ->  X (((system.pickUp.status = success | system.pickUp_2.status = success) | (system.pickUp.status = failure | system.pickUp_2.status = failure)) | (system.pickUp.status = running | system.pickUp_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isHungry.status = success ->  X ((system.eatfood.status = success | system.eatfood.status = failure) | system.eatfood.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 10,
+  "n_false": 0
+ },
+ "checkTarget": {
+  "rc": 0,
+  "n_specs": 3,
+  "specs": [
+   {
+    "spec": "X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToDestination.status = success ->  X (system.TargetFound.status = success | system.TargetFound.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.TargetFound.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 3,
+  "n_false": 0
+ },
+ "doTask": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskA.status = success ->  X ((system.doTaskB.status = success | system.doTaskB.status = failure) | system.doTaskB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskB.status = success ->  X ((system.doTaskC.status = success | system.doTaskC.status = failure) | system.doTaskC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskB.status = failure ->  X ((system.doTaskE.status = success | system.doTaskE.status = failure) | system.doTaskE.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskE.status = failure ->  X ((system.doTaskD.status = success | system.doTaskD.status = failure) | system.doTaskD.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "evaluate": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.abilityEvaluated.status = success | system.abilityEvaluated.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.abilityEvaluated.status = failure ->  X ((system.testPerformance.status = success | system.testPerformance.status = failure) | system.testPerformance.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.testPerformance.status = success ->  X ((system.evaluationPerformance.status = success | system.evaluationPerformance.status = failure) | system.evaluationPerformance.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToDestination.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.putDown.status = success ->  X ((system.moveToParking.status = success | system.moveToParking.status = failure) | system.moveToParking.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "explore": {
+  "rc": 0,
+  "n_specs": 3,
+  "specs": [
+   {
+    "spec": "X (system.detectionCompleted.status = success | system.detectionCompleted.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.detectionCompleted.status = success ->  X ((system.generateDetection.status = success | system.generateDetection.status = failure) | system.generateDetection.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.generateDetection.status = success ->  X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 3,
+  "n_false": 0
+ },
+ "fetchBottle": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = success ->  X ((system.locateBottle.status = success | system.locateBottle.status = failure) | system.locateBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.locateBottle.status = success ->  X ((system.fetchBottle.status = success | system.fetchBottle.status = failure) | system.fetchBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = failure ->  X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "fetch_bottle": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = success ->  X ((system.locateBottle.status = success | system.locateBottle.status = failure) | system.locateBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.locateBottle.status = success ->  X ((system.goToBottle.status = success | system.goToBottle.status = failure) | system.goToBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToBottle.status = success ->  X ((system.fetchBottle.status = success | system.fetchBottle.status = failure) | system.fetchBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = failure ->  X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "findfood": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "X ((system.findFood.status = success | system.findFood.status = failure) | system.findFood.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findFood.status = success ->  X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToDestination.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X ((system.findTableware.status = success | system.findTableware.status = failure) | system.findTableware.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findTableware.status = success ->  X ((system.moveToTableware.status = success | system.moveToTableware.status = failure) | system.moveToTableware.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToTableware.status = success ->  X (system.isFull.status = success | system.isFull.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isFull.status = failure ->  X ((system.eatfood.status = success | system.eatfood.status = failure) | system.eatfood.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "firefighting": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X (system.hasVictim.status = success | system.hasVictim.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasVictim.status = success ->  X ((system.saveVictim.status = success | system.saveVictim.status = failure) | system.saveVictim.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasFire.status = success ->  X ((system.useExtinguisher.status = success | system.useExtinguisher.status = failure) | system.useExtinguisher.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToOtherRoom.status = success ->  X ((system.Rescue.status = success | system.Rescue.status = failure) | system.Rescue.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "followHuman": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.bottleGripped.status = failure ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.bottleLocated.status = success ->  X ((system.graspBottle.status = success | system.graspBottle.status = failure) | system.graspBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.invValid.status = failure ->  X ((system.computInv.status = success | system.computInv.status = failure) | system.computInv.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.invValid.status = success ->  X (system.bottleLocated.status = success | system.bottleLocated.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.roomKnown.status = success ->  X (system.robotInRoom.status = success | system.robotInRoom.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.robotInRoom.status = failure ->  X ((system.goToRoom.status = success | system.goToRoom.status = failure) | system.goToRoom.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.bottleFound.status = failure ->  X ((system.locateBottle.status = success | system.locateBottle.status = failure) | system.locateBottle.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ },
+ "get_food": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "X (system.noFood.status = success | system.noFood.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.noFood.status = success ->  X (system.hasApple.status = success | system.hasApple.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasApple.status = success ->  X ((system.pickApple.status = success | system.pickApple.status = failure) | system.pickApple.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasApple.status = failure ->  X (system.holdKnife.status = success | system.holdKnife.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.holdKnife.status = failure ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X ((system.goCow.status = success | system.goCow.status = failure) | system.goCow.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goCow.status = success ->  X ((system.killCow.status = success | system.killCow.status = failure) | system.killCow.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "go": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "X ((system.goToPos1.status = success | system.goToPos1.status = failure) | system.goToPos1.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos1.status = success ->  X ((system.goToPos2.status = success | system.goToPos2.status = failure) | system.goToPos2.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos2.status = success ->  X ((system.goToPos3.status = success | system.goToPos3.status = failure) | system.goToPos3.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos3.status = success ->  X ((system.goToPos4.status = success | system.goToPos4.status = failure) | system.goToPos4.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos4.status = success ->  X ((system.goToPos5.status = success | system.goToPos5.status = failure) | system.goToPos5.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos5.status = success ->  X ((system.goToPos6.status = success | system.goToPos6.status = failure) | system.goToPos6.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos6.status = success ->  X ((system.goToPos7.status = success | system.goToPos7.status = failure) | system.goToPos7.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "grip_put": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X ((system.openGripper.status = success | system.openGripper.status = failure) | system.openGripper.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openGripper.status = success ->  X ((system.moveFingerToTargetPosition.status = success | system.moveFingerToTargetPosition.status = failure) | system.moveFingerToTargetPosition.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveFingerToTargetPosition.status = success ->  X ((system.closeGripper.status = success | system.closeGripper.status = failure) | system.closeGripper.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.closeGripper.status = success ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "gripper": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X (system.lowBattery.status = success | system.lowBattery.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = success ->  X ((system.openGripper.status = success | system.openGripper.status = failure) | system.openGripper.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveFingerToTargetPosition.status = success ->  X ((system.closeGripper.status = success | system.closeGripper.status = failure) | system.closeGripper.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openGripper.status = success ->  X ((system.moveFingerToTargetPosition.status = success | system.moveFingerToTargetPosition.status = failure) | system.moveFingerToTargetPosition.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "hungry": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.isHungry.status = success | system.isHungry.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isHungry.status = success ->  X ((system.findFood.status = success | system.findFood.status = failure) | system.findFood.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findFood.status = success ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.findTableware.status = success | system.findTableware.status = failure) | system.findTableware.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findTableware.status = success ->  X ((system.eatfood.status = success | system.eatfood.status = failure) | system.eatfood.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isHungry.status = failure ->  X ((system.followHuman.status = success | system.followHuman.status = failure) | system.followHuman.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "hungry_kitchen": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.isHungry.status = success | system.isHungry.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isHungry.status = success ->  X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = failure ->  X ((system.followHuman.status = success | system.followHuman.status = failure) | system.followHuman.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.followHuman.status = success ->  X ((system.locateBottle.status = success | system.locateBottle.status = failure) | system.locateBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.locateBottle.status = success ->  X ((system.fetchBottle.status = success | system.fetchBottle.status = failure) | system.fetchBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isHungry.status = failure ->  X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "inputTarget": {
+  "rc": 0,
+  "n_specs": 11,
+  "specs": [
+   {
+    "spec": "G (system.acceptInput.status = success ->  X ((system.setValue.status = success | system.setValue.status = failure) | system.setValue.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.setValue.status = success ->  X (system.BatteryOK.status = success | system.BatteryOK.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.BatteryOK.status = success ->  X ((system.searchTarget.status = success | system.searchTarget.status = failure) | system.searchTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.searchTarget.status = success ->  X (system.TargetFound.status = success | system.TargetFound.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.TargetFound.status = success ->  X ((system.openGripper.status = success | system.openGripper.status = failure) | system.openGripper.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openGripper.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X ((system.closeGripper.status = success | system.closeGripper.status = failure) | system.closeGripper.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.TargetCaptured.status = success ->  X ((system.goToTarRoom.status = success | system.goToTarRoom.status = failure) | system.goToTarRoom.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToTarRoom.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 11,
+  "n_false": 0
+ },
+ "intCompare": {
+  "rc": 0,
+  "n_specs": 9,
+  "specs": [
+   {
+    "spec": "X ((system.acceptInput.status = success | system.acceptInput.status = failure) | system.acceptInput.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.acceptInput.status = success ->  X ((system.setValue.status = success | system.setValue.status = failure) | system.setValue.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.setValue.status = success ->  X ((system.compareValue.status = success | system.compareValue.status = failure) | system.compareValue.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.equalVal.status = success ->  X ((system.stopSearch.status = success | system.stopSearch.status = failure) | system.stopSearch.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.equalVal.status = failure ->  X ((system.searchTarget.status = success | system.searchTarget.status = failure) | system.searchTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 9,
+  "n_false": 0
+ },
+ "invTask": {
+  "rc": 0,
+  "n_specs": 11,
+  "specs": [
+   {
+    "spec": "X (system.lowBattery.status = success | system.lowBattery.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = success ->  X (system.invValid.status = success | system.invValid.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.invValid.status = failure ->  X ((system.computInv.status = success | system.computInv.status = failure) | system.computInv.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.invValid.status = success ->  X ((system.acceptInput.status = success | system.acceptInput.status = failure) | system.acceptInput.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.acceptInput.status = success ->  X ((system.searchAns.status = success | system.searchAns.status = failure) | system.searchAns.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.roomKnown.status = success ->  X ((system.goToRoom.status = success | system.goToRoom.status = failure) | system.goToRoom.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToRoom.status = success ->  X ((system.sleeping.status = success | system.sleeping.status = failure) | system.sleeping.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atKitchen.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.alarm.status = success ->  X (system.holdTools.status = success | system.holdTools.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.holdTools.status = success ->  X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToKitchen.status = success ->  X ((system.useExtinguisher.status = success | system.useExtinguisher.status = failure) | system.useExtinguisher.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 11,
+  "n_false": 0
+ },
+ "isFull": {
+  "rc": 0,
+  "n_specs": 2,
+  "specs": [
+   {
+    "spec": "X (system.isFull.status = success | system.isFull.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isFull.status = success ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 2,
+  "n_false": 0
+ },
+ "lowBattery_ABC": {
+  "rc": 0,
+  "n_specs": 9,
+  "specs": [
+   {
+    "spec": "X ((system.lowBattery.status = success | system.lowBattery_2.status = success) | (system.lowBattery.status = failure | system.lowBattery_2.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G ((system.pickUp.status = success | system.pickUp_2.status = success) ->  X (((((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running) | system.doTaskB.status = success) | system.doTaskB.status = failure) | system.doTaskB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskA.status = success ->  X (((system.putDown.status = success | system.putDown_2.status = success) | (system.putDown.status = failure | system.putDown_2.status = failure)) | (system.putDown.status = running | system.putDown_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.doTaskB.status = success ->  X (((system.putDown.status = success | system.putDown_2.status = success) | (system.putDown.status = failure | system.putDown_2.status = failure)) | (system.putDown.status = running | system.putDown_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = success ->  X (((system.empty.status = success | system.empty_2.status = success) | system.empty_3.status = success) | ((system.empty.status = failure | system.empty_2.status = failure) | system.empty_3.status = failure)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (((system.empty.status = success | system.empty_2.status = success) | system.empty_3.status = success) ->  X ((((((system.pickUp.status = success | system.pickUp_2.status = success) | (system.pickUp.status = failure | system.pickUp_2.status = failure)) | (system.pickUp.status = running | system.pickUp_2.status = running)) | system.approachTarget.status = success) | system.approachTarget.status = failure) | system.approachTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = success ->  X (((system.empty.status = success | system.empty_2.status = success) | system.empty_3.status = success) | ((system.empty.status = failure | system.empty_2.status = failure) | system.empty_3.status = failure)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosC.status = success ->  X (((system.empty.status = success | system.empty_2.status = success) | system.empty_3.status = success) | ((system.empty.status = failure | system.empty_2.status = failure) | system.empty_3.status = failure)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.approachTarget.status = success ->  X ((system.doTaskC.status = success | system.doTaskC.status = failure) | system.doTaskC.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 9,
+  "n_false": 0
+ },
+ "manipulate_parking": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X ((system.moveToPanel.status = success | system.moveToPanel.status = failure) | system.moveToPanel.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToPanel.status = success ->  X ((system.moveFingerToTargetPosition.status = success | system.moveFingerToTargetPosition.status = failure) | system.moveFingerToTargetPosition.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveFingerToTargetPosition.status = success ->  X ((system.followOperation.status = success | system.followOperation.status = failure) | system.followOperation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.followOperation.status = success ->  X ((system.moveToParking.status = success | system.moveToParking.status = failure) | system.moveToParking.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "mars": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "G (system.getData.status = success ->  X ((system.send.status = success | system.send.status = failure) | system.send.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "X (system.lowBattery.status = success | system.lowBattery.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = success ->  X ((system.unfoldPanels.status = success | system.unfoldPanels.status = failure) | system.unfoldPanels.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.lowBattery.status = failure ->  X (system.storm.status = success | system.storm.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.storm.status = success ->  X ((system.foldPanels.status = success | system.foldPanels.status = failure) | system.foldPanels.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.storm.status = failure ->  X ((system.getData.status = success | system.getData.status = failure) | system.getData.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "mars2": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "X (system.haveData.status = success | system.haveData.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.putDown.status = success ->  X (((system.analyze.status = success | system.analyze_2.status = success) | (system.analyze.status = failure | system.analyze_2.status = failure)) | (system.analyze.status = running | system.analyze_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.haveData.status = failure ->  X (system.hasSample.status = success | system.hasSample.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasSample.status = success ->  X (((system.analyze.status = success | system.analyze_2.status = success) | (system.analyze.status = failure | system.analyze_2.status = failure)) | (system.analyze.status = running | system.analyze_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.holdItem.status = failure ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X (system.atStation.status = success | system.atStation.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atStation.status = failure ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "maze1": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X (system.atPosA.status = success | system.atPosA.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = failure ->  X ((system.moveDown.status = success | system.moveDown.status = failure) | system.moveDown.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveDown.status = success ->  X (system.atPosB.status = success | system.atPosB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = failure ->  X ((system.moveRight.status = success | system.moveRight.status = failure) | system.moveRight.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "maze2": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X (system.atPos3.status = success | system.atPos3.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPos3.status = failure ->  X ((system.move1to3.status = success | system.move1to3.status = failure) | system.move1to3.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPos3.status = success ->  X (system.atPos2.status = success | system.atPos2.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPos2.status = failure ->  X ((system.move3to2.status = success | system.move3to2.status = failure) | system.move3to2.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "maze3": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.atPos9.status = success | system.atPos9.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPos9.status = failure ->  X ((system.move6to9.status = success | system.move6to9.status = failure) | system.move6to9.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move6to9.status = failure ->  X (system.atPos6.status = success | system.atPos6.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPos6.status = failure ->  X ((system.move3to6.status = success | system.move3to6.status = failure) | system.move3to6.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move3to6.status = failure ->  X (system.atPos2.status = success | system.atPos2.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPos2.status = failure ->  X ((system.move1to2.status = success | system.move1to2.status = failure) | system.move1to2.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "maze4": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X ((system.move1to3.status = success | system.move1to3.status = failure) | system.move1to3.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move1to3.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X ((system.move3to6.status = success | system.move3to6.status = failure) | system.move3to6.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move3to6.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "maze5": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.alarm.status = success | system.alarm.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.alarm.status = success ->  X ((system.move1to2.status = success | system.move1to2.status = failure) | system.move1to2.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move1to2.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.alarm.status = failure ->  X ((system.move1to3.status = success | system.move1to3.status = failure) | system.move1to3.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move1to3.status = success ->  X ((system.move3to5.status = success | system.move3to5.status = failure) | system.move3to5.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move3to5.status = success ->  X ((system.doTaskB.status = success | system.doTaskB.status = failure) | system.doTaskB.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "moveActivate": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X ((system.move1to2.status = success | system.move1to2.status = failure) | system.move1to2.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move1to2.status = success ->  X (((((system.activeManipulator.status = success | system.activeManipulator_2.status = success) | system.activeManipulator_3.status = success) | system.activeManipulator_4.status = success) | (((system.activeManipulator.status = failure | system.activeManipulator_2.status = failure) | system.activeManipulator_3.status = failure) | system.activeManipulator_4.status = failure)) | (((system.activeManipulator.status = running | system.activeManipulator_2.status = running) | system.activeManipulator_3.status = running) | system.activeManipulator_4.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move2to3.status = success ->  X (((((system.activeManipulator.status = success | system.activeManipulator_2.status = success) | system.activeManipulator_3.status = success) | system.activeManipulator_4.status = success) | (((system.activeManipulator.status = failure | system.activeManipulator_2.status = failure) | system.activeManipulator_3.status = failure) | system.activeManipulator_4.status = failure)) | (((system.activeManipulator.status = running | system.activeManipulator_2.status = running) | system.activeManipulator_3.status = running) | system.activeManipulator_4.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move3to4.status = success ->  X (((((system.activeManipulator.status = success | system.activeManipulator_2.status = success) | system.activeManipulator_3.status = success) | system.activeManipulator_4.status = success) | (((system.activeManipulator.status = failure | system.activeManipulator_2.status = failure) | system.activeManipulator_3.status = failure) | system.activeManipulator_4.status = failure)) | (((system.activeManipulator.status = running | system.activeManipulator_2.status = running) | system.activeManipulator_3.status = running) | system.activeManipulator_4.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move4to5.status = success ->  X (((((system.activeManipulator.status = success | system.activeManipulator_2.status = success) | system.activeManipulator_3.status = success) | system.activeManipulator_4.status = success) | (((system.activeManipulator.status = failure | system.activeManipulator_2.status = failure) | system.activeManipulator_3.status = failure) | system.activeManipulator_4.status = failure)) | (((system.activeManipulator.status = running | system.activeManipulator_2.status = running) | system.activeManipulator_3.status = running) | system.activeManipulator_4.status = running)))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "moveActivate2": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.checkReachable.status = success | system.checkReachable.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.checkReachable.status = success ->  X ((system.move1to2.status = success | system.move1to2.status = failure) | system.move1to2.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move1to2.status = success ->  X (((((system.activeManipulator.status = success | system.activeManipulator_2.status = success) | system.activeManipulator_3.status = success) | system.activeManipulator_4.status = success) | (((system.activeManipulator.status = failure | system.activeManipulator_2.status = failure) | system.activeManipulator_3.status = failure) | system.activeManipulator_4.status = failure)) | (((system.activeManipulator.status = running | system.activeManipulator_2.status = running) | system.activeManipulator_3.status = running) | system.activeManipulator_4.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move2to3.status = success ->  X (((((system.activeManipulator.status = success | system.activeManipulator_2.status = success) | system.activeManipulator_3.status = success) | system.activeManipulator_4.status = success) | (((system.activeManipulator.status = failure | system.activeManipulator_2.status = failure) | system.activeManipulator_3.status = failure) | system.activeManipulator_4.status = failure)) | (((system.activeManipulator.status = running | system.activeManipulator_2.status = running) | system.activeManipulator_3.status = running) | system.activeManipulator_4.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move3to4.status = success ->  X (((((system.activeManipulator.status = success | system.activeManipulator_2.status = success) | system.activeManipulator_3.status = success) | system.activeManipulator_4.status = success) | (((system.activeManipulator.status = failure | system.activeManipulator_2.status = failure) | system.activeManipulator_3.status = failure) | system.activeManipulator_4.status = failure)) | (((system.activeManipulator.status = running | system.activeManipulator_2.status = running) | system.activeManipulator_3.status = running) | system.activeManipulator_4.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move4to5.status = success ->  X (((((system.activeManipulator.status = success | system.activeManipulator_2.status = success) | system.activeManipulator_3.status = success) | system.activeManipulator_4.status = success) | (((system.activeManipulator.status = failure | system.activeManipulator_2.status = failure) | system.activeManipulator_3.status = failure) | system.activeManipulator_4.status = failure)) | (((system.activeManipulator.status = running | system.activeManipulator_2.status = running) | system.activeManipulator_3.status = running) | system.activeManipulator_4.status = running)))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "moveContinue": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "G (system.move2to3.status = failure ->  X ((system.move3to4.status = success | system.move3to4.status = failure) | system.move3to4.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move3to4.status = failure ->  X ((system.move4to5.status = success | system.move4to5.status = failure) | system.move4to5.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "X (system.checkReachable.status = success | system.checkReachable.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.checkReachable.status = success ->  X ((system.move1to2.status = success | system.move1to2.status = failure) | system.move1to2.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move1to2.status = failure ->  X ((system.move2to3.status = success | system.move2to3.status = failure) | system.move2to3.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.move1to2.status = success ->  X ((system.continueTask.status = success | system.continueTask.status = failure) | system.continueTask.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "moveToPos": {
+  "rc": 0,
+  "n_specs": 7,
+  "specs": [
+   {
+    "spec": "X ((system.goToPos1.status = success | system.goToPos1.status = failure) | system.goToPos1.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos1.status = success ->  X ((system.goToPos2.status = success | system.goToPos2.status = failure) | system.goToPos2.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos2.status = success ->  X ((system.goToPos3.status = success | system.goToPos3.status = failure) | system.goToPos3.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos3.status = failure ->  X ((system.goToPos4.status = success | system.goToPos4.status = failure) | system.goToPos4.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos4.status = failure ->  X ((system.goToPos5.status = success | system.goToPos5.status = failure) | system.goToPos5.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos5.status = failure ->  X ((system.goToPos6.status = success | system.goToPos6.status = failure) | system.goToPos6.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPos6.status = success ->  X ((system.goToPos7.status = success | system.goToPos7.status = failure) | system.goToPos7.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 7,
+  "n_false": 0
+ },
+ "openDoor": {
+  "rc": 0,
+  "n_specs": 3,
+  "specs": [
+   {
+    "spec": "X (system.isDoorOpen.status = success | system.isDoorOpen.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDoorOpen.status = failure ->  X ((system.openDoor.status = success | system.openDoor.status = failure) | system.openDoor.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openDoor.status = success ->  X ((system.passThroughDoor.status = success | system.passThroughDoor.status = failure) | system.passThroughDoor.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 3,
+  "n_false": 0
+ },
+ "openDoor2": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X (system.isDoorOpen.status = success | system.isDoorOpen.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDoorOpen.status = success ->  X ((system.passThroughDoor.status = success | system.passThroughDoor.status = failure) | system.passThroughDoor.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.passThroughDoor.status = success ->  X ((system.closeDoor.status = success | system.closeDoor.status = failure) | system.closeDoor.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDoorOpen.status = failure ->  X ((system.openDoor.status = success | system.openDoor.status = failure) | system.openDoor.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openDoor.status = success ->  X ((system.passThroughDoor.status = success | system.passThroughDoor.status = failure) | system.passThroughDoor.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "panel_activateManipulator": {
+  "rc": 0,
+  "n_specs": 2,
+  "specs": [
+   {
+    "spec": "X ((system.moveToPanel.status = success | system.moveToPanel.status = failure) | system.moveToPanel.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToPanel.status = success ->  X ((system.activeManipulator.status = success | system.activeManipulator.status = failure) | system.activeManipulator.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 2,
+  "n_false": 0
+ },
+ "passThroughDoor": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.isDoorOpen.status = success | system.isDoorOpen.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDoorOpen.status = success ->  X (((system.passThroughDoor.status = success | system.passThroughDoor_2.status = success) | (system.passThroughDoor.status = failure | system.passThroughDoor_2.status = failure)) | (system.passThroughDoor.status = running | system.passThroughDoor_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G ((system.passThroughDoor.status = success | system.passThroughDoor_2.status = success) ->  X (((system.closeDoor.status = success | system.closeDoor_2.status = success) | (system.closeDoor.status = failure | system.closeDoor_2.status = failure)) | (system.closeDoor.status = running | system.closeDoor_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDoorOpen.status = failure ->  X ((system.openDoor.status = success | system.openDoor.status = failure) | system.openDoor.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openDoor.status = success ->  X (((system.passThroughDoor.status = success | system.passThroughDoor_2.status = success) | (system.passThroughDoor.status = failure | system.passThroughDoor_2.status = failure)) | (system.passThroughDoor.status = running | system.passThroughDoor_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openDoor.status = failure ->  X ((system.passThroughWindow.status = success | system.passThroughWindow.status = failure) | system.passThroughWindow.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "passThroughDoor2": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X (system.isDoorOpen.status = success | system.isDoorOpen.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDoorOpen.status = success ->  X (((system.passThroughDoor.status = success | system.passThroughDoor_2.status = success) | (system.passThroughDoor.status = failure | system.passThroughDoor_2.status = failure)) | (system.passThroughDoor.status = running | system.passThroughDoor_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDoorOpen.status = failure ->  X ((system.openDoor.status = success | system.openDoor.status = failure) | system.openDoor.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openDoor.status = success ->  X (((system.passThroughDoor.status = success | system.passThroughDoor_2.status = success) | (system.passThroughDoor.status = failure | system.passThroughDoor_2.status = failure)) | (system.passThroughDoor.status = running | system.passThroughDoor_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.openDoor.status = failure ->  X ((system.passThroughWindow.status = success | system.passThroughWindow.status = failure) | system.passThroughWindow.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "patrol1": {
+  "rc": 0,
+  "n_specs": 9,
+  "specs": [
+   {
+    "spec": "X (system.visitedA.status = success | system.visitedA.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.visitedA.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.visitedA.status = success ->  X (system.visitedB.status = success | system.visitedB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.visitedB.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.visitedB.status = success ->  X (system.visitedC.status = success | system.visitedC.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.visitedC.status = failure ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosC.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))",
+    "result": "true"
+   }
+  ],
+  "n_true": 9,
+  "n_false": 0
+ },
+ "pickDeliver": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "X ((system.moveDefaultDeliverPos.status = success | system.moveDefaultDeliverPos.status = failure) | system.moveDefaultDeliverPos.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveDefaultDeliverPos.status = success ->  X (((system.deliverObj.status = success | system.deliverObj_2.status = success) | (system.deliverObj.status = failure | system.deliverObj_2.status = failure)) | (system.deliverObj.status = running | system.deliverObj_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveDefaultDeliverPos.status = failure ->  X ((system.moveDesignPos.status = success | system.moveDesignPos.status = failure) | system.moveDesignPos.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveDesignPos.status = success ->  X (((system.deliverObj.status = success | system.deliverObj_2.status = success) | (system.deliverObj.status = failure | system.deliverObj_2.status = failure)) | (system.deliverObj.status = running | system.deliverObj_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.approachTarget.status = success ->  X ((system.detectObj.status = success | system.detectObj.status = failure) | system.detectObj.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.detectObj.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.noDeliverTask.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ },
+ "pickUp": {
+  "rc": 0,
+  "n_specs": 6,
+  "specs": [
+   {
+    "spec": "X (system.picked.status = success | system.picked.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.picked.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X (system.placed.status = success | system.placed.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.placed.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 6,
+  "n_false": 0
+ },
+ "pickUp2": {
+  "rc": 0,
+  "n_specs": 9,
+  "specs": [
+   {
+    "spec": "X (system.picked.status = success | system.picked.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.picked.status = failure ->  X (system.atPosA.status = success | system.atPosA.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = success ->  X (((system.pickUp.status = success | system.pickUp_2.status = success) | (system.pickUp.status = failure | system.pickUp_2.status = failure)) | (system.pickUp.status = running | system.pickUp_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X (((system.pickUp.status = success | system.pickUp_2.status = success) | (system.pickUp.status = failure | system.pickUp_2.status = failure)) | (system.pickUp.status = running | system.pickUp_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.placed.status = failure ->  X (system.atPosB.status = success | system.atPosB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = success ->  X (((system.putDown.status = success | system.putDown_2.status = success) | (system.putDown.status = failure | system.putDown_2.status = failure)) | (system.putDown.status = running | system.putDown_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X (((system.putDown.status = success | system.putDown_2.status = success) | (system.putDown.status = failure | system.putDown_2.status = failure)) | (system.putDown.status = running | system.putDown_2.status = running)))",
+    "result": "true"
+   }
+  ],
+  "n_true": 9,
+  "n_false": 0
+ },
+ "pickUp_place": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "X (system.placedB.status = success | system.placedB.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.empty.status = success ->  X (system.atPosA.status = success | system.atPosA.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.picked.status = success ->  X (system.atPosB.status = success | system.atPosB.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G ((system.noCollision.status = success | system.noCollision_2.status = success) ->  X (((((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running) | system.goToPosB.status = success) | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = failure ->  X ((system.noCollision.status = success | system.noCollision_2.status = success) | (system.noCollision.status = failure | system.noCollision_2.status = failure)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosA.status = failure ->  X ((system.noCollision.status = success | system.noCollision_2.status = success) | (system.noCollision.status = failure | system.noCollision_2.status = failure)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atPosB.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ },
+ "place": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "G (system.goToPosC.status = success ->  X ((system.placeC.status = success | system.placeC.status = failure) | system.placeC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "X (system.picked.status = success | system.picked.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.picked.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X (((system.pickUp.status = success | system.pickUp_2.status = success) | (system.pickUp.status = failure | system.pickUp_2.status = failure)) | (system.pickUp.status = running | system.pickUp_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.placedB.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosB.status = success ->  X ((system.placeB.status = success | system.placeB.status = failure) | system.placeB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.placeB.status = success ->  X (((system.pickUp.status = success | system.pickUp_2.status = success) | (system.pickUp.status = failure | system.pickUp_2.status = failure)) | (system.pickUp.status = running | system.pickUp_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.placedC.status = failure ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ },
+ "pour_drink": {
+  "rc": 0,
+  "n_specs": 9,
+  "specs": [
+   {
+    "spec": "X (system.roomKnown.status = success | system.roomKnown.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.roomKnown.status = success ->  X ((system.goToRoom.status = success | system.goToRoom.status = failure) | system.goToRoom.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.roomKnown.status = failure ->  X ((system.followHuman.status = success | system.followHuman.status = failure) | system.followHuman.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToRoom.status = success ->  X ((system.findBottle.status = success | system.findBottle.status = failure) | system.findBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findBottle.status = success ->  X ((system.fetchBottle.status = success | system.fetchBottle.status = failure) | system.fetchBottle.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.fetchBottle.status = success ->  X ((system.findGlass.status = success | system.findGlass.status = failure) | system.findGlass.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findGlass.status = success ->  X ((system.fetchGlass.status = success | system.fetchGlass.status = failure) | system.fetchGlass.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.fetchGlass.status = success ->  X ((system.pourDrink.status = success | system.pourDrink.status = failure) | system.pourDrink.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.fetchGlass.status = failure ->  X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 9,
+  "n_false": 0
+ },
+ "processMaterial": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X ((system.pushR.status = success | system.pushR.status = failure) | system.pushR.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pushR.status = success ->  X (system.acceptedMaterial.status = success | system.acceptedMaterial.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.acceptedMaterial.status = success ->  X ((system.pushP.status = success | system.pushP.status = failure) | system.pushP.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pushP.status = success ->  X (system.isProcessed.status = success | system.isProcessed.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isProcessed.status = success ->  X ((system.pushC.status = success | system.pushC.status = failure) | system.pushC.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "put_pickup_tray": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosA.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUp.status = success ->  X ((system.putOnTray.status = success | system.putOnTray.status = failure) | system.putOnTray.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.putOnTray.status = success ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToPosC.status = success ->  X ((system.pickUpFromTray.status = success | system.pickUpFromTray.status = failure) | system.pickUpFromTray.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pickUpFromTray.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.putDown.status = success ->  X ((system.activateProcess.status = success | system.activateProcess.status = failure) | system.activateProcess.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.activateProcess.status = success ->  X ((system.moveToParking.status = success | system.moveToParking.status = failure) | system.moveToParking.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ },
+ "roomKnown": {
+  "rc": 0,
+  "n_specs": 3,
+  "specs": [
+   {
+    "spec": "G (system.invValid.status = failure ->  X ((system.pushP.status = success | system.pushP.status = failure) | system.pushP.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.pushP.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStation.status = success ->  X ((system.sleeping.status = success | system.sleeping.status = failure) | system.sleeping.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 3,
+  "n_false": 0
+ },
+ "searchAns": {
+  "rc": 0,
+  "n_specs": 5,
+  "specs": [
+   {
+    "spec": "X ((system.waitInput.status = success | system.waitInput.status = failure) | system.waitInput.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.waitInput.status = success ->  X (system.hasInput.status = success | system.hasInput.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasInput.status = success ->  X ((system.acceptInput.status = success | system.acceptInput.status = failure) | system.acceptInput.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.acceptInput.status = success ->  X ((system.searchAns.status = success | system.searchAns.status = failure) | system.searchAns.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.searchAns.status = success ->  X ((system.outputAns.status = success | system.outputAns.status = failure) | system.outputAns.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 5,
+  "n_false": 0
+ },
+ "sequence_move": {
+  "rc": 0,
+  "n_specs": 4,
+  "specs": [
+   {
+    "spec": "X ((system.goToStationA.status = success | system.goToStationA.status = failure) | system.goToStationA.status = running)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStationA.status = success ->  X ((system.goToStationB.status = success | system.goToStationB.status = failure) | system.goToStationB.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStationB.status = success ->  X ((system.goToStationC.status = success | system.goToStationC.status = failure) | system.goToStationC.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStationC.status = success ->  X ((system.moveToParking.status = success | system.moveToParking.status = failure) | system.moveToParking.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 4,
+  "n_false": 0
+ },
+ "shedTree": {
+  "rc": 0,
+  "n_specs": 11,
+  "specs": [
+   {
+    "spec": "X (system.isOnPasture.status = success | system.isOnPasture.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isOnPasture.status = success ->  X (system.isDay.status = success | system.isDay.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDay.status = success ->  X (system.isInShed.status = success | system.isInShed.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isInShed.status = success ->  X ((system.leaveShed.status = success | system.leaveShed.status = failure) | system.leaveShed.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.leaveShed.status = success ->  X ((system.findRandomPastureField.status = success | system.findRandomPastureField.status = failure) | system.findRandomPastureField.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findRandomPastureField.status = success ->  X (((system.randomMove.status = success | system.randomMove_2.status = success) | (system.randomMove.status = failure | system.randomMove_2.status = failure)) | (system.randomMove.status = running | system.randomMove_2.status = running)))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDay.status = failure ->  X (system.isNight.status = success | system.isNight.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isNight.status = success ->  X ((system.findShed.status = success | system.findShed.status = failure) | system.findShed.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.findShed.status = success ->  X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.moveToDestination.status = success ->  X ((system.enterShed.status = success | system.enterShed.status = failure) | system.enterShed.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isNight.status = failure ->  X (((system.randomMove.status = success | system.randomMove_2.status = success) | (system.randomMove.status = failure | system.randomMove_2.status = failure)) | (system.randomMove.status = running | system.randomMove_2.status = running)))",
+    "result": "true"
+   }
+  ],
+  "n_true": 11,
+  "n_false": 0
+ },
+ "waitData": {
+  "rc": 0,
+  "n_specs": 8,
+  "specs": [
+   {
+    "spec": "X (system.isDay.status = success | system.isDay.status = failure)",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isDay.status = success ->  X (system.hasInput.status = success | system.hasInput.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.hasInput.status = failure ->  X ((system.waitInput.status = success | system.waitInput.status = failure) | system.waitInput.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.isNight.status = success ->  X (system.atCharge.status = success | system.atCharge.status = failure))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.atCharge.status = failure ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.fullBattery.status = success ->  X ((system.getTarget.status = success | system.getTarget.status = failure) | system.getTarget.status = running))",
+    "result": "true"
+   },
+   {
+    "spec": "G (system.getTarget.status = success ->  X ((system.searchTarget.status = success | system.searchTarget.status = failure) | system.searchTarget.status = running))",
+    "result": "true"
+   }
+  ],
+  "n_true": 8,
+  "n_false": 0
+ }
+}

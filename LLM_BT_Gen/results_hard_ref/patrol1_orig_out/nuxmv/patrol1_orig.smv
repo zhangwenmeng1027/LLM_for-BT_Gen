@@ -1,0 +1,155 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.visitedA.status = success) | (system.visitedA.status = failure)));
+LTLSPEC G(((system.visitedA.status = failure) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X((((system.patroling.status = success) | (system.patroling_2.status = success) | (system.patroling_3.status = success)) | ((system.patroling.status = failure) | (system.patroling_2.status = failure) | (system.patroling_3.status = failure)) | ((system.patroling.status = running) | (system.patroling_2.status = running) | (system.patroling_3.status = running))))));
+LTLSPEC G(((system.visitedA.status = success) -> X(((system.visitedB.status = success) | (system.visitedB.status = failure)))));
+LTLSPEC G(((system.visitedB.status = failure) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X((((system.patroling.status = success) | (system.patroling_2.status = success) | (system.patroling_3.status = success)) | ((system.patroling.status = failure) | (system.patroling_2.status = failure) | (system.patroling_3.status = failure)) | ((system.patroling.status = running) | (system.patroling_2.status = running) | (system.patroling_3.status = running))))));
+LTLSPEC G(((system.visitedB.status = success) -> X(((system.visitedC.status = success) | (system.visitedC.status = failure)))));
+LTLSPEC G(((system.visitedC.status = failure) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X((((system.patroling.status = success) | (system.patroling_2.status = success) | (system.patroling_3.status = success)) | ((system.patroling.status = failure) | (system.patroling_2.status = failure) | (system.patroling_3.status = failure)) | ((system.patroling.status = running) | (system.patroling_2.status = running) | (system.patroling_3.status = running))))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        visitedA : visitedA_module(visitedA_v_stage_0);
+        goToPosA : success_DEFAULT_module();
+        patroling : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(goToPosA, patroling);
+        c1 : composite_sequence_without_memory_2(visitedA, c2);
+        visitedB : visitedB_module(visitedB_v_stage_0);
+        goToPosB : success_DEFAULT_module();
+        patroling_2 : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_2(goToPosB, patroling_2);
+        c3 : composite_selector_without_memory_2(visitedB, c4);
+        visitedC : visitedC_module(visitedC_v_stage_0);
+        goToPosC : success_DEFAULT_module();
+        patroling_3 : success_DEFAULT_module();
+        c6 : composite_sequence_without_memory_2(goToPosC, patroling_3);
+        c5 : composite_selector_without_memory_2(visitedC, c6);
+        c0 : composite_sequence_without_memory_3(c1, c3, c5);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        visitedA_v_stage_0 : boolean;
+        visitedB_v_stage_0 : boolean;
+        visitedC_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(visitedA_v_stage_0) := {TRUE, FALSE};
+        init(visitedB_v_stage_0) := {TRUE, FALSE};
+        init(visitedC_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(visitedA_v_stage_0) :=
+            case
+                !(c0.active) : visitedA_v_stage_0;
+                TRUE : visitedA_v_stage_0;
+            esac;
+        next(visitedB_v_stage_0) :=
+            case
+                !(c0.active) : visitedB_v_stage_0;
+                TRUE : visitedB_v_stage_0;
+            esac;
+        next(visitedC_v_stage_0) :=
+            case
+                !(c0.active) : visitedC_v_stage_0;
+                TRUE : visitedC_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        visitedA := 2;
+        c2 := 3;
+        goToPosA := 4;
+        patroling := 5;
+        c3 := 6;
+        visitedB := 7;
+        c4 := 8;
+        goToPosB := 9;
+        patroling_2 := 10;
+        c5 := 11;
+        visitedC := 12;
+        c6 := 13;
+        goToPosC := 14;
+        patroling_3 := 15;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE visitedA_module(visitedA_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (visitedA_v_stage_0) ? success : failure;
+MODULE visitedB_module(visitedB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (visitedB_v_stage_0) ? success : failure;
+MODULE visitedC_module(visitedC_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (visitedC_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

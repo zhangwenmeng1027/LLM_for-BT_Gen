@@ -1,0 +1,226 @@
+configuration {} 
+enumerations {} 
+constants {} 
+variables { 
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} } 
+    variable { env atCharge_v VAR BOOLEAN assign{result{True, False}} } 
+    variable { env alarm_v VAR BOOLEAN assign{result{True, False}} } 
+    variable { env hasFire_v VAR BOOLEAN assign{result{True, False}} } 
+    variable { env hasVictim_v VAR BOOLEAN assign{result{True, False}} } 
+    variable { env empty_v VAR BOOLEAN assign{result{True, False}} } 
+    variable { env TargetFound_v VAR BOOLEAN assign{result{True, False}} } 
+    variable { env isDay_v VAR BOOLEAN assign{result{True, False}} } 
+    variable { env isNight_v VAR BOOLEAN assign{result{True, False}} } 
+}
+environment_update { 
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} } 
+    variable_statement{ atCharge_v assign{result{atCharge_v}} } 
+    variable_statement{ alarm_v assign{result{alarm_v}} } 
+    variable_statement{ hasFire_v assign{result{hasFire_v}} } 
+    variable_statement{ hasVictim_v assign{result{hasVictim_v}} } 
+    variable_statement{ empty_v assign{result{empty_v}} } 
+    variable_statement{ TargetFound_v assign{result{TargetFound_v}} } 
+    variable_statement{ isDay_v assign{result{isDay_v}} } 
+    variable_statement{ isNight_v assign{result{isNight_v}} } 
+}
+checks {} 
+environment_checks { 
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} } 
+    environment_check { atCharge arguments {} read_variables {atCharge_v} condition{atCharge_v} } 
+    environment_check { alarm arguments {} read_variables {alarm_v} condition{alarm_v} } 
+    environment_check { hasFire arguments {} read_variables {hasFire_v} condition{hasFire_v} } 
+    environment_check { hasVictim arguments {} read_variables {hasVictim_v} condition{hasVictim_v} } 
+    environment_check { empty arguments {} read_variables {empty_v} condition{empty_v} } 
+    environment_check { TargetFound arguments {} read_variables {TargetFound_v} condition{TargetFound_v} } 
+    environment_check { isDay arguments {} read_variables {isDay_v} condition{isDay_v} } 
+    environment_check { isNight arguments {} read_variables {isNight_v} condition{isNight_v} } 
+}
+actions { 
+    action { goToStation 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { charging 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { useExtinguisher 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { closeDoor 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { checkReachable 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { askHelp 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { goToPosC 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { saveVictim 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { goToPosA 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { pickUp 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { goToPosB 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { placeB 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { goToPos3 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { doTaskA 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { goToKitchen 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    } 
+    action { closeDoor_2 
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {} 
+tree { 
+    composite { 
+        c0 selector 
+        children { 
+            composite { 
+                c1 sequence 
+                children { 
+                    lowBattery {}
+                    composite { 
+                        c2 selector 
+                        children { 
+                            atCharge {} 
+                            goToStation {} 
+                        } 
+                    } 
+                    charging {} 
+                } 
+            } 
+            composite { 
+                c3 sequence 
+                children { 
+                    alarm {}
+                    composite { 
+                        c4 selector 
+                        children { 
+                            composite { 
+                                c5 sequence 
+                                children { 
+                                    hasFire {} 
+                                    useExtinguisher {} 
+                                } 
+                            } 
+                            success {} 
+                        } 
+                    } 
+                    closeDoor {} 
+                } 
+            } 
+            composite { 
+                c6 sequence 
+                children { 
+                    hasVictim {}
+                    composite { 
+                        c7 selector 
+                        children { 
+                            checkReachable {} 
+                            askHelp {} 
+                        } 
+                    } 
+                    goToPosC {} 
+                    saveVictim {} 
+                } 
+            } 
+            composite { 
+                c8 sequence 
+                children { 
+                    empty {}
+                    TargetFound {} 
+                    goToPosA {} 
+                    pickUp {} 
+                    goToPosB {} 
+                    placeB {} 
+                } 
+            } 
+            composite { 
+                c9 sequence 
+                children { 
+                    isDay {} 
+                    goToPos3 {} 
+                    doTaskA {} 
+                } 
+            } 
+            composite { 
+                c10 sequence 
+                children { 
+                    isNight {} 
+                    goToKitchen {} 
+                    closeDoor_2 {} 
+                } 
+            } 
+        } 
+    } 
+}
+tick_prerequisite {True} 
+specifications {
+    LTLSPEC {(next, (or, (success, lowBattery), (failure, lowBattery)))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, atCharge), (failure, atCharge)))))}
+    LTLSPEC {(globally, (implies, (failure, lowBattery), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, atCharge), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (failure, atCharge), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, charging), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, alarm), (next, (or, (success, hasFire), (failure, hasFire)))))}
+    LTLSPEC {(globally, (implies, (failure, alarm), (next, (or, (success, hasVictim), (failure, hasVictim)))))}
+    LTLSPEC {(globally, (implies, (success, hasFire), (next, (or, (success, closeDoor), (failure, closeDoor), (running, closeDoor)))))}
+    LTLSPEC {(globally, (implies, (failure, hasFire), (next, (or, (success, useExtinguisher), (failure, useExtinguisher), (running, useExtinguisher)))))}
+    LTLSPEC {(globally, (implies, (success, useExtinguisher), (next, (or, (success, closeDoor), (failure, closeDoor), (running, closeDoor)))))}
+    LTLSPEC {(globally, (implies, (success, closeDoor), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, hasVictim), (next, (or, (success, checkReachable), (failure, checkReachable)))))}
+    LTLSPEC {(globally, (implies, (failure, hasVictim), (next, (or, (success, empty), (failure, empty)))))}
+    LTLSPEC {(globally, (implies, (success, checkReachable), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (failure, checkReachable), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))}
+    LTLSPEC {(globally, (implies, (success, askHelp), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, saveVictim), (failure, saveVictim), (running, saveVictim)))))}
+    LTLSPEC {(globally, (implies, (success, saveVictim), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, empty), (next, (or, (success, TargetFound), (failure, TargetFound)))))}
+    LTLSPEC {(globally, (implies, (failure, empty), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, TargetFound), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (failure, TargetFound), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, placeB), (failure, placeB), (running, placeB)))))}
+    LTLSPEC {(globally, (implies, (success, placeB), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, isDay), (next, (or, (success, goToPos3), (failure, goToPos3), (running, goToPos3)))))}
+    LTLSPEC {(globally, (implies, (failure, isDay), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, goToPos3), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, isNight), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))}
+    LTLSPEC {(globally, (implies, (failure, isNight), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, goToKitchen), (next, (or, (success, closeDoor_2), (failure, closeDoor_2), (running, closeDoor_2)))))}
+    LTLSPEC {(globally, (implies, (success, closeDoor_2), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+}

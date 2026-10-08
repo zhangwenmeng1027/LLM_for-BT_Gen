@@ -1,0 +1,106 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env visitedA_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env visitedB_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env visitedC_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ visitedA_v assign{result{visitedA_v}} }
+    variable_statement{ visitedB_v assign{result{visitedB_v}} }
+    variable_statement{ visitedC_v assign{result{visitedC_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { visitedA arguments {} read_variables {visitedA_v} condition{visitedA_v} }
+    environment_check { visitedB arguments {} read_variables {visitedB_v} condition{visitedB_v} }
+    environment_check { visitedC arguments {} read_variables {visitedC_v} condition{visitedC_v} }
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { patroling
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { patroling_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { patroling_3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+        composite {
+            c1 selector
+            children {
+                visitedA {}
+            composite {
+                c2 sequence
+                children {
+                    goToPosA {}
+                    patroling {}
+                }
+            }
+            }
+        }
+        composite {
+            c3 selector
+            children {
+                visitedB {}
+            composite {
+                c4 sequence
+                children {
+                    goToPosB {}
+                    patroling_2 {}
+                }
+            }
+            }
+        }
+        composite {
+            c5 selector
+            children {
+                visitedC {}
+            composite {
+                c6 sequence
+                children {
+                    goToPosC {}
+                    patroling_3 {}
+                }
+            }
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, visitedA), (failure, visitedA)))}
+    LTLSPEC {(globally, (implies, (success, visitedA), (next, (or, (success, visitedB), (failure, visitedB)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedA), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, patroling), (failure, patroling), (running, patroling)))))}
+    LTLSPEC {(globally, (implies, (success, patroling), (next, (or, (success, visitedB), (failure, visitedB)))))}
+    LTLSPEC {(globally, (implies, (success, visitedB), (next, (or, (success, visitedC), (failure, visitedC)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, patroling_2), (failure, patroling_2), (running, patroling_2)))))}
+    LTLSPEC {(globally, (implies, (success, patroling_2), (next, (or, (success, visitedC), (failure, visitedC)))))}
+    LTLSPEC {(globally, (implies, (success, visitedC), (next, (or, (success, visitedA), (failure, visitedA)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedC), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, patroling_3), (failure, patroling_3), (running, patroling_3)))))}
+    LTLSPEC {(globally, (implies, (success, patroling_3), (next, (or, (success, visitedA), (failure, visitedA)))))}
+}

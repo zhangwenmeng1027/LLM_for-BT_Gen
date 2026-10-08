@@ -1,0 +1,55 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env hasInput_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ hasInput_v assign{result{hasInput_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { hasInput arguments {} read_variables {hasInput_v} condition{hasInput_v} }
+}
+actions {
+    action { waitInput
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { acceptInput
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchAns
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { outputAns
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            waitInput {}
+            composite {
+                c1 sequence
+                children {
+                    hasInput {}
+                    acceptInput {}
+                    searchAns {}
+                    outputAns {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, waitInput), (failure, waitInput), (running, waitInput)))}
+    LTLSPEC {(globally, (implies, (success, waitInput), (next, (or, (success, hasInput), (failure, hasInput)))))}
+    LTLSPEC {(globally, (implies, (success, hasInput), (next, (or, (success, acceptInput), (failure, acceptInput), (running, acceptInput)))))}
+    LTLSPEC {(globally, (implies, (success, acceptInput), (next, (or, (success, searchAns), (failure, searchAns), (running, searchAns)))))}
+    LTLSPEC {(globally, (implies, (success, searchAns), (next, (or, (success, outputAns), (failure, outputAns), (running, outputAns)))))}
+}

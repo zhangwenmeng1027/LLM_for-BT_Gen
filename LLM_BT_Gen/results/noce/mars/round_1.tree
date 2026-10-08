@@ -1,0 +1,75 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env storm_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} }
+    variable_statement{ storm_v assign{result{storm_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} }
+    environment_check { storm arguments {} read_variables {storm_v} condition{storm_v} }
+}
+actions {
+    action { unfoldPanels
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { foldPanels
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { getData
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { send
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    lowBattery {}
+                    unfoldPanels {}
+                }
+            }
+            composite {
+                c2 selector
+                children {
+                    composite {
+                        c3 sequence
+                        children {
+                            storm {}
+                            foldPanels {}
+                        }
+                    }
+                    composite {
+                        c4 sequence
+                        children {
+                            getData {}
+                            send {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, lowBattery), (failure, lowBattery)))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, unfoldPanels), (failure, unfoldPanels), (running, unfoldPanels)))))}
+    LTLSPEC {(globally, (implies, (failure, lowBattery), (next, (or, (success, storm), (failure, storm)))))}
+    LTLSPEC {(globally, (implies, (success, storm), (next, (or, (success, foldPanels), (failure, foldPanels), (running, foldPanels)))))}
+    LTLSPEC {(globally, (implies, (failure, storm), (next, (or, (success, getData), (failure, getData), (running, getData)))))}
+    LTLSPEC {(globally, (implies, (success, getData), (next, (or, (success, send), (failure, send), (running, send)))))}
+}

@@ -1,0 +1,106 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env picked_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env placedB_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env placedC_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ picked_v assign{result{picked_v}} }
+    variable_statement{ placedB_v assign{result{placedB_v}} }
+    variable_statement{ placedC_v assign{result{placedC_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { picked arguments {} read_variables {picked_v} condition{picked_v} }
+    environment_check { placedB arguments {} read_variables {placedB_v} condition{placedB_v} }
+    environment_check { placedC arguments {} read_variables {placedC_v} condition{placedC_v} }
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { placeB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { placeC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            composite {
+                c1 selector
+                children {
+                    picked {}
+                    composite {
+                        c2 sequence
+                        children {
+                            goToPosA {}
+                            pickUp {}
+                        }
+                    }
+                }
+            }
+            composite {
+                c3 selector
+                children {
+                    placedB {}
+                    composite {
+                        c4 sequence
+                        children {
+                            goToPosB {}
+                            placeB {}
+                        }
+                    }
+                }
+            }
+            pickUp_2 {}
+            composite {
+                c5 selector
+                children {
+                    placedC {}
+                    composite {
+                        c6 sequence
+                        children {
+                            goToPosC {}
+                            placeC {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, picked), (failure, picked)))}
+    LTLSPEC {(globally, (implies, (failure, picked), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))}
+    LTLSPEC {(globally, (implies, (failure, placedB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, placeB), (failure, placeB), (running, placeB)))))}
+    LTLSPEC {(globally, (implies, (success, placeB), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))}
+    LTLSPEC {(globally, (implies, (failure, placedC), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, placeC), (failure, placeC), (running, placeC)))))}
+}

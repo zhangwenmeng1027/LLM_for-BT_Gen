@@ -1,0 +1,206 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.isDay.status = success) | (system.isDay.status = failure)));
+LTLSPEC G(((system.isDay.status = success) -> X(((system.isDoorOpen.status = success) | (system.isDoorOpen.status = failure)))));
+LTLSPEC G(((system.isDay.status = failure) -> X(((system.isDay.status = success) | (system.isDay.status = failure)))));
+LTLSPEC G(((system.isDoorOpen.status = success) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+LTLSPEC G(((system.isDoorOpen.status = failure) -> X(((system.openDoor.status = success) | (system.openDoor.status = failure) | (system.openDoor.status = running)))));
+LTLSPEC G(((system.openDoor.status = success) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+LTLSPEC G(((system.checkReachable.status = success) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.checkReachable.status = failure) -> X(((system.askHelp.status = success) | (system.askHelp.status = failure) | (system.askHelp.status = running)))));
+LTLSPEC G(((system.askHelp.status = success) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.picked.status = success) | (system.picked.status = failure)))));
+LTLSPEC G(((system.picked.status = success) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.picked.status = failure) -> X(((system.pickUp_2.status = success) | (system.pickUp_2.status = failure) | (system.pickUp_2.status = running)))));
+LTLSPEC G(((system.pickUp_2.status = success) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.placeB.status = success) | (system.placeB.status = failure) | (system.placeB.status = running)))));
+LTLSPEC G(((system.placeB.status = success) -> X(((system.closeGripper.status = success) | (system.closeGripper.status = failure) | (system.closeGripper.status = running)))));
+LTLSPEC G(((system.closeGripper.status = success) -> X(((system.isDay.status = success) | (system.isDay.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        isDay : isDay_module(isDay_v_stage_0);
+        isDoorOpen : isDoorOpen_module(isDoorOpen_v_stage_0);
+        openDoor : success_DEFAULT_module();
+        c1 : composite_selector_without_memory_2(isDoorOpen, openDoor);
+        checkReachable : checkReachable_module(checkReachable_v_stage_0);
+        askHelp : success_DEFAULT_module();
+        c2 : composite_selector_without_memory_2(checkReachable, askHelp);
+        goToPosA : success_DEFAULT_module();
+        picked : picked_module(picked_v_stage_0);
+        goToPosB : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_2(picked, goToPosB);
+        pickUp : success_DEFAULT_module();
+        pickUp_2 : _DEFAULT_module();
+        c3 : composite_selector_without_memory_3(c4, pickUp, pickUp_2);
+        placeB : success_DEFAULT_module();
+        closeGripper : success_DEFAULT_module();
+        c0 : composite_sequence_without_memory_7(isDay, c1, c2, goToPosA, c3, placeB, closeGripper);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        isDay_v_stage_0 : boolean;
+        isDoorOpen_v_stage_0 : boolean;
+        checkReachable_v_stage_0 : boolean;
+        picked_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(isDay_v_stage_0) := {TRUE, FALSE};
+        init(isDoorOpen_v_stage_0) := {TRUE, FALSE};
+        init(checkReachable_v_stage_0) := {TRUE, FALSE};
+        init(picked_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(isDay_v_stage_0) :=
+            case
+                !(c0.active) : isDay_v_stage_0;
+                TRUE : isDay_v_stage_0;
+            esac;
+        next(isDoorOpen_v_stage_0) :=
+            case
+                !(c0.active) : isDoorOpen_v_stage_0;
+                TRUE : isDoorOpen_v_stage_0;
+            esac;
+        next(checkReachable_v_stage_0) :=
+            case
+                !(c0.active) : checkReachable_v_stage_0;
+                TRUE : checkReachable_v_stage_0;
+            esac;
+        next(picked_v_stage_0) :=
+            case
+                !(c0.active) : picked_v_stage_0;
+                TRUE : picked_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        isDay := 1;
+        c1 := 2;
+        isDoorOpen := 3;
+        openDoor := 4;
+        c2 := 5;
+        checkReachable := 6;
+        askHelp := 7;
+        goToPosA := 8;
+        c3 := 9;
+        c4 := 10;
+        picked := 11;
+        goToPosB := 12;
+        pickUp := 13;
+        pickUp_2 := 14;
+        placeB := 15;
+        closeGripper := 16;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_7(child_0, child_1, child_2, child_3, child_4, child_5, child_6)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                !(child_5.internal_status = success) : child_5.internal_status;
+                !(child_6.internal_status = success) : child_6.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+        child_5.active := child_4.status = success;
+        child_6.active := child_5.status = success;
+MODULE isDay_module(isDay_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isDay_v_stage_0) ? success : failure;
+MODULE isDoorOpen_module(isDoorOpen_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isDoorOpen_v_stage_0) ? success : failure;
+MODULE checkReachable_module(checkReachable_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (checkReachable_v_stage_0) ? success : failure;
+MODULE picked_module(picked_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (picked_v_stage_0) ? success : failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

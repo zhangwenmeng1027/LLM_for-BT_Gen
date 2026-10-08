@@ -1,0 +1,79 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env abilityEvaluated_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ abilityEvaluated_v assign{result{abilityEvaluated_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { abilityEvaluated arguments {} read_variables {abilityEvaluated_v} condition{abilityEvaluated_v} }
+}
+actions {
+    action { testPerformance
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { evaluationPerformance
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToDestination
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToParking
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+        composite {
+            c1 selector
+            children {
+                abilityEvaluated {}
+            composite {
+                c2 sequence
+                children {
+                    testPerformance {}
+                    evaluationPerformance {}
+                }
+            }
+            }
+        }
+        composite {
+            c3 sequence
+            children {
+                pickUp {}
+                moveToDestination {}
+                putDown {}
+                moveToParking {}
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, abilityEvaluated), (failure, abilityEvaluated)))}
+    LTLSPEC {(globally, (implies, (success, abilityEvaluated), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (failure, abilityEvaluated), (next, (or, (success, testPerformance), (failure, testPerformance), (running, testPerformance)))))}
+    LTLSPEC {(globally, (implies, (success, testPerformance), (next, (or, (success, evaluationPerformance), (failure, evaluationPerformance), (running, evaluationPerformance)))))}
+    LTLSPEC {(globally, (implies, (success, evaluationPerformance), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))}
+    LTLSPEC {(globally, (implies, (success, moveToDestination), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+    LTLSPEC {(globally, (implies, (success, putDown), (next, (or, (success, moveToParking), (failure, moveToParking), (running, moveToParking)))))}
+    LTLSPEC {(globally, (implies, (success, moveToParking), (next, (or, (success, abilityEvaluated), (failure, abilityEvaluated)))))}
+}

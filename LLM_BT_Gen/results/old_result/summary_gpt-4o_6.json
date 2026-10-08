@@ -1,0 +1,18 @@
+{
+ "model": "gpt-4o",
+ "max_rounds": 5,
+ "results": [
+  {
+   "success": true,
+   "rounds": 1,
+   "n_specs": 4,
+   "final_tree": "D:\\科研\\LLM_for_BT_Gen\\LLM_BT_Gen\\results\\charge\\final.tree",
+   "task": "charge",
+   "n_calls": 1,
+   "time_s": 5.1,
+   "prompt_tokens": 2232,
+   "completion_tokens": 422,
+   "total_tokens": 2654
+  }
+ ]
+}

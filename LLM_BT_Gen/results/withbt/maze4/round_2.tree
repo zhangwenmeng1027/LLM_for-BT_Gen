@@ -1,0 +1,42 @@
+configuration {} enumerations {} constants {}
+variables {}
+environment_update {}
+checks {}
+environment_checks {}
+actions {
+    action { move1to3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move3to6
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            move1to3 {}
+            pickUp {}
+            move3to6 {}
+            putDown {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, move1to3), (failure, move1to3), (running, move1to3)))}
+    LTLSPEC {(globally, (implies, (success, move1to3), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, move3to6), (failure, move3to6), (running, move3to6)))))}
+    LTLSPEC {(globally, (implies, (success, move3to6), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+}

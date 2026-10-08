@@ -1,0 +1,101 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env atPos1_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPos2_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPos3_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPos4_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPos5_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ atPos1_v assign{result{atPos1_v}} }
+    variable_statement{ atPos2_v assign{result{atPos2_v}} }
+    variable_statement{ atPos3_v assign{result{atPos3_v}} }
+    variable_statement{ atPos4_v assign{result{atPos4_v}} }
+    variable_statement{ atPos5_v assign{result{atPos5_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { atPos1 arguments {} read_variables {atPos1_v} condition{atPos1_v} }
+    environment_check { atPos2 arguments {} read_variables {atPos2_v} condition{atPos2_v} }
+    environment_check { atPos3 arguments {} read_variables {atPos3_v} condition{atPos3_v} }
+    environment_check { atPos4 arguments {} read_variables {atPos4_v} condition{atPos4_v} }
+    environment_check { atPos5 arguments {} read_variables {atPos5_v} condition{atPos5_v} }
+}
+actions {
+    action { move1to2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move2to3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move3to4
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move4to5
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { activeManipulator
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { activeManipulator_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { activeManipulator_3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { activeManipulator_4
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            composite {
+                c1 sequence
+                children {
+                    move1to2 {}
+                    activeManipulator {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    move2to3 {}
+                    activeManipulator_2 {}
+                }
+            }
+            composite {
+                c3 sequence
+                children {
+                    move3to4 {}
+                    activeManipulator_3 {}
+                }
+            }
+            composite {
+                c4 sequence
+                children {
+                    move4to5 {}
+                    activeManipulator_4 {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))}
+    LTLSPEC {(globally, (implies, (success, move1to2), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))}
+    LTLSPEC {(globally, (implies, (success, move2to3), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))}
+    LTLSPEC {(globally, (implies, (success, move3to4), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))}
+    LTLSPEC {(globally, (implies, (success, move4to5), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))}
+}

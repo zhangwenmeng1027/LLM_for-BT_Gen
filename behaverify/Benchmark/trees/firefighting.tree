@@ -1,0 +1,68 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env hasVictim_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env hasFire_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ hasVictim_v assign{result{hasVictim_v}} }
+    variable_statement{ hasFire_v assign{result{hasFire_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { hasVictim arguments {} read_variables {hasVictim_v} condition{hasVictim_v} }
+    environment_check { hasFire arguments {} read_variables {hasFire_v} condition{hasFire_v} }
+}
+actions {
+    action { saveVictim
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { useExtinguisher
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToOtherRoom
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { Rescue
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+        composite {
+            c1 sequence
+            children {
+                hasVictim {}
+                saveVictim {}
+            }
+        }
+        composite {
+            c2 sequence
+            children {
+                hasFire {}
+                useExtinguisher {}
+            }
+        }
+        composite {
+            c3 sequence
+            children {
+                moveToOtherRoom {}
+                Rescue {}
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, hasVictim), (failure, hasVictim)))}
+    LTLSPEC {(globally, (implies, (success, hasVictim), (next, (or, (success, saveVictim), (failure, saveVictim), (running, saveVictim)))))}
+    LTLSPEC {(globally, (implies, (success, hasFire), (next, (or, (success, useExtinguisher), (failure, useExtinguisher), (running, useExtinguisher)))))}
+    LTLSPEC {(globally, (implies, (success, moveToOtherRoom), (next, (or, (success, Rescue), (failure, Rescue), (running, Rescue)))))}
+}

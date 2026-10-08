@@ -1,0 +1,124 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.atPos9.status = success) | (system.atPos9.status = failure)));
+LTLSPEC G(((system.atPos9.status = success) -> X(((system.atPos9.status = success) | (system.atPos9.status = failure)))));
+LTLSPEC G(((system.atPos9.status = failure) -> X(((system.move6to9.status = success) | (system.move6to9.status = failure) | (system.move6to9.status = running)))));
+LTLSPEC G(((system.move6to9.status = success) -> X(((system.atPos9.status = success) | (system.atPos9.status = failure)))));
+LTLSPEC G(((system.atPos6.status = success) -> X(((system.atPos9.status = success) | (system.atPos9.status = failure)))));
+LTLSPEC G(((system.atPos6.status = failure) -> X(((system.move3to6.status = success) | (system.move3to6.status = failure) | (system.move3to6.status = running)))));
+LTLSPEC G(((system.move3to6.status = success) -> X(((system.atPos9.status = success) | (system.atPos9.status = failure)))));
+LTLSPEC G(((system.atPos2.status = success) -> X(((system.atPos9.status = success) | (system.atPos9.status = failure)))));
+LTLSPEC G(((system.atPos2.status = failure) -> X(((system.move1to2.status = success) | (system.move1to2.status = failure) | (system.move1to2.status = running)))));
+LTLSPEC G(((system.move1to2.status = success) -> X(((system.atPos9.status = success) | (system.atPos9.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        atPos9 : atPos9_module(atPos9_v_stage_0);
+        move6to9 : success_DEFAULT_module();
+        atPos6 : atPos6_module(atPos6_v_stage_0);
+        move3to6 : _DEFAULT_module();
+        atPos2 : atPos2_module(atPos2_v_stage_0);
+        move1to2 : _DEFAULT_module();
+        c0 : composite_selector_without_memory_6(atPos9, move6to9, atPos6, move3to6, atPos2, move1to2);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        atPos9_v_stage_0 : boolean;
+        atPos6_v_stage_0 : boolean;
+        atPos2_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(atPos9_v_stage_0) := {TRUE, FALSE};
+        init(atPos6_v_stage_0) := {TRUE, FALSE};
+        init(atPos2_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(atPos9_v_stage_0) :=
+            case
+                !(c0.active) : atPos9_v_stage_0;
+                TRUE : atPos9_v_stage_0;
+            esac;
+        next(atPos6_v_stage_0) :=
+            case
+                !(c0.active) : atPos6_v_stage_0;
+                TRUE : atPos6_v_stage_0;
+            esac;
+        next(atPos2_v_stage_0) :=
+            case
+                !(c0.active) : atPos2_v_stage_0;
+                TRUE : atPos2_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        atPos9 := 1;
+        move6to9 := 2;
+        atPos6 := 3;
+        move3to6 := 4;
+        atPos2 := 5;
+        move1to2 := 6;
+MODULE composite_selector_without_memory_6(child_0, child_1, child_2, child_3, child_4, child_5)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                !(child_4.internal_status = failure) : child_4.internal_status;
+                !(child_5.internal_status = failure) : child_5.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+        child_4.active := child_3.status = failure;
+        child_5.active := child_4.status = failure;
+MODULE atPos9_module(atPos9_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPos9_v_stage_0) ? success : failure;
+MODULE atPos6_module(atPos6_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPos6_v_stage_0) ? success : failure;
+MODULE atPos2_module(atPos2_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPos2_v_stage_0) ? success : failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

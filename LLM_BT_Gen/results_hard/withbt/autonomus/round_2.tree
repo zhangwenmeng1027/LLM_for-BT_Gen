@@ -1,0 +1,150 @@
+configuration {} 
+enumerations {} 
+constants {}
+variables {
+    variable { env roomKnown_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env robotInRoom_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env bottleFound_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env ballGrasped_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env invValid_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env RobotAtInvPose_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ roomKnown_v assign{result{roomKnown_v}} }
+    variable_statement{ robotInRoom_v assign{result{robotInRoom_v}} }
+    variable_statement{ bottleFound_v assign{result{bottleFound_v}} }
+    variable_statement{ ballGrasped_v assign{result{ballGrasped_v}} }
+    variable_statement{ invValid_v assign{result{invValid_v}} }
+    variable_statement{ RobotAtInvPose_v assign{result{RobotAtInvPose_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { roomKnown arguments {} read_variables {roomKnown_v} condition{roomKnown_v} }
+    environment_check { robotInRoom arguments {} read_variables {robotInRoom_v} condition{robotInRoom_v} }
+    environment_check { bottleFound arguments {} read_variables {bottleFound_v} condition{bottleFound_v} }
+    environment_check { ballGrasped arguments {} read_variables {ballGrasped_v} condition{ballGrasped_v} }
+    environment_check { invValid arguments {} read_variables {invValid_v} condition{invValid_v} }
+    environment_check { RobotAtInvPose arguments {} read_variables {RobotAtInvPose_v} condition{RobotAtInvPose_v} }
+}
+actions {
+    action { goToRoom
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { computInv
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToInvPose
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findBottle_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { followHuman
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { askHelp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    roomKnown {}
+                    composite {
+                        c2 selector
+                        children {
+                            robotInRoom {}
+                            goToRoom {}
+                        }
+                    }
+                }
+            }
+            composite {
+                c3 selector
+                children {
+                    bottleFound {}
+                    findBottle {}
+                }
+            }
+            composite {
+                c9 selector
+                children {
+                    ballGrasped {}
+                }
+            }
+            composite {
+                c4 sequence
+                children {
+                    composite {
+                        c5 selector
+                        children {
+                            invValid {}
+                            computInv {}
+                        }
+                    }
+                    composite {
+                        c6 selector
+                        children {
+                            RobotAtInvPose {}
+                            goToInvPose {}
+                        }
+                    }
+                    composite {
+                        c7 selector
+                        children {
+                            bottleFound {}
+                            findBottle_2 {}
+                        }
+                    }
+                }
+            }
+            composite {
+                c8 selector
+                children {
+                    followHuman {}
+                    askHelp {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, roomKnown), (failure, roomKnown)))}
+    LTLSPEC {(globally, (implies, (success, roomKnown), (next, (or, (success, robotInRoom), (failure, robotInRoom)))))}
+    LTLSPEC {(globally, (implies, (failure, roomKnown), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+    LTLSPEC {(globally, (implies, (success, robotInRoom), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (failure, robotInRoom), (next, (or, (success, goToRoom), (failure, goToRoom), (running, goToRoom)))))}
+    LTLSPEC {(globally, (implies, (success, goToRoom), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (success, bottleFound), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (failure, bottleFound), (next, (or, (success, findBottle), (failure, findBottle), (running, findBottle)))))}
+    LTLSPEC {(globally, (implies, (success, findBottle), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (success, ballGrasped), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (failure, ballGrasped), (next, (or, (success, invValid), (failure, invValid)))))}
+    LTLSPEC {(globally, (implies, (success, invValid), (next, (or, (success, computInv), (failure, computInv), (running, computInv)))))}
+    LTLSPEC {(globally, (implies, (failure, invValid), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))}
+    LTLSPEC {(globally, (implies, (success, computInv), (next, (or, (success, RobotAtInvPose), (failure, RobotAtInvPose)))))}
+    LTLSPEC {(globally, (implies, (success, RobotAtInvPose), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (failure, RobotAtInvPose), (next, (or, (success, goToInvPose), (failure, goToInvPose), (running, goToInvPose)))))}
+    LTLSPEC {(globally, (implies, (success, goToInvPose), (next, (or, (success, bottleFound_2), (failure, bottleFound_2)))))}
+    LTLSPEC {(globally, (implies, (success, bottleFound_2), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (failure, bottleFound_2), (next, (or, (success, findBottle_2), (failure, findBottle_2), (running, findBottle_2)))))}
+    LTLSPEC {(globally, (implies, (success, findBottle_2), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (success, followHuman), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+    LTLSPEC {(globally, (implies, (success, askHelp), (next, (or, (success, roomKnown), (failure, roomKnown)))))}
+}

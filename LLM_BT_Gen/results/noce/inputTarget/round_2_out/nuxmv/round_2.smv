@@ -1,0 +1,184 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC G(((system.acceptInput.status = success) -> X(((system.setValue.status = success) | (system.setValue.status = failure) | (system.setValue.status = running)))));
+LTLSPEC G(((system.setValue.status = success) -> X(((system.BatteryOK.status = success) | (system.BatteryOK.status = failure)))));
+LTLSPEC G(((system.BatteryOK.status = success) -> X(((system.searchTarget.status = success) | (system.searchTarget.status = failure) | (system.searchTarget.status = running)))));
+LTLSPEC G(((system.searchTarget.status = success) -> X(((system.TargetFound.status = success) | (system.TargetFound.status = failure)))));
+LTLSPEC G(((system.TargetFound.status = success) -> X(((system.openGripper.status = success) | (system.openGripper.status = failure) | (system.openGripper.status = running)))));
+LTLSPEC G(((system.openGripper.status = success) -> X(((system.pickUp.status = success) | (system.pickUp.status = failure) | (system.pickUp.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.closeGripper.status = success) | (system.closeGripper.status = failure) | (system.closeGripper.status = running)))));
+LTLSPEC G(((system.TargetCaptured.status = success) -> X(((system.goToTarRoom.status = success) | (system.goToTarRoom.status = failure) | (system.goToTarRoom.status = running)))));
+LTLSPEC G(((system.goToTarRoom.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.lowBattery.status = success) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        acceptInput : success_DEFAULT_module();
+        setValue : success_DEFAULT_module();
+        BatteryOK : BatteryOK_module(BatteryOK_v_stage_0);
+        searchTarget : success_DEFAULT_module();
+        TargetFound : TargetFound_module(TargetFound_v_stage_0);
+        openGripper : success_DEFAULT_module();
+        pickUp : success_DEFAULT_module();
+        closeGripper : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_4(TargetFound, openGripper, pickUp, closeGripper);
+        TargetCaptured : TargetCaptured_module(TargetCaptured_v_stage_0);
+        goToTarRoom : success_DEFAULT_module();
+        putDown : success_DEFAULT_module();
+        c5 : composite_sequence_without_memory_3(TargetCaptured, goToTarRoom, putDown);
+        c3 : composite_selector_without_memory_2(c4, c5);
+        c2 : composite_sequence_without_memory_3(BatteryOK, searchTarget, c3);
+        lowBattery : lowBattery_module(lowBattery_v_stage_0);
+        goToStation : success_DEFAULT_module();
+        charging : success_DEFAULT_module();
+        c6 : composite_sequence_without_memory_3(lowBattery, goToStation, charging);
+        c1 : composite_selector_without_memory_2(c2, c6);
+        c0 : composite_sequence_without_memory_3(acceptInput, setValue, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        lowBattery_v_stage_0 : boolean;
+        BatteryOK_v_stage_0 : boolean;
+        TargetFound_v_stage_0 : boolean;
+        TargetCaptured_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(lowBattery_v_stage_0) := {TRUE, FALSE};
+        init(BatteryOK_v_stage_0) := {TRUE, FALSE};
+        init(TargetFound_v_stage_0) := {TRUE, FALSE};
+        init(TargetCaptured_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(lowBattery_v_stage_0) :=
+            case
+                !(c0.active) : lowBattery_v_stage_0;
+                TRUE : lowBattery_v_stage_0;
+            esac;
+        next(BatteryOK_v_stage_0) :=
+            case
+                !(c0.active) : BatteryOK_v_stage_0;
+                TRUE : BatteryOK_v_stage_0;
+            esac;
+        next(TargetFound_v_stage_0) :=
+            case
+                !(c0.active) : TargetFound_v_stage_0;
+                TRUE : TargetFound_v_stage_0;
+            esac;
+        next(TargetCaptured_v_stage_0) :=
+            case
+                !(c0.active) : TargetCaptured_v_stage_0;
+                TRUE : TargetCaptured_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        acceptInput := 1;
+        setValue := 2;
+        c1 := 3;
+        c2 := 4;
+        BatteryOK := 5;
+        searchTarget := 6;
+        c3 := 7;
+        c4 := 8;
+        TargetFound := 9;
+        openGripper := 10;
+        pickUp := 11;
+        closeGripper := 12;
+        c5 := 13;
+        TargetCaptured := 14;
+        goToTarRoom := 15;
+        putDown := 16;
+        c6 := 17;
+        lowBattery := 18;
+        goToStation := 19;
+        charging := 20;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE BatteryOK_module(BatteryOK_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (BatteryOK_v_stage_0) ? success : failure;
+MODULE TargetFound_module(TargetFound_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (TargetFound_v_stage_0) ? success : failure;
+MODULE TargetCaptured_module(TargetCaptured_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (TargetCaptured_v_stage_0) ? success : failure;
+MODULE lowBattery_module(lowBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (lowBattery_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

@@ -1,0 +1,25 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.abilityEvaluated.status = success | system.abilityEvaluated.status = failure)  is true
+-- specification  G (system.abilityEvaluated.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is true
+-- specification  G (system.abilityEvaluated.status = failure ->  X ((system.testPerformance.status = success | system.testPerformance.status = failure) | system.testPerformance.status = running))  is true
+-- specification  G (system.testPerformance.status = success ->  X ((system.evaluationPerformance.status = success | system.evaluationPerformance.status = failure) | system.evaluationPerformance.status = running))  is true
+-- specification  G (system.evaluationPerformance.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is true
+-- specification  G (system.pickUp.status = success ->  X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running))  is true
+-- specification  G (system.moveToDestination.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))  is true
+-- specification  G (system.putDown.status = success ->  X ((system.moveToParking.status = success | system.moveToParking.status = failure) | system.moveToParking.status = running))  is true
+-- specification  G (system.moveToParking.status = success ->  X (system.abilityEvaluated.status = success | system.abilityEvaluated.status = failure))  is true

@@ -1,0 +1,229 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.fullBattery.status = success) | (system.fullBattery.status = failure)));
+LTLSPEC G(((system.fullBattery.status = success) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.fullBattery.status = failure) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.doTaskA.status = success) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.doTaskB.status = success) | (system.doTaskB.status = failure) | (system.doTaskB.status = running)))));
+LTLSPEC G(((system.doTaskB.status = success) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X(((system.doTaskC.status = success) | (system.doTaskC.status = failure) | (system.doTaskC.status = running)))));
+LTLSPEC G(((system.doTaskC.status = success) -> X(((system.fullBattery.status = success) | (system.fullBattery.status = failure)))));
+LTLSPEC G(((system.lowBattery.status = success) -> X(((system.atCharge.status = success) | (system.atCharge.status = failure)))));
+LTLSPEC G(((system.lowBattery.status = failure) -> X(((system.isCharge.status = success) | (system.isCharge.status = failure)))));
+LTLSPEC G(((system.atCharge.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.atCharge.status = failure) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.charging.status = success) -> X(((system.fullBattery.status = success) | (system.fullBattery.status = failure)))));
+LTLSPEC G(((system.isCharge.status = success) -> X(((system.stopCharge.status = success) | (system.stopCharge.status = failure) | (system.stopCharge.status = running)))));
+LTLSPEC G(((system.isCharge.status = failure) -> X(((system.fullBattery.status = success) | (system.fullBattery.status = failure)))));
+LTLSPEC G(((system.stopCharge.status = success) -> X(((system.goToPosB_2.status = success) | (system.goToPosB_2.status = failure) | (system.goToPosB_2.status = running)))));
+LTLSPEC G(((system.goToPosB_2.status = success) -> X(((system.doTaskB_2.status = success) | (system.doTaskB_2.status = failure) | (system.doTaskB_2.status = running)))));
+LTLSPEC G(((system.doTaskB_2.status = success) -> X(((system.fullBattery.status = success) | (system.fullBattery.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        fullBattery : fullBattery_module(fullBattery_v_stage_0);
+        goToPosA : success_DEFAULT_module();
+        doTaskA : success_DEFAULT_module();
+        goToPosB : success_DEFAULT_module();
+        doTaskB : success_DEFAULT_module();
+        goToPosC : success_DEFAULT_module();
+        doTaskC : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_7(fullBattery, goToPosA, doTaskA, goToPosB, doTaskB, goToPosC, doTaskC);
+        lowBattery : lowBattery_module(lowBattery_v_stage_0);
+        atCharge : atCharge_module(atCharge_v_stage_0);
+        goToStation : success_DEFAULT_module();
+        c3 : composite_selector_without_memory_2(atCharge, goToStation);
+        charging : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_3(lowBattery, c3, charging);
+        isCharge : isCharge_module(isCharge_v_stage_0);
+        stopCharge : success_DEFAULT_module();
+        goToPosB_2 : success_DEFAULT_module();
+        doTaskB_2 : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_4(isCharge, stopCharge, goToPosB_2, doTaskB_2);
+        c0 : composite_selector_without_memory_3(c1, c2, c4);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        fullBattery_v_stage_0 : boolean;
+        lowBattery_v_stage_0 : boolean;
+        isCharge_v_stage_0 : boolean;
+        atCharge_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(fullBattery_v_stage_0) := {TRUE, FALSE};
+        init(lowBattery_v_stage_0) := {TRUE, FALSE};
+        init(isCharge_v_stage_0) := {TRUE, FALSE};
+        init(atCharge_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(fullBattery_v_stage_0) :=
+            case
+                !(c0.active) : fullBattery_v_stage_0;
+                TRUE : fullBattery_v_stage_0;
+            esac;
+        next(lowBattery_v_stage_0) :=
+            case
+                !(c0.active) : lowBattery_v_stage_0;
+                TRUE : lowBattery_v_stage_0;
+            esac;
+        next(isCharge_v_stage_0) :=
+            case
+                !(c0.active) : isCharge_v_stage_0;
+                TRUE : isCharge_v_stage_0;
+            esac;
+        next(atCharge_v_stage_0) :=
+            case
+                !(c0.active) : atCharge_v_stage_0;
+                TRUE : atCharge_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        fullBattery := 2;
+        goToPosA := 3;
+        doTaskA := 4;
+        goToPosB := 5;
+        doTaskB := 6;
+        goToPosC := 7;
+        doTaskC := 8;
+        c2 := 9;
+        lowBattery := 10;
+        c3 := 11;
+        atCharge := 12;
+        goToStation := 13;
+        charging := 14;
+        c4 := 15;
+        isCharge := 16;
+        stopCharge := 17;
+        goToPosB_2 := 18;
+        doTaskB_2 := 19;
+MODULE composite_sequence_without_memory_7(child_0, child_1, child_2, child_3, child_4, child_5, child_6)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                !(child_5.internal_status = success) : child_5.internal_status;
+                !(child_6.internal_status = success) : child_6.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+        child_5.active := child_4.status = success;
+        child_6.active := child_5.status = success;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE fullBattery_module(fullBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (fullBattery_v_stage_0) ? success : failure;
+MODULE lowBattery_module(lowBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (lowBattery_v_stage_0) ? success : failure;
+MODULE atCharge_module(atCharge_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atCharge_v_stage_0) ? success : failure;
+MODULE isCharge_module(isCharge_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isCharge_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

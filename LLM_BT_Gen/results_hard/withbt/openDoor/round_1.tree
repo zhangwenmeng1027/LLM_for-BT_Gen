@@ -1,0 +1,45 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isDoorOpen_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isDoorOpen_v assign{result{isDoorOpen_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isDoorOpen arguments {} read_variables {isDoorOpen_v} condition{isDoorOpen_v} }
+}
+actions {
+    action { openDoor
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { passThroughDoor
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            isDoorOpen {}
+            composite {
+                c1 sequence
+                children {
+                    openDoor {}
+                    passThroughDoor {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isDoorOpen), (failure, isDoorOpen)))}
+    LTLSPEC {(globally, (implies, (success, isDoorOpen), (next, (or, (success, isDoorOpen), (failure, isDoorOpen)))))}
+    LTLSPEC {(globally, (implies, (failure, isDoorOpen), (next, (or, (success, openDoor), (failure, openDoor), (running, openDoor)))))}
+    LTLSPEC {(globally, (implies, (success, openDoor), (next, (or, (success, passThroughDoor), (failure, passThroughDoor), (running, passThroughDoor)))))}
+    LTLSPEC {(globally, (implies, (success, passThroughDoor), (next, (or, (success, isDoorOpen), (failure, isDoorOpen)))))}
+}

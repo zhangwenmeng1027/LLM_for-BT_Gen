@@ -1,0 +1,155 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC G(((system.atPosA.status = failure) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.atPosB.status = failure) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.atPosC.status = failure) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.atPos3.status = failure) -> X(((system.goToPos3.status = success) | (system.goToPos3.status = failure) | (system.goToPos3.status = running)))));
+LTLSPEC G(((system.goToPosA.status = failure) -> X(((system.atPosB.status = success) | (system.atPosB.status = failure)))));
+LTLSPEC G(((system.goToPosB.status = failure) -> X(((system.atPosC.status = success) | (system.atPosC.status = failure)))));
+LTLSPEC G(((system.goToPosC.status = failure) -> X(((system.atPos3.status = success) | (system.atPos3.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        atPosA : atPosA_module(atPosA_v_stage_0);
+        goToPosA : success_DEFAULT_module();
+        c1 : composite_selector_without_memory_2(atPosA, goToPosA);
+        atPosB : atPosB_module(atPosB_v_stage_0);
+        goToPosB : _DEFAULT_module();
+        c2 : composite_selector_without_memory_2(atPosB, goToPosB);
+        atPosC : atPosC_module(atPosC_v_stage_0);
+        goToPosC : _DEFAULT_module();
+        c3 : composite_selector_without_memory_2(atPosC, goToPosC);
+        atPos3 : atPos3_module(atPos3_v_stage_0);
+        goToPos3 : _DEFAULT_module();
+        c4 : composite_selector_without_memory_2(atPos3, goToPos3);
+        c0 : composite_selector_without_memory_4(c1, c2, c3, c4);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        atPosA_v_stage_0 : boolean;
+        atPosB_v_stage_0 : boolean;
+        atPosC_v_stage_0 : boolean;
+        atPos3_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(atPosA_v_stage_0) := {TRUE, FALSE};
+        init(atPosB_v_stage_0) := {TRUE, FALSE};
+        init(atPosC_v_stage_0) := {TRUE, FALSE};
+        init(atPos3_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(atPosA_v_stage_0) :=
+            case
+                !(c0.active) : atPosA_v_stage_0;
+                TRUE : atPosA_v_stage_0;
+            esac;
+        next(atPosB_v_stage_0) :=
+            case
+                !(c0.active) : atPosB_v_stage_0;
+                TRUE : atPosB_v_stage_0;
+            esac;
+        next(atPosC_v_stage_0) :=
+            case
+                !(c0.active) : atPosC_v_stage_0;
+                TRUE : atPosC_v_stage_0;
+            esac;
+        next(atPos3_v_stage_0) :=
+            case
+                !(c0.active) : atPos3_v_stage_0;
+                TRUE : atPos3_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        atPosA := 2;
+        goToPosA := 3;
+        c2 := 4;
+        atPosB := 5;
+        goToPosB := 6;
+        c3 := 7;
+        atPosC := 8;
+        goToPosC := 9;
+        c4 := 10;
+        atPos3 := 11;
+        goToPos3 := 12;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_selector_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+MODULE atPosA_module(atPosA_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosA_v_stage_0) ? success : failure;
+MODULE atPosB_module(atPosB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosB_v_stage_0) ? success : failure;
+MODULE atPosC_module(atPosC_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosC_v_stage_0) ? success : failure;
+MODULE atPos3_module(atPos3_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPos3_v_stage_0) ? success : failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

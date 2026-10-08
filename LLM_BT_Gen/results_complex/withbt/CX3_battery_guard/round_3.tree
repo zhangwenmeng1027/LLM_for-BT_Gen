@@ -1,0 +1,132 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env fullBattery_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isCharge_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atCharge_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ fullBattery_v assign{result{fullBattery_v}} }
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} }
+    variable_statement{ isCharge_v assign{result{isCharge_v}} }
+    variable_statement{ atCharge_v assign{result{atCharge_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { fullBattery arguments {} read_variables {fullBattery_v} condition{fullBattery_v} }
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} }
+    environment_check { isCharge arguments {} read_variables {isCharge_v} condition{isCharge_v} }
+    environment_check { atCharge arguments {} read_variables {atCharge_v} condition{atCharge_v} }
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { stopCharge
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskB_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    fullBattery {}
+                    goToPosA {}
+                    doTaskA {}
+                    goToPosB {}
+                    doTaskB {}
+                    goToPosC {}
+                    doTaskC {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    lowBattery {}
+                    composite {
+                        c3 selector
+                        children {
+                            atCharge {}
+                            goToStation {}
+                        }
+                    }
+                    charging {}
+                }
+            }
+            composite {
+                c4 sequence
+                children {
+                    isCharge {}
+                    stopCharge {}
+                    goToPosB_2 {}
+                    doTaskB_2 {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, fullBattery), (failure, fullBattery)))}
+    LTLSPEC {(globally, (implies, (success, fullBattery), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (failure, fullBattery), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskB), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskC), (next, (or, (success, fullBattery), (failure, fullBattery)))))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, atCharge), (failure, atCharge)))))}
+    LTLSPEC {(globally, (implies, (failure, lowBattery), (next, (or, (success, isCharge), (failure, isCharge)))))}
+    LTLSPEC {(globally, (implies, (success, atCharge), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (failure, atCharge), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, charging), (next, (or, (success, fullBattery), (failure, fullBattery)))))}
+    LTLSPEC {(globally, (implies, (success, isCharge), (next, (or, (success, stopCharge), (failure, stopCharge), (running, stopCharge)))))}
+    LTLSPEC {(globally, (implies, (failure, isCharge), (next, (or, (success, fullBattery), (failure, fullBattery)))))}
+    LTLSPEC {(globally, (implies, (success, stopCharge), (next, (or, (success, goToPosB_2), (failure, goToPosB_2), (running, goToPosB_2)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB_2), (next, (or, (success, doTaskB_2), (failure, doTaskB_2), (running, doTaskB_2)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskB_2), (next, (or, (success, fullBattery), (failure, fullBattery)))))}
+}

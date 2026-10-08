@@ -1,0 +1,40 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isFull_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isFull_v assign{result{isFull_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isFull arguments {} read_variables {isFull_v} condition{isFull_v} }
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    isFull {}
+                    goToPosA {}
+                }
+            }
+            isFull_dummy {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isFull), (failure, isFull)))}
+    LTLSPEC {(globally, (implies, (success, isFull), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (failure, isFull), (next, (or, (success, isFull), (failure, isFull)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, isFull), (failure, isFull)))))}
+}

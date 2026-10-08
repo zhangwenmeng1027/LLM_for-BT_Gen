@@ -1,0 +1,195 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)));
+LTLSPEC G(((system.hasVictim.status = success) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+LTLSPEC G(((system.hasVictim.status = failure) -> X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)))));
+LTLSPEC G(((system.checkReachable.status = success) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.checkReachable.status = failure) -> X(((system.askHelp.status = success) | (system.askHelp.status = failure) | (system.askHelp.status = running)))));
+LTLSPEC G(((system.askHelp.status = success) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X(((system.TargetAdjacent.status = success) | (system.TargetAdjacent.status = failure)))));
+LTLSPEC G(((system.TargetAdjacent.status = success) -> X(((system.saveVictim.status = success) | (system.saveVictim.status = failure) | (system.saveVictim.status = running)))));
+LTLSPEC G(((system.TargetAdjacent.status = failure) -> X(((system.goToPosC_2.status = success) | (system.goToPosC_2.status = failure) | (system.goToPosC_2.status = running)))));
+LTLSPEC G(((system.goToPosC_2.status = success) -> X(((system.saveVictim.status = success) | (system.saveVictim.status = failure) | (system.saveVictim.status = running)))));
+LTLSPEC G(((system.saveVictim.status = success) -> X(((system.placed.status = success) | (system.placed.status = failure)))));
+LTLSPEC G(((system.placed.status = success) -> X(((system.hasData.status = success) | (system.hasData.status = failure)))));
+LTLSPEC G(((system.placed.status = failure) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.putDown.status = success) -> X(((system.hasData.status = success) | (system.hasData.status = failure)))));
+LTLSPEC G(((system.hasData.status = success) -> X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)))));
+LTLSPEC G(((system.hasData.status = failure) -> X(((system.send.status = success) | (system.send.status = failure) | (system.send.status = running)))));
+LTLSPEC G(((system.send.status = success) -> X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        hasVictim : hasVictim_module(hasVictim_v_stage_0);
+        checkReachable : checkReachable_module(checkReachable_v_stage_0);
+        goToPosC : success_DEFAULT_module();
+        TargetAdjacent : TargetAdjacent_module(TargetAdjacent_v_stage_0);
+        saveVictim : success_DEFAULT_module();
+        placed : placed_module(placed_v_stage_0);
+        hasData : hasData_module(hasData_v_stage_0);
+        send : success_DEFAULT_module();
+        c7 : composite_selector_without_memory_2(hasData, send);
+        c6 : composite_sequence_without_memory_2(placed, c7);
+        putDown : success_DEFAULT_module();
+        c5 : composite_selector_without_memory_2(c6, putDown);
+        c4 : composite_sequence_without_memory_3(TargetAdjacent, saveVictim, c5);
+        goToPosC_2 : success_DEFAULT_module();
+        c3 : composite_selector_without_memory_2(c4, goToPosC_2);
+        c2 : composite_sequence_without_memory_3(checkReachable, goToPosC, c3);
+        askHelp : success_DEFAULT_module();
+        c1 : composite_selector_without_memory_2(c2, askHelp);
+        c0 : composite_sequence_without_memory_2(hasVictim, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        hasVictim_v_stage_0 : boolean;
+        checkReachable_v_stage_0 : boolean;
+        TargetAdjacent_v_stage_0 : boolean;
+        placed_v_stage_0 : boolean;
+        hasData_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(hasVictim_v_stage_0) := {TRUE, FALSE};
+        init(checkReachable_v_stage_0) := {TRUE, FALSE};
+        init(TargetAdjacent_v_stage_0) := {TRUE, FALSE};
+        init(placed_v_stage_0) := {TRUE, FALSE};
+        init(hasData_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(hasVictim_v_stage_0) :=
+            case
+                !(c0.active) : hasVictim_v_stage_0;
+                TRUE : hasVictim_v_stage_0;
+            esac;
+        next(checkReachable_v_stage_0) :=
+            case
+                !(c0.active) : checkReachable_v_stage_0;
+                TRUE : checkReachable_v_stage_0;
+            esac;
+        next(TargetAdjacent_v_stage_0) :=
+            case
+                !(c0.active) : TargetAdjacent_v_stage_0;
+                TRUE : TargetAdjacent_v_stage_0;
+            esac;
+        next(placed_v_stage_0) :=
+            case
+                !(c0.active) : placed_v_stage_0;
+                TRUE : placed_v_stage_0;
+            esac;
+        next(hasData_v_stage_0) :=
+            case
+                !(c0.active) : hasData_v_stage_0;
+                TRUE : hasData_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        hasVictim := 1;
+        c1 := 2;
+        c2 := 3;
+        checkReachable := 4;
+        goToPosC := 5;
+        c3 := 6;
+        c4 := 7;
+        TargetAdjacent := 8;
+        saveVictim := 9;
+        c5 := 10;
+        c6 := 11;
+        placed := 12;
+        c7 := 13;
+        hasData := 14;
+        send := 15;
+        putDown := 16;
+        goToPosC_2 := 17;
+        askHelp := 18;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE hasVictim_module(hasVictim_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasVictim_v_stage_0) ? success : failure;
+MODULE checkReachable_module(checkReachable_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (checkReachable_v_stage_0) ? success : failure;
+MODULE TargetAdjacent_module(TargetAdjacent_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (TargetAdjacent_v_stage_0) ? success : failure;
+MODULE placed_module(placed_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (placed_v_stage_0) ? success : failure;
+MODULE hasData_module(hasData_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasData_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

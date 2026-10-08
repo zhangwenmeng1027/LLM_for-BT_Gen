@@ -1,0 +1,492 @@
+[
+ {
+  "row": 2,
+  "task": "ABC_bottle",
+  "description": "Choose to execute the following three branch tasks:\n\nTask 1: Check if it is located at position A or check if it is located at position B, then check if the hand is empty, and finally pick up the object in front of you.\n\nTask 2: Check if it is located at position C, and then execute task A.\n\nTask 3: Check if it is located in the kitchen and then locate the bottle.",
+  "ltl": "[X(atPosA_s || atPosA_f) && G(atPosA_f -> X(atPosB_s || atPosB_f)) && G(atPosB_s -> X(empty_s || empty_f)),G(empty_s -> X(pickUp_s || pickUp_f || pickUp_r)) , G(atPosC_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)),  G(atKitchen_s -> X(locateBottle_s || locateBottle_f || locateBottle_r))]",
+  "bt": "[?, [>, [?, atPosA, atPosB], empty, pickUp], [>, atPosC, doTaskA], [>, atKitchen, locateBottle]]"
+ },
+ {
+  "row": 3,
+  "task": "ABC3",
+  "description": "Selectively execute the following four branch tasks:\n\nTask 1: Check if you are at location A or have navigated to location A.\n\nTask 2: Check if you are at location B or have navigated to location B.\n\nTask 3: Check if you are at location C or have navigated to location C.\n\nTask 4: Check if it is at position 3 or navigate to position 3.",
+  "ltl": "[G(atPosA_f -> X(goToPosA_s || goToPosA_f || goToPosA_r)) && G(atPosB_f -> X(goToPosB_s || goToPosB_f || goToPosB_r)) && G(atPosC_f -> X(goToPosC_s || goToPosC_f || goToPosC_r)) , G(atPos3_f -> X(goToPos3_s || goToPos3_f || goToPos3_r)) && G(goToPosA_f -> X(atPosB_s || atPosB_f)) &&  G(goToPosB_f -> X(atPosC_s || atPosC_f)) &&  G(goToPosC_f -> X(atPos3_s || atPos3_f))]",
+  "bt": "['?', ['?', 'atPosA', 'goToPosA'], ['?', 'atPosB', 'goToPosB'], ['?', 'atPosC', 'goToPosC'], ['?', 'atPos3', 'goToPos3']]"
+ },
+ {
+  "row": 4,
+  "task": "ABCholdKnife",
+  "description": "Execute the following three tasks in sequence:\n\nTask 1: Execute Task A or Task B.\n\nTask 2: Move to the kitchen\n\nTask 3: Check if you are currently holding a knife, and then execute Task C.",
+  "ltl": "[G(doTaskA_f -> X(doTaskB_s || doTaskB_f || doTaskB_r)) && G(doTaskA_s -> X(goToKitchen_s || goToKitchen_f || goToKitchen_r)) && G(goToKitchen_s -> X(holdKnife_s || holdKnife_f)) && G(holdKnife_s -> X(doTaskC_s || doTaskC_f || doTaskC_r))]",
+  "bt": "['>', ['?', 'doTaskA', 'doTaskB'], 'goToKitchen', ['>', 'holdKnife', 'doTaskC']]"
+ },
+ {
+  "row": 5,
+  "task": "acceptDoOtherTask",
+  "description": "The robot chooses to perform the following two branch tasks:\n\nTask 1: If the current robot is in a low battery state, turn off the gripper, navigate to the charging station location, and start charging.Task 2: Sequential execution of sub tasks: Subtask 1: The robot move to position A and execute task A, move to position B and execute task B, and move to position C and execute task C. Subtask 2: Check if there is any input information or wait for input. Subtask 3: Check if the inv is valid or calculate the inv value. Finally, the robot searches for the target object and then activates the manipulator. ",
+  "ltl": "[G(lowBattery_s -> X(closeGripper_s || closeGripper_f || closeGripper_r)) , G(closeGripper_s -> X(goToStation_s || goToStation_f || goToStation_r)) && G(goToStation_s -> X(charging_s || charging_f || charging_r)),G(lowBattery_f -> X(goToPosA_s || goToPosA_f || goToPosA_r)) && G(goToPosA_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)) , G(doTaskA_s -> X(goToPosB_s || goToPosB_f || goToPosB_r)) , G(goToPosB_s -> X(doTaskB_s || doTaskB_f || doTaskB_r)) && G(doTaskB_s -> X(goToPosC_s || goToPosC_f || goToPosC_r)), G(goToPosC_s -> X(doTaskC_s || doTaskC_f || doTaskC_r)) && G(doTaskC_s -> X(hasInput_s || hasInput_f)) , G(invValid_f -> X(computInv_s || computInv_f || computInv_r))&& G(hasInput_f -> X(waitInput_s || waitInput_f || waitInput_r)) , G(hasInput_s -> X(invValid_s || invValid_f)), G(invValid_s -> X(searchTarget_s || searchTarget_f || searchTarget_r)) && G(computInv_s -> X(searchTarget_s || searchTarget_f || searchTarget_r)) , G(searchTarget_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r))]",
+  "bt": "['>', 'lowBattery', 'closeGripper', 'goToStation', 'charging'], ['>', ['>', 'goToPosA', 'doTaskA', 'goToPosB', 'doTaskB', 'goToPosC', 'doTaskC'], ['?', 'hasInput', 'waitInput'], ['?', 'invValid', 'computInv'], ['>', 'searchTarget', 'activeManipulator']]]"
+ },
+ {
+  "row": 6,
+  "task": "acceptMoveFinger",
+  "description": "Execute the following tasks in sequence: Accept the destination location point, and then move the operating finger towards the target location.",
+  "ltl": "[X(acceptInput_s || acceptInput_f || acceptInput_r) && G(acceptInput_s -> X(moveFingerToTargetPosition_s || moveFingerToTargetPosition_f || moveFingerToTargetPosition_r))]",
+  "bt": "['>', 'acceptInput', 'moveFingerToTargetPosition']"
+ },
+ {
+  "row": 7,
+  "task": "alarm1",
+  "description": "Choose one of two tasks to execute\nTask 1: The alarm is sounding, check if Task A has been completed.\nTask 2 contains two options: either the alarm is in the sounding state and check if it is in position A, then execute Task A. Either the alarm sounds and navigates to position A, then executes task A.\n\n",
+  "ltl": "[G(alarm_s -> X(taskFinishedA_s || taskFinishedA_f || atPosA_s || atPosA_f || goToPosA_s ||goToPosA_f||goToPosA_r)) , G(atPosA_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)) && G(goToPosA_s -> X(doTaskA_s || doTaskA_f || doTaskA_r))]",
+  "bt": "['?', ['>', 'alarm', 'taskFinishedA'], ['?', ['>', 'alarm', 'atPosA', 'doTaskA'], ['>', 'alarm', 'goToPosA', 'doTaskA']]]"
+ },
+ {
+  "row": 8,
+  "task": "alarm2",
+  "description": "Execute the following tasks in sequence:\nTask 1: First navigate to location A, then pick up the item.\nTask 2: Choose to execute the following branch tasks:\nSubtask 1: When the alarm sounds, navigate to location B and place the item at location B.\nSubtask 2: Navigate to location C and place the item at location C.",
+  "ltl": "[X(goToPosA_s || goToPosA_f || goToPosA_r) && G(goToPosA_s -> X(pickUp_s || pickUp_f || pickUp_r)),G(pickUp_s -> X(alarm_s || alarm_f))&& G(alarm_s -> X(goToPosB_s || goToPosB_f || goToPosB_r)) && G(goToPosB_s -> X(placeB_s || placeB_f || placeB_r)),G(alarm_f -> X(goToPosC_s || goToPosC_f || goToPosC_r)) && G(goToPosC_s -> X(placeC_s || placeC_f || placeC_r))]",
+  "bt": "['>', ['>', 'goToPosA', 'pickUp'], ['?', ['>', 'alarm', 'goToPosB', 'placeB'], ['>', 'goToPosC', 'placeC']]]"
+ },
+ {
+  "row": 9,
+  "task": "alarm3",
+  "description": "When the alarm sounds, first navigate to location A and pick up the item on the ground. Otherwise, first navigate to location B and put down the item in your hand.",
+  "ltl": "[G(alarm_s -> X(goToPosA_s || goToPosA_f || goToPosA_r)) && G(goToPosA_s -> X(pickUp_s || pickUp_f || pickUp_r)) && G(alarm_f -> X(goToPosB_s || goToPosB_f || goToPosB_r)) && G(goToPosB_s -> X(putDown_s || putDown_f || putDown_r))]",
+  "bt": "['?', ['>', 'alarm', 'goToPosA', 'pickUp'], ['>', 'goToPosB', 'putDown']]"
+ },
+ {
+  "row": 10,
+  "task": "alarm4",
+  "description": "There are two tasks to choose from:\nTask 1: Check if the alarm sounds, select to execute the following two subtasks: Subtask 1.1: Check if Task A has been completed. Subtask 1.2: Check if it is located at position A, if not, navigate to position A, and then, execute task A.\nTask 2: Choose to execute the following two subtasks: Subtask 2.1: Check if Task B has been completed. Subtask 2.2: Check if it is located at position B ,if not, navigate to position B, and then, execute task B.",
+  "ltl": "[G(alarm_s -> X(taskFinishedA_s || taskFinishedA_f)) && G(taskFinishedA_f -> X(atPosA_s || atPosA_f)) , G(atPosA_f -> X(goToPosA_s || goToPosA_f || goToPosA_r)) && G(goToPosA_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)), G(alarm_f -> X(taskFinishedB_s || taskFinishedB_f)) && G(taskFinishedB_f -> X(atPosB_s || atPosB_f)), G(atPosB_f -> X(goToPosB_s || goToPosB_f || goToPosB_r)) &&G(goToPosB_s -> X(doTaskB_s || doTaskB_f || doTaskB_r))]",
+  "bt": " [?, [>, alarm, [?, taskFinishedA, [>, [?, atPosA, goToPosA], doTaskA]]], [?, taskFinishedB, [>, [?, atPosB, goToPosB], doTaskB]]]"
+ },
+ {
+  "row": 11,
+  "task": "alarm5",
+  "description": "Select the tasks that can be executed based on the alert status:\nWhen the alarm rings, then perform the following three optional tasks: either check if task A has been completed, or check if it is located at position A and execute task A, or navigate to position A and execute task A.\nWhen the alarm does not sound, then perform the following three optional tasks: either check if Task B has been completed. Or check if it is located at position B and execute task B. Or navigate to location B and execute task B.",
+  "ltl": "[G(alarm_s -> X(taskFinishedA_s || taskFinishedA_f)) &&  G(taskFinishedA_f -> X(atPosA_s || atPosA_f)) , G(atPosA_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)) && G(goToPosA_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)) , G(alarm_f -> X(taskFinishedB_s || taskFinishedB_f)) &&  G(taskFinishedB_f -> X(atPosB_s || atPosB_f)) , G(atPosB_s -> X(doTaskB_s || doTaskB_f || doTaskB_r)) && G(goToPosB_s -> X(doTaskB_s || doTaskB_f || doTaskB_r)))]",
+  "bt": " [?, [>, alarm, [?, taskFinishedA, [>, atPosA, doTaskA], [>, goToPosA, doTaskA]]], [>, [?, taskFinishedB, [>, atPosB, doTaskB], [>, goToPosB, doTaskB]]]]"
+ },
+ {
+  "row": 12,
+  "task": "attack",
+  "description": "Robots can choose to perform the following two branch tasks:\n\nTask 1: Firstly, acquire the target, and then move to the target location, then check if the target is nearby, and finally attack the target.\n\nTask 2: Follow humans to move.",
+  "ltl": "[X(getTarget_s || getTarget_f || getTarget_r) && G(getTarget_s -> X(approachTarget_s || approachTarget_f || approachTarget_r)) && G(approachTarget_s -> X(TargetAdjacent_s || TargetAdjacent_f)) && G(TargetAdjacent_s -> X(attackTarget_s || attackTarget_f || attackTarget_r)) && G(getTarget_f -> X(followHuman_s || followHuman_f || followHuman_r))]",
+  "bt": "['?', ['>', 'getTarget', 'approachTarget', 'TargetAdjacent', 'attackTarget'], 'followHuman']"
+ },
+ {
+  "row": 13,
+  "task": "attack_taskA",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Check if it is located at position A, and then complete task A.\n\nTask 2: Obtain the target and then move to the destination.\n\nTask 3: Check if the target is nearby and then attack the target.\n\nTask 4: Finally check if Task A has been completed.",
+  "ltl": "[X(atPosA_s || atPosA_f) && G(atPosA_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)) && G(doTaskA_s -> X(getTarget_s || getTarget_f || getTarget_r)) && G(getTarget_s -> X(moveToDestination_s || moveToDestination_f || moveToDestination_r)) && G(moveToDestination_s -> X(TargetAdjacent_s || TargetAdjacent_f)), G(TargetAdjacent_s -> X(attackTarget_s || attackTarget_f || attackTarget_r)) && G(attackTarget_s -> X(taskFinishedA_s || taskFinishedA_f))]",
+  "bt": "[>, [>, atPosA, doTaskA], [>, getTarget, moveToDestination], [>, TargetAdjacent, attackTarget], taskFinishedA]"
+ },
+ {
+  "row": 14,
+  "task": "attackTarget",
+  "description": "The robot chooses to perform the following two branch tasks:\n\nTask 1: Perform the following actions in sequence: First, obtain the target, and then move to position A. Check if the target is nearby, then attack the target.\n\nTask 2: Choose to execute the following two branch tasks: Subtask 1: Check for hunger and then search for food. Afterwards, move to position B, search for utensils, and finally eat food. Subtask 2: Follow humans to move.",
+  "ltl": "[X(getTarget_s || getTarget_f || getTarget_r) && G(getTarget_s -> X(goToPosA_s || goToPosA_f || goToPosA_r)), G(goToPosA_s -> X(TargetAdjacent_s || TargetAdjacent_f))&& G(TargetAdjacent_s -> X(attackTarget_s || attackTarget_f || attackTarget_r)), G(isHungry_s -> X(findFood_s || findFood_f || findFood_r)), G(findFood_s -> X(goToPosB_s || goToPosB_f || goToPosB_r)) && G(goToPosB_s -> X(findTableware_s || findTableware_f || findTableware_r)), G(findTableware_s -> X(eatfood_s || eatfood_f || eatfood_r)), G(isHungry_f -> X(followHuman_s || followHuman_f || followHuman_r))]",
+  "bt": "['?', ['>', 'getTarget', 'goToPosA', ['?', 'TargetAdjacent', 'attackTarget']], ['?', ['>', 'isHungry', 'findFood', 'goToPosA', 'findTableware'], 'followHuman']]"
+ },
+ {
+  "row": 15,
+  "task": "autonomus",
+  "description": "Choose to execute the following branch tasks:Task 1: Check if the room number is known, then check if the robot is already in the room or has moved to the room.Task 2: Check if the bottle has been found or find the bottle .Task 3: Check if the bottle has been picked up.Task 4: Execute the following tasks in sequence: Task 4.1: Check if the inv value is valid or compute the inv value. Task 4.2: Check if the robot is at the inv position or has moved to the invPose position. Task 4.3: Check if the bottle has been found or find for the bottle.Task 5: Follow the person or seek help.",
+  "ltl": "[X(roomKnown_s || roomKnown_f) && G(roomKnown_s -> X(robotInRoom_s || robotInRoom_f)) ,\n  G(robotInRoom_f -> X(goToRoom_s || goToRoom_f || goToRoom_r)) , G(bottleFound_f -> X(findBottle_s || findBottle_f || findBottle_r)), G(ballGrasped_f -> X(invValid_s || invValid_f)) && G(invValid_s -> X(computInv_s || computInv_f || computInv_r)), G(computInv_s -> X(RobotAtInvPose_s || RobotAtInvPose_f)), G(RobotAtInvPose_f -> X(goToInvPose_s || goToInvPose_f || goToInvPose_r)),  G(goToInvPose_s -> X(bottleFound_s || bottleFound_f)), G(followHuman_f -> X(askHelp_s || askHelp_f || askHelp_r))]",
+  "bt": "[?, [>, roomKnown, [?, robotInRoom, goToRoom]], [?, bottleFound, findBottle], [?, ballGrasped, [>, invValid, [>, computInv, [?, RobotAtInvPose, [>, goToInvPose, [?, bottleFound, findBottle]]]]]], [?, followHuman, askHelp]]"
+ },
+ {
+  "row": 16,
+  "task": "ballFound",
+  "description": "Execute the following tasks in sequence: The ball has been found or search for the ball. The ball is nearby or close to the ball. Check if the ball has been grabbed or grasp the ball. Check if the box has been found or search for the box. Then check if the box is nearby or close to the box. Finally, put down the ball.",
+  "ltl": "[X(ballFound_s || ballFound_f) && G(ballFound_f -> X(searchForBall_s || searchForBall_f ||searchForBall_r)) && G(ballClose_f -> X(closeToBall_s || closeToBall_f ||closeToBall_r)) , G(ballGrasped_f -> X(graspBall_s || graspBall_f || graspBall_r)),\nG(boxFound_f -> X(searchForBox_s || searchForBox_f ||searchForBox_r)) && G(boxNear_f -> X(closeToBox_s || closeToBox_f ||closeToBox_r)) && G(closeToBox_s -> X(ballPlaced_s || ballPlaced_f))]",
+  "bt": "[>, [?, ballFound, searchForBall], [?, ballClose, closeToBall], [?, ballGrasped, graspBall], [?, boxFound, [>, searchForBox, [?, boxNear, [>, closeToBox, [?, ballPlaced, putDownBall]]]]]]"
+ },
+ {
+  "row": 17,
+  "task": "charge",
+  "description": "Firstly, check if the battery level of the robot is in a low state. Then perform one of the following tasks: either the robot is already in the charging station position, or the robot navigates to the charging station position. Finally, charge it.",
+  "ltl": "[X(lowBattery_s || lowBattery_f) && G(lowBattery_s -> X(atCharge_s || atCharge_f)) && G(atCharge_f -> X(goToStation_s ||goToStation_f || goToStation_r)) && G(goToStation_s -> X(charging_s || charging_f || charging_r))]",
+  "bt": "['>', 'lowBattery', ['?', 'atCharge', 'goToStation'], 'charging']"
+ },
+ {
+  "row": 18,
+  "task": "chargeFull",
+  "description": "\nChoose to execute the following branch task: Task 1: Check if the robot's battery is fully charged, then check if it is charging, and then stop charging. Task 2: Check if the battery level is not sufficient, then  connect it to the charging station, and then go charge it. Task 3: seek help from humans, move to the charging station location, and then wait for charging.",
+  "ltl": "[X(fullBattery_s || fullBattery_f) && G(fullBattery_s -> X(isCharge_s || isCharge_f)) , G(isCharge_s -> X(stopCharge_s ||stopCharge_f || stopCharge_r)), G(fullBattery_f -> X(lowBattery_s || lowBattery_f)), G(lowBattery_s -> X(connectToStation_s || connectToStation_f || connectToStation_r)) ,G(connectToStation_s -> X(charging_s || charging_f || charging_r)), G(askHelp_s -> X(goToStation_s || goToStation_f || goToStation_r)) , G(goToStation_s -> X(waitCharge_s || waitCharge_f || waitCharge_r))]",
+  "bt": "['?', ['>', 'fullBattery', 'isCharge', 'stopCharge'], ['>', 'lowBattery', 'connectToStation', 'charging'], ['>', 'askHelp', 'goToStation', 'waitCharge']]"
+ },
+ {
+  "row": 19,
+  "task": "checkBattery_ABC",
+  "description": "Robots have the following four branch tasks:\n\nTask 1: Navigate to position A and pick up the items in front of you. Then check if the battery level is sufficient, and execute task A.\n\nTask 2: Check if the current position is A, and then check if the current hand is empty. Then pick up the object in front of you. Then navigate to position B and put down the object in your hand. Finally, navigate to location C and execute task C.\n\nTask 3: Check if the battery is low, navigate to the charging station location, and start charging. Then check if the robot is hungry and eat food.\n\nTask 4: Follow human movement.",
+  "ltl": "[X(goToPosA_s || goToPosA_f || goToPosA_r) && G(goToPosA_s -> X(pickUp_s || pickUp_f || pickUp_r))  &&  G(checkBattery_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)), G(atPosA_s -> X(empty_s || empty_f)) &&  G(empty_s -> X(pickUp_s || pickUp_f || pickUp_r)) &&  G(goToPosB_s -> X(putDown_s || putDown_f || putDown_r)) , G(goToPosC_s -> X(doTaskC_s || doTaskC_f || doTaskC_r)),\nG(lowBattery_s -> X(goToStation_s || goToStation_f || goToStation_r)) ,\n  G(goToStation_s -> X(charging_s || charging_f || charging_r)) &&\n  G(isHungry_s -> X(eatfood_s || eatfood_f || eatfood_r))\n]",
+  "bt": "[?, [>, goToPosA, pickUp, checkBattery, doTaskA], [>, [>, atPosA, empty], pickUp, goToPosB, putDown, goToPosC, doTaskC], [>, [>, lowBattery, goToStation, charging], [>, isHungry, eatfood]], followHuman]"
+ },
+ {
+  "row": 20,
+  "task": "checkTarget",
+  "description": "Perform the following tasks in sequence: navigate to the destination, check for the presence of the target object, and pick up the target object.",
+  "ltl": "[X(moveToDestination_s || moveToDestination_f || moveToDestination_r) && G(moveToDestination_s -> X(TargetFound_s || TargetFound_f)) && G(TargetFound_s -> X(pickUp_s || pickUp_f || pickUp_r))]",
+  "bt": "['>', 'moveToDestination', 'TargetFound', 'pickUp']"
+ },
+ {
+  "row": 21,
+  "task": "doTask",
+  "description": "Execute Task A, and then choose to execute the following two tasks: Task 1:  Execute Task B, and execute Task C. Task 2: Execute task E or task D.",
+  "ltl": "[X(doTaskA_s || doTaskA_f || doTaskA_r) && G(doTaskA_s -> X(doTaskB_s || doTaskB_f || doTaskB_r)) , G(doTaskB_s -> X(doTaskC_s || doTaskC_f || doTaskC_r)) && G(doTaskB_f -> X(doTaskE_s || doTaskE_f || doTaskE_r)) , G(doTaskE_f -> X(doTaskD_s || doTaskD_f || doTaskD_r))]",
+  "bt": "['>', 'doTaskA', ['?', ['>', 'doTaskB', 'doTaskC'], ['?', 'doTaskE', 'doTaskD']]]"
+ },
+ {
+  "row": 22,
+  "task": "evaluate",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Check if the ability has been evaluated. Or conduct performance testing and evaluate its capabilities.\n\nTask 2: Pick up the item and move it to the destination, put down the item, and finally move it to the parking lot.",
+  "ltl": "[X(abilityEvaluated_s || abilityEvaluated_f) && G(abilityEvaluated_f -> X(testPerformance_s || testPerformance_f || testPerformance_r)) && G(testPerformance_s -> X(evaluationPerformance_s || evaluationPerformance_f || evaluationPerformance_r)), G(pickUp_s -> X(moveToDestination_s ||moveToDestination_f || moveToDestination_r)) && G(moveToDestination_s -> X(putDown_s || putDown_f || putDown_r)) && G(putDown_s -> X(moveToParking_s || moveToParking_f || moveToParking_r))]",
+  "bt": "['>', ['?', 'abilityEvaluated', ['>', 'testPerformance', 'evaluationPerformance']], ['>', 'pickUp', 'moveToDestination', 'putDown']]"
+ },
+ {
+  "row": 23,
+  "task": "explore",
+  "description": "Execute the following tasks in sequence: First, check if the detection is complete, generate a new detection location, and move to the detection location.",
+  "ltl": "[X(detectionCompleted_s || detectionCompleted_f) && G(detectionCompleted_s -> X(generateDetection_s || generateDetection_f || generateDetection_r)) && G(generateDetection_s -> X(moveToDestination_s || moveToDestination_f || moveToDestination_r))]",
+  "bt": "['>', 'detectionCompleted', 'generateDetection', 'moveToDestination']"
+ },
+ {
+  "row": 24,
+  "task": "fetch_bottle",
+  "description": "Robots have two selectable events:\n1、 The robot navigates to the kitchen, then locate the bottle, navigates to the position of the bottle, and retrieves the bottle.\n2、 Request help.",
+  "ltl": "[X(goToKitchen_s || goToKitchen_f ||goToKitchen_r) && G(goToKitchen_s -> X(locateBottle_s || locateBottle_f || locateBottle_r)) && G(locateBottle_s -> X(goToBottle_s || goToBottle_f || goToBottle_r))&& G(goToBottle_s -> X(fetchBottle_s || fetchBottle_f || fetchBottle_r))&& G(goToKitchen_f -> X(askHelp_s || askHelp_f || askHelp_r))]",
+  "bt": "['?', ['>', 'goToKitchen', 'locateBottle', 'goToBottle', 'fetchBottle'], 'askHelp']"
+ },
+ {
+  "row": 25,
+  "task": "fetchBottle",
+  "description": "Choose to execute the following branch tasks:\n\nTask 1: Move to the kitchen, find the location of the bottle, and retrieve it.\n\nTask 2: Seeking Help",
+  "ltl": "[X(goToKitchen_s || goToKitchen_f ||goToKitchen_r) && G(goToKitchen_s -> X(locateBottle_s || locateBottle_f || locateBottle_r)) && G(locateBottle_s -> X(fetchBottle_s || fetchBottle_f || fetchBottle_r)) && G(goToKitchen_f -> X(askHelp_s || askHelp_f || askHelp_r))]",
+  "bt": "['?', ['>', 'goToKitchen', 'locateBottle', 'fetchBottle'], 'askHelp']"
+ },
+ {
+  "row": 26,
+  "task": "findfood",
+  "description": "Perform the following actions in sequence: Task1: First, search for food, then move to the target destination and then pick up the food. Task 2: search for tableware and then move the tableware. Task 3: check if you have reached a state of fullness or continue eating.",
+  "ltl": "[X(findFood_s || findFood_f || findFood_r) && G(findFood_s -> X(moveToDestination_s || moveToDestination_f || moveToDestination_r)) && G(moveToDestination_s -> X(pickUp_s || pickUp_f || pickUp_r)) , G(pickUp_s -> X(findTableware_s || findTableware_f || findTableware_r)) && G(findTableware_s -> X(moveToTableware_s || moveToTableware_f || moveToTableware_r)) && G(moveToTableware_s -> X(isFull_s || isFull_f)) &&G(isFull_f -> X(eatfood_s || eatfood_f || eatfood_r))]",
+  "bt": "['>', ['>', 'findFood', 'moveToDestination', 'pickUp'], ['>', 'findTableware', 'moveToTableware'], ['?', 'isFull', 'eatfood']]"
+ },
+ {
+  "row": 27,
+  "task": "firefighting",
+  "description": "Three selectable execution tasks:\nTask 1: Check if there are any victims present and rescue them.\nTask 2:  If there is still a fire source in the room, use a fire extinguisher to extinguish the fire. \nTask 3: Transfer to another room and then continue rescue.\n﻿",
+  "ltl": "[X(hasVictim_s || hasVictim_f) && G(hasVictim_s -> X(saveVictim_s || saveVictim_f || saveVictim_r)) && G(hasFire_s -> X(useExtinguisher_s || useExtinguisher_f || useExtinguisher_r))&&G(moveToOtherRoom_s -> X(Rescue_s || Rescue_f || Rescue_r))]",
+  "bt": "['?', ['>', 'hasVictim', 'saveVictim'], ['>', 'hasFire', 'UseExtinguisher'], ['>', 'moveToOtherRoom', 'Rescue']]"
+ },
+ {
+  "row": 28,
+  "task": "followHuman",
+  "description": "You can choose to seek help from humans or perform the following tasks:\n\nExecute the following two subtasks in the order of tasks:\n\nSubtask 1: Follow human movement. Or check if the room number is known and then check if the robot is in the room or navigating to the room.\n\nSubtask 2: Execute the following two subtasks in sequence: Subtask 1: Check if the bottle has been found or search for the bottle. Subtask 2: Check if the bottle has been grabbed, or perform task A, or perform the following sequence of tasks: either inv has already been calculated and is a valid value, or calculate the value of Inv. Then, check if the bottle is located or positioned, and grab the bottle.",
+  "ltl": "[\nX(askHelp_s || askHelp_f || askHelp_r) && G(roomKnown_s -> X(robotInRoom_s || robotInRoom_f)),G(robotInRoom_f -> X(goToRoom_s || goToRoom_f || goToRoom_r)),G(bottleFound_f -> X(locateBottle_s || locateBottle_f || locateBottle_r)),\nG(bottleGripped_f -> X(doTaskA_s || doTaskA_f || doTaskA_r)), G(invValid_f -> X(computInv_s || computInv_f || computInv_r)), G(invValid_s -> X(bottleLocated_s || bottleLocated_f)),G( bottleLocated_s -> X(graspBottle_s || graspBottle_f || graspBottle_r))\n]",
+  "bt": "[?, askHelp, [>, [?, followHuman, [>, roomKnown, [?, robotInRoom, goToRoom]]], [>, [?, bottleFound, locateBottle], [?, bottleGripped, doTaskA, [>, [?, invValid, computInv], [>, bottleLocated, graspBottle]]]]]]"
+ },
+ {
+  "row": 29,
+  "task": "get_food",
+  "description": " Check the robot has no food, then there are two events to choose from:\n1、check there is an apple tree nearby, and then pick apples.\n2、check it either has a knife in its hand or will pick it up. And then walk towards the cow, ultimately killing it.",
+  "ltl": "[X(noFood_s || noFood_f) && G(noFood_s -> X(hasApple_s || hasApple_f )) && G(hasApple_s -> X(pickApple_s || pickApple_f || pickApple_r)) , G(hasApple_f -> X(holdKnife_s || holdKnife_f )) && G(holdKnife_f -> X(pickUp_s || pickUp_f || pickUp_r)) , G(pickUp_s -> X(goCow_s || goCow_f || goCow_r)) && G(goCow_s -> X(killCow_s ||killCow_f || killCow_r))]",
+  "bt": "['>', 'noFood', ['?', ['>', 'hasApple', 'pickApple'], ['>', ['?', 'holdKnife', 'pickUp'], ['>', 'goCow', 'killCow']]]]"
+ },
+ {
+  "row": 30,
+  "task": "go",
+  "description": "Execute the following actions in sequence: move to position 1, move to position 2, move to position 3, move to position 4, move to position 5, move to position 6, and move to position 7.",
+  "ltl": "[X(goToPos1_s || goToPos1_f || goToPos1_r) && G(goToPos1_s -> X(goToPos2_s || goToPos2_f || goToPos2_r)) , G(goToPos2_s -> X(goToPos3_s || goToPos3_f || goToPos3_r)) && G(goToPos3_s -> X(goToPos4_s || goToPos4_f || goToPos4_r)) && G(goToPos4_s -> X(goToPos5_s || goToPos5_f || goToPos5_r)) , G(goToPos5_s -> X(goToPos6_s || goToPos6_f || goToPos6_r)) && G(goToPos6_s -> X(goToPos7_s || goToPos7_f || goToPos7_r))]",
+  "bt": " [>, goToPos1, goToPos2, goToPos3, goToPos4, goToPos5, goToPos6, goToPos7]"
+ },
+ {
+  "row": 31,
+  "task": "grip_put",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Open the gripper, move to the target position, and close the gripper.\n\nTask 2: Move to position A, and finally put down the object.",
+  "ltl": "[X(openGripper_s || openGripper_f || openGripper_r) && G(openGripper_s -> X(moveFingerToTargetPosition_s || moveFingerToTargetPosition_f || moveFingerToTargetPosition_r)) , G(moveFingerToTargetPosition_s -> X(closeGripper_s || closeGripper_f || closeGripper_r)) && G(closeGripper_s -> X(goToPosA_s || goToPosA_f || goToPosA_r)) && G(goToPosA_s -> X(putDown_s || putDown_f || putDown_r))]",
+  "bt": "['>', ['>', 'openGripper', 'moveFingerToTargetPosition', 'closeGripper'], ['>', 'goToPosA', 'putDown']]"
+ },
+ {
+  "row": 32,
+  "task": "gripper",
+  "description": "Check if the battery is low, open the gripper, move to the target position, and close the gripper.",
+  "ltl": "[X(lowBattery_s || lowBattery_f) && G(lowBattery_s -> X(openGripper_s || openGripper_f || openGripper_r)) , G(moveFingerToTargetPosition_s -> X(closeGripper_s || closeGripper_f || closeGripper_r)) && G(openGripper_s -> X(moveFingerToTargetPosition_s || moveFingerToTargetPosition_f || moveFingerToTargetPosition_r))]",
+  "bt": "['>', 'lowBattery', 'openGripper', 'moveFingerToTargetPosition', 'closeGripper']"
+ },
+ {
+  "row": 33,
+  "task": "hungry",
+  "description": "Choose to execute the following two branch tasks:\n\nTask 1: Check for hunger and then search for food. Afterwards, move to position A, search for utensils, and finally eat food.\n\nTask 2: Follow humans to move.",
+  "ltl": "[X(isHungry_s || isHungry_f) && G(isHungry_s -> X(findFood_s || findFood_f || findFood_r)) , G(findFood_s -> X(goToPosA_s || goToPosA_f || goToPosA_r)) , G(goToPosA_s -> X(findTableware_s || findTableware_f || findTableware_r)) && G(findTableware_s -> X(eatfood_s || eatfood_f || eatfood_r)) && G(isHungry_f -> X(followHuman_s || followHuman_f || followHuman_r ))]",
+  "bt": "['?', ['>', 'isHungry', 'findFood', 'goToPosA', 'findTableware', 'eatfood'], 'followHuman']"
+ },
+ {
+  "row": 34,
+  "task": "hungry_kitchen",
+  "description": "Choose to execute the following two branch tasks:\n\nTask 1: Execute the following tasks in sequence: Subtask 1: Firstly, check if you are hungry, then navigate to the kitchen or follow human movement. Subtask 2: Search for the bottle and then grab the bottle.\n\nTask 2: Seek help.",
+  "ltl": "[X(isHungry_s || isHungry_f) && G(isHungry_s -> X(goToKitchen_s || goToKitchen_f || goToKitchen_r)) && G(goToKitchen_f -> X(followHuman_s || followHuman_f || followHuman_r)), G(followHuman_s ->X(locateBottle_s || locateBottle_f || locateBottle_r)) && G(locateBottle_s -> X(fetchBottle_s || fetchBottle_f || fetchBottle_r)),G(isHungry_f -> X(askHelp_s || askHelp_f || askHelp_r))]",
+  "bt": "['?', ['>', 'isHungry', ['?', 'goToKitchen', 'followHuman'], ['>', 'locateBottle', 'fetchBottle']]"
+ },
+ {
+  "row": 35,
+  "task": "inputTarget",
+  "description": "The robot executes the following tasks in sequence:\nTask 1: Firstly, the robot receives input data and sets the parameters to the values of this data.\nTask 2: Choose to execute the following two subtasks:\nSubtask 1: Execute the following three tasks in sequence: Task 1: Check the battery status. If the battery status is good, search for the target object. Task 2:  If the target object has been found, open the gripper, pick the object, and finally close the gripper.  Task 3: If the target has already been captured, move to the target room, and finally put down the object.\nSubtask 2: If the battery is low, move it to a charging station for charging.",
+  "ltl": "[G(acceptInput_s -> X(setValue_s || setValue_f || setValue_r)) && G(setValue_s -> X(BatteryOK_s || BatteryOK_f)),G(BatteryOK_s -> X(searchTarget_s || searchTarget_f || searchTarget_r)) && G(searchTarget_s -> X(TargetFound_s || TargetFound_f)), G(TargetFound_s -> X(openGripper_s || openGripper_f || openGripper_r)) &&\n  G(openGripper_s -> X(pickUp_s || pickUp_f || pickUp_r)) ,\n  G(pickUp_s -> X(closeGripper_s || closeGripper_f || closeGripper_r)),G(TargetCaptured_s -> X(goToTarRoom_s || goToTarRoom_f || goToTarRoom_r)), G(goToTarRoom_s -> X(putDown_s || putDown_f || putDown_r)) ,G(lowBattery_s -> X(goToStation_s || goToStation_f || goToStation_r)) &&\n  G(goToStation_s -> X(charging_s || charging_f || charging_r))]",
+  "bt": "[>, acceptInput, setValue, [?, [>, BatteryOK, searchTarget, [?, [>, TargetFound, openGripper, pickUp, closeGripper], [>, TargetCaptured, goToTarRoom, putDown]]], [>, lowBattery, goToStation, charging]]]"
+ },
+ {
+  "row": 36,
+  "task": "intCompare",
+  "description": "Perform the following tasks in sequence:\n\nTask 1: First, the robot receives input data and sets the parameters to the values ​​corresponding to that data. Then, it compares the current parameter values ​​with the preset values.\n\nTask 2: If the values ​​are equal, stop the search. Otherwise, search for the target.\n\nTask 3: Pick up the target and move it to the kitchen, then place it down. Alternatively, move it to location A and complete Task A.",
+  "ltl": "[X(acceptInput_s || acceptInput_f || acceptInput_r) && G(acceptInput_s -> X(setValue_s || setValue_f || setValue_r)) && G(setValue_s -> X(compareValue_s || compareValue_f || compareValue_r)), \nG(equalVal_s -> X(stopSearch_s || stopSearch_f || stopSearch_r)) && G(equalVal_f -> X(searchTarget_s || searchTarget_f || searchTarget_r)), G(pickUp_s -> X(goToKitchen_s || goToKitchen_f || goToKitchen_r)) && G(goToKitchen_s -> X(putDown_s || putDown_f || putDown_r)), G(goToKitchen_f -> X(goToPosA_s || goToPosA_f || goToPosA_r)) && G(goToPosA_s -> X(doTaskA_s || doTaskA_f || doTaskA_r))\n]",
+  "bt": " [>, [>, acceptInput, setValue, compareValue], [?, [>, equalVal, stopSearch], [>, searchTarget]], [?, [>, pickUp, [?, [>, goToKitchen, putDown], [>, goToPosA, doTaskA]]]]]"
+ },
+ {
+  "row": 37,
+  "task": "isFull",
+  "description": "Check if the robot is full and then move to position A.",
+  "ltl": "[X(isFull_s || isFull_f) && G(isFull_s -> X(goToPosA_s || goToPosA_f || goToPosA_r))]",
+  "bt": "['>', 'isFull', 'goToPosA']"
+ },
+ {
+  "row": 38,
+  "task": "lowBattery_ABC",
+  "description": "Choose to execute the following three branch tasks:\n\nSubtask 1: Perform the following actions in sequence: Check if it is in a low battery state, then check if it is in position A, and then check if the hand is empty. Then pick up the object, perform task A, and finally put the object down.\n\nSubtask 2: Perform the following actions in sequence: Check if it is in a low battery state, then check if it is in position B, and then check if the hand is empty. Then pick up the object, perform task B, and finally put the object down.\n\nSubtask 3: Perform the following actions in sequence: Check if the robot is located at position C, then check if the hand is empty, then move to the target position, and finally execute task C.",
+  "ltl": "[X(lowBattery_s || lowBattery_f)  &&  G(atPosA_s -> X(empty_s || empty_f)) && G(empty_s -> X(pickUp_s || pickUp_f || pickUp_r || approachTarget_s || approachTarget_f || approachTarget_r)), G(pickUp_s -> X(doTaskA_s || doTaskA_f || doTaskA_r || doTaskB_s || doTaskB_f || doTaskB_r)) && G(doTaskA_s -> X(putDown_s || putDown_f || putDown_r)), G(doTaskB_s -> X(putDown_s || putDown_f || putDown_r)), G(atPosB_s -> X(empty_s || empty_f)) &&G(atPosC_s -> X(empty_s || empty_f)) && G(approachTarget_s -> X(doTaskC_s || doTaskC_f || doTaskC_r))]",
+  "bt": "[?, [>, lowBattery, atPosA, empty, pickUp, doTaskA, putDown], [>, lowBattery, atPosB, empty, pickUp, doTaskB, putDown], [>, atPosC, empty, approachTarget, doTaskC]]"
+ },
+ {
+  "row": 39,
+  "task": "manipulate_parking",
+  "description": "Execute the following tasks in sequence: Move to the control panel, move the mechanical finger towards the target position, follow the given ID operation, and move to the parking lot.",
+  "ltl": "[X(moveToPanel_s || moveToPanel_f || moveToPanel_r) && G(moveToPanel_s -> X(moveFingerToTargetPosition_s || moveFingerToTargetPosition_f || moveFingerToTargetPosition_r)),G(moveFingerToTargetPosition_s -> X(followOperation_s || followOperation_f || followOperation_r)) && G(followOperation_s -> X(moveToParking_s || moveToParking_f || moveToParking_r))]",
+  "bt": "['>', 'moveToPanel', 'moveFingerToTargetPosition', 'followOperation', 'moveToParking']"
+ },
+ {
+  "row": 40,
+  "task": "mars",
+  "description": "When the battery of the Mars rover is low, deploy the solar panel. Alternatively, during a storm, retract the solar panels; Otherwise, obtain and send data.",
+  "ltl": "[X(lowBattery_s || lowBattery_f) && G(lowBattery_s -> X(unfoldPanels_s || unfoldPanels_f || unfoldPanels_r)),G(lowBattery_f -> X(storm_s || storm_f)) && G(storm_s -> X(foldPanels_s || foldPanels_f || foldPanels_r)), G(storm_f -> X(getData_s || getData_f || getData_r)) && G(getData_s -> X(send_s || send_f || send_r))]",
+  "bt": "[?, [>, lowBattery, unfoldPanels], [?, [>, storm, foldPanels], [>, getData, send]]]"
+ },
+ {
+  "row": 41,
+  "task": "mars2",
+  "description": "There are three selectable execution tasks: 1、 There is currently data available. 2、 When there is already sampled data, analyze the data. 3、First check if you are holding the sample in your hand otherwise picking up objects. Then check if it is already located at the base station ,otherwise navigate to the base station. Finally, put down the item and analyze it.",
+  "ltl": "[X(haveData_s || haveData_f) && G(haveData_f -> X(hasSample_s || hasSample_f))&& G(hasSample_s -> X(analyze_s || analyze_f || analyze_r)), G(holdItem_f -> X(pickUp_s || pickUp_f || pickUp_r)) && G(pickUp_s -> X(atStation_s || atStation_f)) && G(atStation_f -> X(goToStation_s || goToStation_f || goToStation_r)),G(putDown_s -> X(analyze_s || analyze_f || analyze_r))]",
+  "bt": "['?', 'haveData', ['>', 'hasSample', 'analyze'], ['>', ['?', 'holdItem', 'pickUp'], ['?', 'atStation', 'goToStation'], ['>', 'putDown', 'analyze']]]"
+ },
+ {
+  "row": 42,
+  "task": "maze1",
+  "description": "Execute the following two subtasks in sequence: Task 1: Either check the robot is in position A or it moves downwards.  Task 2: Either check if the robot is in position B, or the robot will move to the right.",
+  "ltl": "[X(atPosA_s || atPosA_f) && G(atPosA_f -> X(moveDown_s || moveDown_f || moveDown_r))&& G(moveDown_s -> X(atPosB_s || atPosB_f)) && G(atPosB_f -> X(moveRight_s || moveRight_f || moveRight_r))]",
+  "bt": "['>', ['?', 'atPosA', 'moveDown'], ['?', 'atPosB', 'moveRight']]"
+ },
+ {
+  "row": 43,
+  "task": "maze2",
+  "description": "Firstly, check if the robot is located at position 3, or navigate from position 1 to position 3. Then check if it is located at position 2, or navigate from position 3 to position 2\n",
+  "ltl": "[X(atPos3_s || atPos3_f) && G(atPos3_f -> X(move1to3_s || move1to3_f || move1to3_r )) && G(atPos3_s -> X(atPos2_s || atPos2_f)) && G(atPos2_f -> X(move3to2_s || move3to2_f || move3to2_r))]",
+  "bt": "['>', ['?', 'atPos3', 'move1to3'], ['?', 'atPos2', 'move3to2']]"
+ },
+ {
+  "row": 44,
+  "task": "maze3",
+  "description": "Three optional execution options:\nTask 1: Check if the robot is in position 9, or if it is moving from position 6 to position 9. Task 2: check if the robot is in position 6, or perform a move from position 3 to position 6. Task 3:  check if the robot is in position 2, or move from position 1 to position 2.\n",
+  "ltl": "[X(atPos9_s || atPos9_f) && G(atPos9_f -> X(move6to9_s || move6to9_f || move6to9_r )) , G(move6to9_f -> X(atPos6_s || atPos6_f)) && G(atPos6_f -> X(move3to6_s || move3to6_f || move3to6_r)), G(move3to6_f -> X(atPos2_s || atPos2_f)) && G(atPos2_f -> X(move1to2_s || move1to2_f || move1to2_r))]",
+  "bt": " [?, [?, atPos9, move6to9], [?, atPos6, move3to6], [?, atPos2, move1to2]]"
+ },
+ {
+  "row": 45,
+  "task": "maze4",
+  "description": "Firstly, move from position 1 to position 3, then pick up the object below, then navigate from position 3 to position 6, and then lower the object.",
+  "ltl": "[X(move1to3_s || move1to3_f || move1to3_r) && G(move1to3_s -> X(pickUp_s || pickUp_f || pickUp_r )) && G(pickUp_s -> X(move3to6_s || move3to6_f || move3to6_r)) && G(move3to6_s -> X(putDown_s || putDown_f || putDown_r))]",
+  "bt": "['>', 'move1to3', 'pickUp', 'move3to6', 'putDown']"
+ },
+ {
+  "row": 46,
+  "task": "maze5",
+  "description": "\nWhen the alarm is on, first navigate from position 1 to position 2, and then complete task A.\nOtherwise, first navigate from 1 to 3, then navigate from 3 to 5, and then complete Task B.",
+  "ltl": "[X(alarm_s || alarm_f) && G(alarm_s -> X(move1to2_s || move1to2_f || move1to2_r )) && G(move1to2_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)),G(alarm_f -> X(move1to3_s || move1to3_f || move1to3_r))&&G(move1to3_s -> X(move3to5_s || move3to5_f || move3to5_r))&&G(move3to5_s -> X(doTaskB_s || doTaskB_f || doTaskB_r))]",
+  "bt": "['?', ['>', 'alarm', 'move1to2', 'doTaskA'], ['>', 'move1to3', 'move3to5', 'doTaskB']]"
+ },
+ {
+  "row": 47,
+  "task": "moveActivate",
+  "description": "Execute the following four tasks in sequence:\n\nTask 1: Move from position 1 to position 2 and activate the robotic arm.\n\nTask 2: Move from position 2 to position 3 and activate the robotic arm.\n\nTask 3: Move from position 3 to position 4 and activate the robotic arm.\n\nTask 4: Move from position 4 to position 5 and activate the robotic arm.",
+  "ltl": "[X(move1to2_s || move1to2_f || move1to2_r) && G(move1to2_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r )) && G(move2to3_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r )),G(move3to4_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r ))&&G(move4to5_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r ))]",
+  "bt": "['>', ['>', 'move1to2', 'activeManipulator'], ['>', 'move2to3', 'activeManipulator'], ['>', 'move3to4', 'activeManipulator'], ['>', 'move4to5', 'activeManipulator']]"
+ },
+ {
+  "row": 48,
+  "task": "moveActivate2",
+  "description": "First check accessibility, and then choose to perform the following four tasks:\n﻿\nTask 1: move from position 1 to position 2, and then activate the robotic arm.\n﻿\nTask 2: move from position 2 to position 3, and then activate the robotic arm.\n﻿\nTask 3:  move from position 3 to position 4, and then activate the robotic arm.\n﻿\nTask 4: move from position 4 to position 5, and then activate the robotic arm.",
+  "ltl": "[X(checkReachable_s || checkReachable_f) && G(checkReachable_s -> X(move1to2_s || move1to2_f || move1to2_r)), G(move1to2_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r )) && G(move2to3_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r )),G(move3to4_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r ))&&G(move4to5_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r ))]",
+  "bt": "['>', 'checkReachable', ['?', ['>', 'move1to2', 'activeManipulator'], ['>', 'move2to3', 'activeManipulator'], ['>', 'move3to4', 'activeManipulator'], ['>', 'move4to5', 'activeManipulator']]]"
+ },
+ {
+  "row": 49,
+  "task": "moveContinue",
+  "description": "First check reachable. Then, move from position 1 to position 2 or move from position 2 to position 3 or move from position 3 to position 4 or move from position 4 to position 5. Finally, continue to execute.",
+  "ltl": "[X(checkReachable_s || checkReachable_f) && G(checkReachable_s -> X(move1to2_s || move1to2_f || move1to2_r )) && G(move1to2_f -> X(move2to3_s || move2to3_f || move2to3_r)), G(move2to3_f -> X(move3to4_s || move3to4_f || move3to4_r)) && G(move3to4_f -> X(move4to5_s || move4to5_f || move4to5_r)),G(move1to2_s -> X(continue_s || continue_f || continue_r))]",
+  "bt": "[>, checkReachable, [?, move1to2, move2to3, move3to4, move4to5], continue]"
+ },
+ {
+  "row": 50,
+  "task": "moveToPos",
+  "description": "Execute the following two tasks in sequence:\n\nTask 1: Move to Position 1 and then move to Position 2.\n\nTask 2: Either move to position 3, or move to position 4, or move to position 5, or move to position 6 and move to position 7",
+  "ltl": "[X(goToPos1_s || goToPos1_f || goToPos1_r) && G(goToPos1_s -> X(goToPos2_s || goToPos2_f || goToPos2_r)), G(goToPos2_s -> X(goToPos3_s || goToPos3_f || goToPos3_r )) && G(goToPos3_f -> X(goToPos4_s || goToPos4_f || goToPos4_r )),G(goToPos4_f -> X(goToPos5_s || goToPos5_f || goToPos5_r ))&&G(goToPos5_f -> X(goToPos6_s || goToPos6_f || goToPos6_r )) && G(goToPos6_s -> X(goToPos7_s || goToPos7_f || goToPos7_r )) ]",
+  "bt": "['>', ['>', 'goToPos1', 'goToPos2'], ['?', 'goToPos3', 'goToPos4', 'goToPos5', ['>', 'goToPos6', 'goToPos7']]]"
+ },
+ {
+  "row": 51,
+  "task": "openDoor",
+  "description": "Check that the current door is open. Otherwise, open the door and pass through the door.",
+  "ltl": "[X(isDoorOpen_s || isDoorOpen_f) && G(isDoorOpen_f -> X(openDoor_s || openDoor_f || openDoor_r)), G(openDoor_s -> X(passThroughDoor_s || passThroughDoor_f || passThroughDoor_r ))]",
+  "bt": "['?', 'isDoorOpen', '>','openDoor', 'passThroughDoor']]"
+ },
+ {
+  "row": 52,
+  "task": "openDoor2",
+  "description": "Check if the door is currently open or open the door, then pass through the door, and finally close the door.",
+  "ltl": "[X(isDoorOpen_s || isDoorOpen_f) &&G(isDoorOpen_s -> X(passThroughDoor_s || passThroughDoor_f || passThroughDoor_r )),G(passThroughDoor_s -> X(closeDoor_s || closeDoor_f || closeDoor_r)), G(isDoorOpen_f -> X(openDoor_s || openDoor_f || openDoor_r)),G(openDoor_s -> X(passThroughDoor_s || passThroughDoor_f || passThroughDoor_r ))]",
+  "bt": "['>', ['?', 'isDoorOpen', 'openDoor'], 'passThroughDoor', 'closeDoor']"
+ },
+ {
+  "row": 53,
+  "task": "panel_activateManipulator",
+  "description": "First move to the control panel, and then activate the robotic arm.",
+  "ltl": "[X(moveToPanel_s || moveToPanel_f || moveToPanel_r) &&G(moveToPanel_s -> X(activeManipulator_s || activeManipulator_f || activeManipulator_r ))]",
+  "bt": "['>', 'moveToPanel', 'activeManipulator']"
+ },
+ {
+  "row": 54,
+  "task": "passThroughDoor",
+  "description": "Choose to execute the following three branch tasks:\n\nTask 1: If the door is open, pass through it and finally close the door.\n\nTask 2: Otherwise, first open the door, then pass through the door, and finally close the door.\n\nTask 3: Pass through the window.",
+  "ltl": "[X(isDoorOpen_s || isDoorOpen_f) &&G(isDoorOpen_s -> X(passThroughDoor_s || passThroughDoor_f || passThroughDoor_r ))&&G(passThroughDoor_s -> X(closeDoor_s || closeDoor_f || closeDoor_r)),G(isDoorOpen_f -> X(openDoor_s || openDoor_f || openDoor_r)), G(openDoor_s -> X(passThroughDoor_s || passThroughDoor_f || passThroughDoor_r))&&G(openDoor_f -> X(passThroughWindow_s || passThroughWindow_f || passThroughWindow_r ))]",
+  "bt": "['?', ['>', 'isDoorOpen', 'passThroughDoor', 'closeDoor'], ['>', 'openDoor', 'passThroughDoor', 'closeDoor'], 'passThroughWindow']"
+ },
+ {
+  "row": 55,
+  "task": "passThroughDoor2",
+  "description": "Choose to execute the following three branches\n\nTask 1: First, check that the door is open, and then pass through the door.\n\nTask 2: Otherwise, open the door and finally pass through it.\n\nTask 3: Pass through the window.",
+  "ltl": "[X(isDoorOpen_s || isDoorOpen_f) &&G(isDoorOpen_s -> X(passThroughDoor_s || passThroughDoor_f || passThroughDoor_r )),G(isDoorOpen_f -> X(openDoor_s || openDoor_f || openDoor_r)), G(openDoor_s -> X(passThroughDoor_s || passThroughDoor_f || passThroughDoor_r))&&G(openDoor_f -> X(passThroughWindow_s || passThroughWindow_f || passThroughWindow_r ))]",
+  "bt": "['?', ['>', 'isDoorOpen', 'passThroughDoor'], ['>', 'openDoor', 'passThroughDoor'], 'passThroughWindow']"
+ },
+ {
+  "row": 56,
+  "task": "patrol1",
+  "description": "Firstly, check if location A has been accessed, or navigate to location A and perform patrol actions. Then, check if location B has been accessed, or navigate to location B and perform patrol actions. Finally, check if location C has been accessed, or navigate to location C and patrol",
+  "ltl": "[X(visitedA_s || visitedA_f)  &&G(visitedA_f -> X(goToPosA_s || goToPosA_f || goToPosA_r ))&&G(goToPosA_s -> X(patroling_s || patroling_f || patroling_r ))&&G(visitedA_s -> X(visitedB_s || visitedB_f)), G(visitedB_f -> X(goToPosB_s || goToPosB_f || goToPosB_r ))&&G(goToPosB_s -> X(patroling_s || patroling_f || patroling_r ))&&G(visitedB_s -> X(visitedC_s || visitedC_f)),G(visitedC_f -> X(goToPosC_s || goToPosC_f || goToPosC_r ))&&G(goToPosC_s -> X(patroling_s || patroling_f || patroling_r ))]",
+  "bt": "['>', ['?', 'visitedA', ['>', 'goToPosA', 'patroling']], ['?', 'visitedB', ['>', 'goToPosB', 'patroling']], ['?', 'visitedC', ['>', 'goToPosC', 'patroling']]]"
+ },
+ {
+  "row": 57,
+  "task": "pickDeliver",
+  "description": "Choose to execute the following four branch tasks:\n\nTask 1: Move to the default delivery location and then deliver the items.\nTask 2: Move to the designated delivery location and then deliver the item.\nTask 3: Check no task has been delivered at this time,then move to the charging station location and start charging.\nTask 4: Approach the target, then detect the item and finally pick it up.",
+  "ltl": "[X(moveDefaultDeliverPos_s || moveDefaultDeliverPos_f ||moveDefaultDeliverPos_r)  &&G(moveDefaultDeliverPos_s -> X(deliverObj_s || deliverObj_f || deliverObj_r ))&&G(moveDefaultDeliverPos_f -> X(moveDesignPos_s || moveDesignPos_f || moveDesignPos_r )),G(moveDesignPos_s -> X(deliverObj_s || deliverObj_f || deliverObj_r )), G(noDeliverTask_s -> X(goToStation_s || goToStation_f || goToStation_r ))&&G(goToStation_s -> X(charging_s || charging_f || charging_r )),G(approachTarget_s -> X(detectObj_s || detectObj_f || detectObj_r)),G(detectObj_s -> X(pickUp_s || pickUp_f || pickUp_r ))]",
+  "bt": "['?', ['>', 'moveDefaultDeliverPos', 'deliverObj'], ['>', 'moveDesignPos', 'deliverObj'], ['>', 'noDeliverTask', 'goToStation', 'charging'], ['>', 'approachTarget', 'detectObj', 'pickUp']]"
+ },
+ {
+  "row": 58,
+  "task": "pickUp",
+  "description": "Firstly, check if the item has been extracted, or navigate to location A and extract the item. Then, check if the item has been placed, or navigate to location B and place the item.",
+  "ltl": "[X(picked_s || picked_f)  &&G(picked_f -> X(goToPosA_s || goToPosA_f || goToPosA_r ))&&G(goToPosA_s -> X(pickUp_s || pickUp_f || pickUp_r )),G(pickUp_s -> X(placed_s || placed_f)), G(placed_f -> X(goToPosB_s || goToPosB_f || goToPosB_r ))&&G(goToPosB_s -> X(putDown_s || putDown_f || putDown_r ))]",
+  "bt": "['>', ['?', 'picked', ['>', 'goToPosA', 'pickUp']], ['?', 'placed', ['>', 'goToPosB', 'putDown']]]"
+ },
+ {
+  "row": 59,
+  "task": "pickUp_place",
+  "description": "The robot has two possible events:\n\n1. Check if the object is placed at position B.\n\n2. First, check if the robotic arm is empty. If empty, either check if the robot is at position A, or navigate to position A without conflict and pick up the object.\n\nOtherwise, check if the object has been picked up, and either check if the robot is at position B, or navigate to position B without conflict. Finally, place the object.",
+  "ltl": "[X(placedB_s || placedB_f),  G(picked_s -> X(atPosB_s || atPosB_f)) && G(empty_s -> X(atPosA_s || atPosA_f)), G(noCollision_s -> X(goToPosA_s || goToPosA_f || goToPosA_r || goToPosB_s || goToPosB_f || goToPosB_r)) ,G(atPosB_f -> X(noCollision_s || noCollision_f)) && G(atPosA_f -> X(noCollision_s || noCollision_f)), G(atPosB_s -> X(putDown_s || putDown_f || putDown_r)) && G(goToPosB_s -> X(putDown_s || putDown_f || putDown_r))]",
+  "bt": "[?, placedB, [>, empty, [?, atPosA, [>, noCollision, goToPosA, pickUp]], [>, picked, [?, atPosB, [>, noCollision, goToPosB]], putDown]]]"
+ },
+ {
+  "row": 60,
+  "task": "pickUp2",
+  "description": "The robot needs to complete the following two events in sequence:\nTask 1: Select to perform the following task: 1.1  Either the object has already been picked up, 1.2  check if the robot is in position A and pick up the object. 1.3 navigate to position A and then pick up the object.\nTask 2: Select to perform the following task: 2.1 either the object has been placed, 2.2  first check if the robot is in position B and place the object. 2.3  navigate to position B and then put down the object.",
+  "ltl": "[X(picked_s || picked_f)&& G(picked_f -> X(atPosA_s || atPosA_f)) && G(atPosA_s -> X(pickUp_s || pickUp_f || pickUp_r)),G(atPosA_f -> X(goToPosA_s || goToPosA_f || goToPosA_r ))&&G(goToPosA_s -> X(pickUp_s || pickUp_f || pickUp_r )),G(placed_f -> X(atPosB_s || atPosB_f))&& G(atPosB_s -> X(putDown_s || putDown_f || putDown_r)), G(atPosB_f -> X(goToPosB_s || goToPosB_f || goToPosB_r ))&&G(goToPosB_s -> X(putDown_s || putDown_f || putDown_r ))]",
+  "bt": "['>', ['?', 'picked', ['>', 'atPosA', 'pickUp'], ['>', 'goToPosA', 'pickUp']], ['?', 'placed', ['>', 'atPosB', 'putDown'], ['>', 'goToPosB', 'putDown']]]"
+ },
+ {
+  "row": 61,
+  "task": "place",
+  "description": "Firstly, check if the item has been picked, or navigate to location A and pick up the item. Then check if it is placed in position B, or navigate to position B and place it in position B. Then pick up the items. Finally, check if it is placed in position C, or navigate to position C and place it in position C.",
+  "ltl": "[X(picked_s || picked_f)&& G(picked_f -> X(goToPosA_s || goToPosA_f || goToPosA_r ))&&G(goToPosA_s -> X(pickUp_s || pickUp_f || pickUp_r )),G(placedB_f ->  X(goToPosB_s || goToPosB_f || goToPosB_r ))&&G(goToPosB_s -> X(placeB_s || placeB_f || placeB_r )) &&G(placeB_s -> X(pickUp_s || pickUp_f || pickUp_r )),G(placedC_f ->  X(goToPosC_s || goToPosC_f || goToPosC_r ))&&G(goToPosC_s -> X(placeC_s || placeC_f || placeC_r )) ]",
+  "bt": "['>', ['?', 'picked', ['>', 'goToPosA', 'pickUp']], ['?', 'placedB', ['>', 'goToPosB', 'placeB']], 'pickUp', ['?', 'placedC', ['>', 'goToPosC', 'placeC']]]"
+ },
+ {
+  "row": 62,
+  "task": "pour_drink",
+  "description": "Select to perform the following task:\nTask 1: Execute the following tasks in sequence: Subtask 1.1: Select to perform the following task: Task 1.1.1 Check know the room number and then move to the room . Task 1.1.2 Follow the movement of humans. Subtask 1.2: Execute the following five action in sequence: Find the bottle and then grab it. Afterwards, search for the glass cup, and then grab it, and finally pour water.\nTask 2: Seek help.",
+  "ltl": "[X(roomKnown_s || roomKnown_f)&& G(roomKnown_s -> X(goToRoom_s || goToRoom_f || goToRoom_r ))&&G(roomKnown_f -> X(followHuman_s || followHuman_f || followHuman_r )),G(goToRoom_s ->  X(findBottle_s || findBottle_f || findBottle_r ))&&G(findBottle_s -> X(fetchBottle_s || fetchBottle_f || fetchBottle_r )) &&G(fetchBottle_s -> X(findGlass_s || findGlass_f || findGlass_r )),G(findGlass_s ->  X(fetchGlass_s || fetchGlass_f || fetchGlass_r )) &&G(fetchGlass_s -> X(pourDrink_s || pourDrink_f || pourDrink_r )),G(fetchGlass_f -> X(askHelp_s || askHelp_f || askHelp_r )) ]",
+  "bt": "['?', ['>', ['?', ['>', 'roomKnown', 'goToRoom'], 'followHuman'], ['>', 'findBottle', 'fetchBottle', 'findGlass', 'fetchGlass', 'pourDrink']]"
+ },
+ {
+  "row": 63,
+  "task": "processMaterial",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Press the R button.\n\nTask 2: Check if the raw materials have been received and then press the P button to proceed with processing.\n\nTask 3: Check if the material has been processed and finally press the C button to indicate completion.",
+  "ltl": "[X(pushR_s || pushR_f || pushR_r)&& G(pushR_s -> X(acceptedMaterial_s || acceptedMaterial_f ))&&G(acceptedMaterial_s -> X(pushP_s || pushP_f || pushP_r )),G(pushP_s ->  X(isProcessed_s || isProcessed_f))&&G(isProcessed_s -> X(pushC_s || pushC_f || pushC_r ))]",
+  "bt": "['>', 'pushR', ['>', 'acceptedMaterial', 'pushP'], ['>', 'isProcessed', 'pushC']]"
+ },
+ {
+  "row": 64,
+  "task": "put_pickup_tray",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Move to position A, pick up an object at position A, and place the object on the robot's tray.\n\nTask 2: Move to position C, pick up the object from the tray, and put down the item.\n\nTask 3: Activate the assembly process and then move  to the parking lot.",
+  "ltl": "[X(goToPosA_s || goToPosA_f || goToPosA_r)&& G(goToPosA_s -> X(pickUp_s || pickUp_f || pickUp_r))&&G(pickUp_s -> X(putOnTray_s || putOnTray_f || putOnTray_r )),G(putOnTray_s ->  X(goToPosC_s || goToPosC_f || goToPosC_r))&&G(goToPosC_s -> X(pickUpFromTray_s || pickUpFromTray_f || pickUpFromTray_r )),G(pickUpFromTray_s ->  X(putDown_s || putDown_f || putDown_r))&&G(putDown_s -> X(activateProcess_s || activateProcess_f || activateProcess_r ))&& G(activateProcess_s -> X(moveToParking_s ||moveToParking_f || moveToParking_r))]",
+  "bt": "['>', ['>', 'goToPosA', 'pickUp', 'putOnTray'], ['>', 'goToPosC', 'pickUpFromTray', 'putDown'], ['>', 'activateProcess', 'moveToParking']]"
+ },
+ {
+  "row": 65,
+  "task": "roomKnown",
+  "description": "Choose to execute the following three branch tasks:\nTask 1: If the current room number is known, move to the target room to perform tasks A, B, and C.\nTask 2: If the inv value is valid, receive the ID information and search for the target. If the target is nearby, activate the operator and attack the target. \nTask 3: Press the P button and move to the charging station position to enter sleep mode.",
+  "ltl": "[X(roomKnown_s || roomKnown_f) && G(roomKnown_s -> X(goToTarRoom_s || goToTarRoom_f || goToTarRoom_r)) && G(goToTarRoom_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)), G(doTaskA_s -> X(doTaskB_s || doTaskB_f || doTaskB_r)) && G(doTaskB_s -> X(doTaskC_s || doTaskC_f || doTaskC_r)), G(invValid_s -> X(acceptData_s || acceptData_f || acceptData_r)) && G(acceptData_s -> X(searchTarget_s || searchTarget_f || searchTarget_r)), G(TargetAdjacent_s -> X(activateProcess_s || activateProcess_f || activateProcess_r)) && G(activateProcess_s -> X(attackTarget_s || attackTarget_f || attackTarget_r)),G(invValid_f) -> X(pushP_s || pushP_f || pushP_r)) && G(pushP_s -> X(goToStation_s || goToStation_f || goToStation_r)) && G(goToStation_s -> X(sleeping_s || sleeping_f || sleeping_r))]",
+  "bt": "[?, [>, roomKnown, goToTarRoom, doTaskA, doTaskB, doTaskC], [>, invValid, acceptData, searchTarget, [>, TargetAdjacent, activateProcess, attackTarget]], [>, pushP, goToStation, sleeping]]"
+ },
+ {
+  "row": 66,
+  "task": "searchAns",
+  "description": "Execute the following tasks in sequence: Task 1: Wait for input requests. Task 2: Check for current input requests, accept input information, search for answers in the knowledge base, and finally provide feedback to the user.",
+  "ltl": "[X(waitInput_s || waitInput_f || waitInput_r)&& G(waitInput_s -> X(hasInput_s || hasInput_f ))&&G(hasInput_s -> X(acceptInput_s || acceptInput_f || acceptInput_r )),G(acceptInput_s ->  X(searchAns_s || searchAns_f || searchAns_r))&&G(searchAns_s -> X(outputAns_s || outputAns_f || outputAns_r ))]",
+  "bt": "['>', 'waitInput', ['>', 'hasInput', 'acceptInput', 'searchAns', 'outputAns']]"
+ },
+ {
+  "row": 67,
+  "task": "sequence_move",
+  "description": "Execute the following tasks in sequence: move to station A, move to station B, move to station C, and move to the parking lot.",
+  "ltl": "[X(goToStationA_s || goToStationA_f || goToStationA_r)&& G(goToStationA_s -> X(goToStationB_s || goToStationB_f || goToStationB_r ))&& G(goToStationB_s -> X(goToStationC_s || goToStationC_f || goToStationC_r ))&& G(goToStationC_s -> X(moveToParking_s || moveToParking_f || moveToParking_r ))]",
+  "bt": "['>', 'goToStationA', 'goToStationB', 'goToStationC', 'moveToParking']"
+ },
+ {
+  "row": 68,
+  "task": "shedTree",
+  "description": "Check if it is on the pasture, and then choose to perform the following task: Task 1:  check if it is daytime, then check if it is in the shed, and then leave the shed, randomly find a piece of pasture land, and move randomly. Task 2: Check if it was night, search for the shed, move to the destination, and finally enter the shed. Task 3: move randomly.",
+  "ltl": "[X(isOnPasture_s || isOnPasture_f)&& G(isOnPasture_s -> X(isDay_s || isDay_f)), G(isDay_s -> X(isInShed_s || isInShed_f))&& G(isInShed_s -> X(leaveShed_s || leaveShed_f || leaveShed_r )),G(leaveShed_s -> X(findRandomPastureField_s || findRandomPastureField_f || findRandomPastureField_r ))&& G(findRandomPastureField_s -> X(randomMove_s || randomMove_f || randomMove_r )), G(isDay_f -> X(isNight_s || isNight_f))&& G(isNight_s -> X(findShed_s || findShed_f || findShed_r ))&& G(findShed_s -> X(moveToDestination_s || moveToDestination_f || moveToDestination_r )), G(moveToDestination_s -> X(enterShed_s || enterShed_f || enterShed_r ))&& G(isNight_f -> X(randomMove_s || randomMove_f || randomMove_r ))]",
+  "bt": "['>', 'isOnPasture', ['?', ['>', 'isDay', 'isInShed', 'leaveShed', 'findRandomPastureField', 'randomMove'], ['>', 'isNight', 'findShed', 'moveToDestination', 'enterShed'], 'randomMove']]"
+ },
+ {
+  "row": 69,
+  "task": "",
+  "description": "Choose to execute the following branch tasks:\nTask 1: First, obtain target information, then move to the target, and check the target information is nearby, and then attack the target.\nTask 2: Randomly move.",
+  "ltl": "[X(getTarget_s || getTarget_f || getTarget_r)&& G(getTarget_s -> X(moveToDestination_s || moveToDestination_f || moveToDestination_r )), G(moveToDestination_s -> X(TargetAdjacent_s || TargetAdjacent_f))&& G(TargetAdjacent_s -> X(attackTarget_s || attackTarget_f || attackTarget_r )),G(getTarget_f -> X(randomMove_s || randomMove_f || randomMove_r ))]",
+  "bt": "['?', ['>', 'getTarget', 'moveToDestination', 'TargetAdjacent', 'attackTarget'], 'randomMove']"
+ },
+ {
+  "row": 70,
+  "task": "invTask",
+  "description": "The robot chooses to perform the following tasks:\nTask 1: The robot sequentially executes the following tasks:\nSubtask 1: Check if the current battery level has reached a low state, and then calculate the value of inv or if the inv value has already been calculated. Then accept the input value and search for the answer. If the robot knows the room number, it moves to that room and enters sleep mode.\nSubtask 2: Check if the robot is already in the kitchen. Finally, execute task A.\nTask 2: When the alarm sounds, check if you are holding a tool and navigate to the kitchen to use a fire extinguisher.\nTask 3: Wait for charging.",
+  "ltl": "[X(lowBattery_s || lowBattery_f) && G(lowBattery_s -> X(invValid_s || invValid_f)), G(invValid_f -> X(computInv_s || computInv_f || computInv_r)), G(invValid_s -> X(acceptInput_s || acceptInput_f || acceptInput_r)) && G(acceptInput_s -> X(searchAns_s || searchAns_f || searchAns_r)), G(roomKnown_s -> X(goToRoom_s || goToRoom_f || goToRoom_r)) && G(goToRoom_s -> X(sleeping_s || sleeping_f || sleeping_r)), G(atKitchen_s -> X(doTaskA_s || doTaskA_f || doTaskA_r)), \nG(alarm_s -> X(holdTools_s || holdTools_f)) && G(holdTools_s -> X(goToKitchen_s || goToKitchen_f || goToKitchen_r)), G(goToKitchen_s -> X(useExtinguisher_s || useExtinguisher_f || useExtinguisher_r))]",
+  "bt": "[?, [>, [>, lowBattery, [?, invValid, computInv], acceptInput, searchAns, [?, [>, roomKnown, goToRoom, sleeping]]], [>, atKitchen, doTaskA]], [>, alarm, [>, holdTools, goToKitchen, useExtinguisher]], waitCharge]"
+ },
+ {
+  "row": 71,
+  "task": "waitData",
+  "description": "The robot chooses to perform the following tasks:\nTask 1: The robot checks if it is currently daytime, then checks if there is any input data or waits for input, and then searches for answers.\nTask 2: The robot checks that it is currently nighttime and whether it is at the charging station location or navigating to the charging station. Charge it.\nTask 3: Check if the current battery is full, then retrieve the target and search for it.",
+  "ltl": "[X(isDay_s || isDay_f) && G(isDay_s -> X(hasInput_s || hasInput_f)) && G(hasInput_f -> X(waitInput_s || waitInput_f || waitInput_r)),\nG(isNight_s -> X(atCharge_s || atCharge_f )) && G(atCharge_f -> X(goToStation_s || goToStation_f || goToStation_r)) && G(goToStation_s -> X(charging_s || charging_f || charging_r)), G(fullBattery_s -> X(getTarget_s || getTarget_f || getTarget_r)) && G(getTarget_s -> X(searchTarget_s || searchTarget_f || searchTarget_r))\n]",
+  "bt": "[?, [>, isDay, [?, hasInput, waitInput], searchAns], [>, isNight, [?, atCharge, goToStation], charging], [>, fullBattery, getTarget, searchTarget]]"
+ }
+]

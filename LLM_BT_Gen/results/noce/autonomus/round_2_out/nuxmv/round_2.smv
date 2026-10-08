@@ -1,0 +1,247 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.roomKnown.status = success) | (system.roomKnown.status = failure)));
+LTLSPEC G(((system.roomKnown.status = success) -> X(((system.robotInRoom.status = success) | (system.robotInRoom.status = failure)))));
+LTLSPEC G(((system.robotInRoom.status = failure) -> X(((system.goToRoom.status = success) | (system.goToRoom.status = failure) | (system.goToRoom.status = running)))));
+LTLSPEC G((((system.bottleFound.status = failure) | (system.bottleFound_2.status = failure)) -> X((((system.findBottle.status = success) | (system.findBottle_2.status = success)) | ((system.findBottle.status = failure) | (system.findBottle_2.status = failure)) | ((system.findBottle.status = running) | (system.findBottle_2.status = running))))));
+LTLSPEC G(((system.ballGrasped.status = failure) -> X(((system.invValid.status = success) | (system.invValid.status = failure)))));
+LTLSPEC G(((system.invValid.status = success) -> X(((system.computInv.status = success) | (system.computInv.status = failure) | (system.computInv.status = running)))));
+LTLSPEC G(((system.computInv.status = success) -> X(((system.RobotAtInvPose.status = success) | (system.RobotAtInvPose.status = failure)))));
+LTLSPEC G(((system.RobotAtInvPose.status = failure) -> X(((system.goToInvPose.status = success) | (system.goToInvPose.status = failure) | (system.goToInvPose.status = running)))));
+LTLSPEC G(((system.goToInvPose.status = success) -> X((((system.bottleFound.status = success) | (system.bottleFound_2.status = success)) | ((system.bottleFound.status = failure) | (system.bottleFound_2.status = failure))))));
+LTLSPEC G(((system.followHuman.status = failure) -> X(((system.askHelp.status = success) | (system.askHelp.status = failure) | (system.askHelp.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        roomKnown : roomKnown_module(roomKnown_v_stage_0);
+        robotInRoom : robotInRoom_module(robotInRoom_v_stage_0);
+        goToRoom : success_DEFAULT_module();
+        c2 : composite_selector_without_memory_2(robotInRoom, goToRoom);
+        c1 : composite_sequence_without_memory_2(roomKnown, c2);
+        bottleFound : bottleFound_module(bottleFound_v_stage_0);
+        findBottle : success_DEFAULT_module();
+        c3 : composite_selector_without_memory_2(bottleFound, findBottle);
+        ballGrasped : ballGrasped_module(ballGrasped_v_stage_0);
+        invValid : invValid_module(invValid_v_stage_0);
+        computInv : success_DEFAULT_module();
+        c6 : composite_selector_without_memory_2(invValid, computInv);
+        RobotAtInvPose : RobotAtInvPose_module(RobotAtInvPose_v_stage_0);
+        goToInvPose : success_DEFAULT_module();
+        c7 : composite_selector_without_memory_2(RobotAtInvPose, goToInvPose);
+        bottleFound_2 : bottleFound_2_module(bottleFound_2_v_stage_0);
+        findBottle_2 : success_DEFAULT_module();
+        c8 : composite_selector_without_memory_2(bottleFound_2, findBottle_2);
+        c5 : composite_sequence_without_memory_3(c6, c7, c8);
+        c4 : composite_selector_without_memory_2(ballGrasped, c5);
+        followHuman : success_DEFAULT_module();
+        askHelp : _DEFAULT_module();
+        c9 : composite_selector_without_memory_2(followHuman, askHelp);
+        c0 : composite_sequence_without_memory_4(c1, c3, c4, c9);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        roomKnown_v_stage_0 : boolean;
+        robotInRoom_v_stage_0 : boolean;
+        bottleFound_v_stage_0 : boolean;
+        bottleFound_2_v_stage_0 : boolean;
+        ballGrasped_v_stage_0 : boolean;
+        invValid_v_stage_0 : boolean;
+        RobotAtInvPose_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(roomKnown_v_stage_0) := {TRUE, FALSE};
+        init(robotInRoom_v_stage_0) := {TRUE, FALSE};
+        init(bottleFound_v_stage_0) := {TRUE, FALSE};
+        init(bottleFound_2_v_stage_0) := {TRUE, FALSE};
+        init(ballGrasped_v_stage_0) := {TRUE, FALSE};
+        init(invValid_v_stage_0) := {TRUE, FALSE};
+        init(RobotAtInvPose_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(roomKnown_v_stage_0) :=
+            case
+                !(c0.active) : roomKnown_v_stage_0;
+                TRUE : roomKnown_v_stage_0;
+            esac;
+        next(robotInRoom_v_stage_0) :=
+            case
+                !(c0.active) : robotInRoom_v_stage_0;
+                TRUE : robotInRoom_v_stage_0;
+            esac;
+        next(bottleFound_v_stage_0) :=
+            case
+                !(c0.active) : bottleFound_v_stage_0;
+                TRUE : bottleFound_v_stage_0;
+            esac;
+        next(bottleFound_2_v_stage_0) :=
+            case
+                !(c0.active) : bottleFound_2_v_stage_0;
+                TRUE : bottleFound_2_v_stage_0;
+            esac;
+        next(ballGrasped_v_stage_0) :=
+            case
+                !(c0.active) : ballGrasped_v_stage_0;
+                TRUE : ballGrasped_v_stage_0;
+            esac;
+        next(invValid_v_stage_0) :=
+            case
+                !(c0.active) : invValid_v_stage_0;
+                TRUE : invValid_v_stage_0;
+            esac;
+        next(RobotAtInvPose_v_stage_0) :=
+            case
+                !(c0.active) : RobotAtInvPose_v_stage_0;
+                TRUE : RobotAtInvPose_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        roomKnown := 2;
+        c2 := 3;
+        robotInRoom := 4;
+        goToRoom := 5;
+        c3 := 6;
+        bottleFound := 7;
+        findBottle := 8;
+        c4 := 9;
+        ballGrasped := 10;
+        c5 := 11;
+        c6 := 12;
+        invValid := 13;
+        computInv := 14;
+        c7 := 15;
+        RobotAtInvPose := 16;
+        goToInvPose := 17;
+        c8 := 18;
+        bottleFound_2 := 19;
+        findBottle_2 := 20;
+        c9 := 21;
+        followHuman := 22;
+        askHelp := 23;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE roomKnown_module(roomKnown_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (roomKnown_v_stage_0) ? success : failure;
+MODULE robotInRoom_module(robotInRoom_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (robotInRoom_v_stage_0) ? success : failure;
+MODULE bottleFound_module(bottleFound_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (bottleFound_v_stage_0) ? success : failure;
+MODULE ballGrasped_module(ballGrasped_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (ballGrasped_v_stage_0) ? success : failure;
+MODULE invValid_module(invValid_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (invValid_v_stage_0) ? success : failure;
+MODULE RobotAtInvPose_module(RobotAtInvPose_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (RobotAtInvPose_v_stage_0) ? success : failure;
+MODULE bottleFound_2_module(bottleFound_2_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (bottleFound_2_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;

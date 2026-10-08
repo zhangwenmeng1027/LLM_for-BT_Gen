@@ -1,0 +1,80 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.goToPos1.status = success) | (system.goToPos1.status = failure) | (system.goToPos1.status = running)));
+LTLSPEC G(((system.goToPos1.status = success) -> X(((system.goToPos2.status = success) | (system.goToPos2.status = failure) | (system.goToPos2.status = running)))));
+LTLSPEC G(((system.goToPos2.status = success) -> X(((system.goToPos3.status = success) | (system.goToPos3.status = failure) | (system.goToPos3.status = running)))));
+LTLSPEC G(((system.goToPos3.status = success) -> X(((system.goToPos4.status = success) | (system.goToPos4.status = failure) | (system.goToPos4.status = running)))));
+LTLSPEC G(((system.goToPos4.status = success) -> X(((system.goToPos5.status = success) | (system.goToPos5.status = failure) | (system.goToPos5.status = running)))));
+LTLSPEC G(((system.goToPos5.status = success) -> X(((system.goToPos6.status = success) | (system.goToPos6.status = failure) | (system.goToPos6.status = running)))));
+LTLSPEC G(((system.goToPos6.status = success) -> X(((system.goToPos7.status = success) | (system.goToPos7.status = failure) | (system.goToPos7.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        goToPos1 : success_DEFAULT_module();
+        goToPos2 : success_DEFAULT_module();
+        goToPos3 : success_DEFAULT_module();
+        goToPos4 : success_DEFAULT_module();
+        goToPos5 : success_DEFAULT_module();
+        goToPos6 : success_DEFAULT_module();
+        goToPos7 : success_DEFAULT_module();
+        c0 : composite_sequence_without_memory_7(goToPos1, goToPos2, goToPos3, goToPos4, goToPos5, goToPos6, goToPos7);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        goToPos1 := 1;
+        goToPos2 := 2;
+        goToPos3 := 3;
+        goToPos4 := 4;
+        goToPos5 := 5;
+        goToPos6 := 6;
+        goToPos7 := 7;
+MODULE composite_sequence_without_memory_7(child_0, child_1, child_2, child_3, child_4, child_5, child_6)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                !(child_5.internal_status = success) : child_5.internal_status;
+                !(child_6.internal_status = success) : child_6.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+        child_5.active := child_4.status = success;
+        child_6.active := child_5.status = success;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

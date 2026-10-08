@@ -1,0 +1,113 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env equalVal_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ equalVal_v assign{result{equalVal_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { equalVal arguments {} read_variables {equalVal_v} condition{equalVal_v} }
+}
+actions {
+    action { acceptInput
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { setValue
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { compareValue
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { stopSearch
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToKitchen
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            acceptInput {}
+            setValue {}
+            compareValue {}
+            composite {
+                c1 selector
+                children {
+                    composite {
+                        c2 sequence
+                        children {
+                            equalVal {}
+                            stopSearch {}
+                        }
+                    }
+                    searchTarget {}
+                }
+            }
+            pickUp {}
+            composite {
+                c3 selector
+                children {
+                    composite {
+                        c4 sequence
+                        children {
+                            goToKitchen {}
+                            putDown {}
+                        }
+                    }
+                    composite {
+                        c5 sequence
+                        children {
+                            goToPosA {}
+                            doTaskA {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, acceptInput), (failure, acceptInput)))}
+    LTLSPEC {(globally, (implies, (success, acceptInput), (next, (or, (success, setValue), (failure, setValue), (running, setValue)))))}
+    LTLSPEC {(globally, (implies, (success, setValue), (next, (or, (success, compareValue), (failure, compareValue), (running, compareValue)))))}
+    LTLSPEC {(globally, (implies, (success, compareValue), (next, (or, (success, equalVal), (failure, equalVal)))))}
+    LTLSPEC {(globally, (implies, (success, equalVal), (next, (or, (success, stopSearch), (failure, stopSearch), (running, stopSearch)))))}
+    LTLSPEC {(globally, (implies, (failure, equalVal), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))}
+    LTLSPEC {(globally, (implies, (success, stopSearch), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, searchTarget), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))}
+    LTLSPEC {(globally, (implies, (success, goToKitchen), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+    LTLSPEC {(globally, (implies, (success, putDown), (next, (or, (success, acceptInput), (failure, acceptInput)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, acceptInput), (failure, acceptInput)))))}
+}

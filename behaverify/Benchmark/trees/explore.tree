@@ -1,0 +1,38 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env detectionCompleted_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ detectionCompleted_v assign{result{detectionCompleted_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { detectionCompleted arguments {} read_variables {detectionCompleted_v} condition{detectionCompleted_v} }
+}
+actions {
+    action { generateDetection
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToDestination
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            detectionCompleted {}
+            generateDetection {}
+            moveToDestination {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, detectionCompleted), (failure, detectionCompleted)))}
+    LTLSPEC {(globally, (implies, (success, detectionCompleted), (next, (or, (success, generateDetection), (failure, generateDetection), (running, generateDetection)))))}
+    LTLSPEC {(globally, (implies, (success, generateDetection), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))}
+}

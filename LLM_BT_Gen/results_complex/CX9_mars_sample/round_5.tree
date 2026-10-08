@@ -1,0 +1,142 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isNight_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atStation_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isDay_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env hasSample_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env TargetFound_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env checkReachable_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isNight_v assign{result{isNight_v}} }
+    variable_statement{ atStation_v assign{result{atStation_v}} }
+    variable_statement{ isDay_v assign{result{isDay_v}} }
+    variable_statement{ hasSample_v assign{result{hasSample_v}} }
+    variable_statement{ TargetFound_v assign{result{TargetFound_v}} }
+    variable_statement{ checkReachable_v assign{result{checkReachable_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isNight arguments {} read_variables {isNight_v} condition{isNight_v} }
+    environment_check { atStation arguments {} read_variables {atStation_v} condition{atStation_v} }
+    environment_check { isDay arguments {} read_variables {isDay_v} condition{isDay_v} }
+    environment_check { hasSample arguments {} read_variables {hasSample_v} condition{hasSample_v} }
+    environment_check { TargetFound arguments {} read_variables {TargetFound_v} condition{TargetFound_v} }
+    environment_check { checkReachable arguments {} read_variables {checkReachable_v} condition{checkReachable_v} }
+}
+actions {
+    action { foldPanels
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { unfoldPanels
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { getData
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { send
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPos3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    isNight {}
+                    foldPanels {}
+                    composite {
+                        c2 selector
+                        children {
+                            atStation {}
+                            goToStation {}
+                        }
+                    }
+                    charging {}
+                }
+            }
+            composite {
+                c3 sequence
+                children {
+                    isDay {}
+                    unfoldPanels {}
+                    composite {
+                        c4 selector
+                        children {
+                            composite {
+                                c5 sequence
+                                children {
+                                    hasSample {}
+                                    getData {}
+                                    send {}
+                                }
+                            }
+                            TargetFound {}
+                        }
+                    }
+                    composite {
+                        c6 selector
+                        children {
+                            TargetFound {}
+                            searchTarget {}
+                        }
+                    }
+                    composite {
+                        c7 sequence
+                        children {
+                            checkReachable {}
+                            goToPos3 {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isNight), (failure, isNight)))}
+    LTLSPEC {(globally, (implies, (success, isNight), (next, (or, (success, foldPanels), (failure, foldPanels), (running, foldPanels)))))}
+    LTLSPEC {(globally, (implies, (failure, isNight), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, foldPanels), (next, (or, (success, atStation), (failure, atStation)))))}
+    LTLSPEC {(globally, (implies, (success, atStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (failure, atStation), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, charging), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, isDay), (next, (or, (success, unfoldPanels), (failure, unfoldPanels), (running, unfoldPanels)))))}
+    LTLSPEC {(globally, (implies, (failure, isDay), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, unfoldPanels), (next, (or, (success, hasSample), (failure, hasSample)))))}
+    LTLSPEC {(globally, (implies, (success, hasSample), (next, (or, (success, TargetFound), (failure, TargetFound)))))}
+    LTLSPEC {(globally, (implies, (failure, hasSample), (next, (or, (success, getData), (failure, getData), (running, getData)))))}
+    LTLSPEC {(globally, (implies, (success, getData), (next, (or, (success, send), (failure, send), (running, send)))))}
+    LTLSPEC {(globally, (implies, (success, send), (next, (or, (success, TargetFound), (failure, TargetFound)))))}
+    LTLSPEC {(globally, (implies, (success, TargetFound), (next, (or, (success, checkReachable), (failure, checkReachable)))))}
+    LTLSPEC {(globally, (implies, (failure, TargetFound), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))}
+    LTLSPEC {(globally, (implies, (success, searchTarget), (next, (or, (success, checkReachable), (failure, checkReachable)))))}
+    LTLSPEC {(globally, (implies, (success, checkReachable), (next, (or, (success, goToPos3), (failure, goToPos3), (running, goToPos3)))))}
+    LTLSPEC {(globally, (implies, (failure, checkReachable), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, goToPos3), (next, (or, (success, isNight), (failure, isNight)))))}
+}

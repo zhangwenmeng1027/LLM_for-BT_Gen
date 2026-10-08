@@ -1,0 +1,30 @@
+configuration {} enumerations {} constants {}
+variables {}
+environment_update {}
+checks {}
+environment_checks {}
+actions {
+    action { acceptInput
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveFingerToTargetPosition
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            acceptInput {}
+            moveFingerToTargetPosition {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, acceptInput), (failure, acceptInput), (running, acceptInput)))}
+    LTLSPEC {(globally, (implies, (success, acceptInput), (next, (or, (success, moveFingerToTargetPosition), (failure, moveFingerToTargetPosition), (running, moveFingerToTargetPosition)))))}
+}

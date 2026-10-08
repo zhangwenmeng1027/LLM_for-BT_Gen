@@ -1,0 +1,34 @@
+configuration {} enumerations {} constants {}
+variables {
+}
+environment_update {
+}
+checks {}
+environment_checks {
+}
+actions {
+    action { moveToPanel
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { activeManipulator
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            moveToPanel {}
+            activeManipulator {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, moveToPanel), (failure, moveToPanel)))}
+    LTLSPEC {(globally, (implies, (success, moveToPanel), (next, (or, (success, activeManipulator), (failure, activeManipulator), (running, activeManipulator)))))}
+    LTLSPEC {(globally, (implies, (success, activeManipulator), (next, (or, (success, moveToPanel), (failure, moveToPanel)))))}
+}

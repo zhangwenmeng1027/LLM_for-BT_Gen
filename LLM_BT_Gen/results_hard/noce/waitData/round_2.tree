@@ -1,0 +1,135 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isDay_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env hasInput_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isNight_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atCharge_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env fullBattery_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isDay_v assign{result{isDay_v}} }
+    variable_statement{ hasInput_v assign{result{hasInput_v}} }
+    variable_statement{ isNight_v assign{result{isNight_v}} }
+    variable_statement{ atCharge_v assign{result{atCharge_v}} }
+    variable_statement{ fullBattery_v assign{result{fullBattery_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isDay arguments {} read_variables {isDay_v} condition{isDay_v} }
+    environment_check { hasInput arguments {} read_variables {hasInput_v} condition{hasInput_v} }
+    environment_check { isNight arguments {} read_variables {isNight_v} condition{isNight_v} }
+    environment_check { atCharge arguments {} read_variables {atCharge_v} condition{atCharge_v} }
+    environment_check { fullBattery arguments {} read_variables {fullBattery_v} condition{fullBattery_v} }
+}
+actions {
+    action { searchAns
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { waitInput
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { getTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    isDay {}
+                    composite {
+                        c2 selector
+                        children {
+                            composite {
+                                c3 sequence
+                                children {
+                                    hasInput {}
+                                    searchAns {}
+                                }
+                            }
+                            composite {
+                                c4 sequence
+                                children {
+                                    waitInput {}
+                                    searchAns {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            composite {
+                c5 sequence
+                children {
+                    isNight {}
+                    composite {
+                        c6 selector
+                        children {
+                            composite {
+                                c7 sequence
+                                children {
+                                    atCharge {}
+                                    charging {}
+                                }
+                            }
+                            composite {
+                                c8 sequence
+                                children {
+                                    goToStation {}
+                                    charging {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            composite {
+                c9 sequence
+                children {
+                    fullBattery {}
+                    getTarget {}
+                    searchTarget {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isDay), (failure, isDay)))}
+    LTLSPEC {(globally, (implies, (success, isDay), (next, (or, (success, hasInput), (failure, hasInput)))))}
+    LTLSPEC {(globally, (implies, (failure, isDay), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, hasInput), (next, (or, (success, searchAns), (failure, searchAns), (running, searchAns)))))}
+    LTLSPEC {(globally, (implies, (failure, hasInput), (next, (or, (success, waitInput), (failure, waitInput), (running, waitInput)))))}
+    LTLSPEC {(globally, (implies, (success, waitInput), (next, (or, (success, searchAns), (failure, searchAns), (running, searchAns)))))}
+    LTLSPEC {(globally, (implies, (success, searchAns), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, isNight), (next, (or, (success, atCharge), (failure, atCharge)))))}
+    LTLSPEC {(globally, (implies, (failure, isNight), (next, (or, (success, fullBattery), (failure, fullBattery)))))}
+    LTLSPEC {(globally, (implies, (success, atCharge), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (failure, atCharge), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, charging), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, fullBattery), (next, (or, (success, getTarget), (failure, getTarget), (running, getTarget)))))}
+    LTLSPEC {(globally, (implies, (failure, fullBattery), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, getTarget), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))}
+    LTLSPEC {(globally, (implies, (success, searchTarget), (next, (or, (success, isDay), (failure, isDay)))))}
+}

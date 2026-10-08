@@ -1,0 +1,53 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env atPos3_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPos2_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ atPos3_v assign{result{atPos3_v}} }
+    variable_statement{ atPos2_v assign{result{atPos2_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { atPos3 arguments {} read_variables {atPos3_v} condition{atPos3_v} }
+    environment_check { atPos2 arguments {} read_variables {atPos2_v} condition{atPos2_v} }
+}
+actions {
+    action { move1to3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move3to2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+        composite {
+            c1 selector
+            children {
+                atPos3 {}
+                move1to3 {}
+            }
+        }
+        composite {
+            c2 selector
+            children {
+                atPos2 {}
+                move3to2 {}
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, atPos3), (failure, atPos3)))}
+    LTLSPEC {(globally, (implies, (failure, atPos3), (next, (or, (success, move1to3), (failure, move1to3), (running, move1to3)))))}
+    LTLSPEC {(globally, (implies, (success, atPos3), (next, (or, (success, atPos2), (failure, atPos2)))))}
+    LTLSPEC {(globally, (implies, (failure, atPos2), (next, (or, (success, move3to2), (failure, move3to2), (running, move3to2)))))}
+}

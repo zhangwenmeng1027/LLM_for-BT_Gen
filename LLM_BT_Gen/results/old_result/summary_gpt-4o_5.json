@@ -1,0 +1,18 @@
+{
+ "model": "gpt-4o",
+ "max_rounds": 5,
+ "results": [
+  {
+   "success": false,
+   "rounds": 5,
+   "reason": "not verified within 5 rounds",
+   "final_tree": null,
+   "task": "ABC3",
+   "n_calls": 5,
+   "time_s": 36.0,
+   "prompt_tokens": 19528,
+   "completion_tokens": 4479,
+   "total_tokens": 24007
+  }
+ ]
+}

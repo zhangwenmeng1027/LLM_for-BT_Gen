@@ -1,0 +1,242 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)));
+LTLSPEC G(((system.lowBattery.status = success) -> X(((system.invValid.status = success) | (system.invValid.status = failure)))));
+LTLSPEC G(((system.lowBattery.status = failure) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.invValid.status = success) -> X(((system.acceptInput.status = success) | (system.acceptInput.status = failure) | (system.acceptInput.status = running)))));
+LTLSPEC G(((system.invValid.status = failure) -> X(((system.computInv.status = success) | (system.computInv.status = failure) | (system.computInv.status = running)))));
+LTLSPEC G(((system.computInv.status = success) -> X(((system.acceptInput.status = success) | (system.acceptInput.status = failure) | (system.acceptInput.status = running)))));
+LTLSPEC G(((system.acceptInput.status = success) -> X(((system.searchAns.status = success) | (system.searchAns.status = failure) | (system.searchAns.status = running)))));
+LTLSPEC G(((system.searchAns.status = success) -> X(((system.roomKnown.status = success) | (system.roomKnown.status = failure)))));
+LTLSPEC G(((system.roomKnown.status = success) -> X(((system.goToRoom.status = success) | (system.goToRoom.status = failure) | (system.goToRoom.status = running)))));
+LTLSPEC G(((system.roomKnown.status = failure) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.goToRoom.status = success) -> X(((system.sleeping.status = success) | (system.sleeping.status = failure) | (system.sleeping.status = running)))));
+LTLSPEC G(((system.sleeping.status = success) -> X(((system.atKitchen.status = success) | (system.atKitchen.status = failure)))));
+LTLSPEC G(((system.atKitchen.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.atKitchen.status = failure) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.doTaskA.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.alarm.status = success) -> X(((system.holdTools.status = success) | (system.holdTools.status = failure)))));
+LTLSPEC G(((system.alarm.status = failure) -> X(((system.waitCharge.status = success) | (system.waitCharge.status = failure) | (system.waitCharge.status = running)))));
+LTLSPEC G(((system.holdTools.status = success) -> X(((system.goToKitchen.status = success) | (system.goToKitchen.status = failure) | (system.goToKitchen.status = running)))));
+LTLSPEC G(((system.holdTools.status = failure) -> X(((system.waitCharge.status = success) | (system.waitCharge.status = failure) | (system.waitCharge.status = running)))));
+LTLSPEC G(((system.goToKitchen.status = success) -> X(((system.useExtinguisher.status = success) | (system.useExtinguisher.status = failure) | (system.useExtinguisher.status = running)))));
+LTLSPEC G(((system.useExtinguisher.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.waitCharge.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        lowBattery : lowBattery_module(lowBattery_v_stage_0);
+        invValid : invValid_module(invValid_v_stage_0);
+        computInv : success_DEFAULT_module();
+        acceptInput : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_2(computInv, acceptInput);
+        c2 : composite_selector_without_memory_2(invValid, c3);
+        searchAns : success_DEFAULT_module();
+        roomKnown : roomKnown_module(roomKnown_v_stage_0);
+        goToRoom : success_DEFAULT_module();
+        sleeping : success_DEFAULT_module();
+        c5 : composite_sequence_without_memory_3(roomKnown, goToRoom, sleeping);
+        atKitchen : atKitchen_module(atKitchen_v_stage_0);
+        doTaskA : success_DEFAULT_module();
+        c6 : composite_sequence_without_memory_2(atKitchen, doTaskA);
+        c4 : composite_selector_without_memory_2(c5, c6);
+        c1 : composite_sequence_without_memory_4(lowBattery, c2, searchAns, c4);
+        alarm : alarm_module(alarm_v_stage_0);
+        holdTools : holdTools_module(holdTools_v_stage_0);
+        goToKitchen : success_DEFAULT_module();
+        useExtinguisher : success_DEFAULT_module();
+        c9 : composite_sequence_without_memory_3(holdTools, goToKitchen, useExtinguisher);
+        waitCharge : success_DEFAULT_module();
+        c8 : composite_selector_without_memory_2(c9, waitCharge);
+        c7 : composite_sequence_without_memory_2(alarm, c8);
+        c0 : composite_selector_without_memory_2(c1, c7);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        lowBattery_v_stage_0 : boolean;
+        invValid_v_stage_0 : boolean;
+        roomKnown_v_stage_0 : boolean;
+        alarm_v_stage_0 : boolean;
+        atKitchen_v_stage_0 : boolean;
+        holdTools_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(lowBattery_v_stage_0) := {TRUE, FALSE};
+        init(invValid_v_stage_0) := {TRUE, FALSE};
+        init(roomKnown_v_stage_0) := {TRUE, FALSE};
+        init(alarm_v_stage_0) := {TRUE, FALSE};
+        init(atKitchen_v_stage_0) := {TRUE, FALSE};
+        init(holdTools_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(lowBattery_v_stage_0) :=
+            case
+                !(c0.active) : lowBattery_v_stage_0;
+                TRUE : lowBattery_v_stage_0;
+            esac;
+        next(invValid_v_stage_0) :=
+            case
+                !(c0.active) : invValid_v_stage_0;
+                TRUE : invValid_v_stage_0;
+            esac;
+        next(roomKnown_v_stage_0) :=
+            case
+                !(c0.active) : roomKnown_v_stage_0;
+                TRUE : roomKnown_v_stage_0;
+            esac;
+        next(alarm_v_stage_0) :=
+            case
+                !(c0.active) : alarm_v_stage_0;
+                TRUE : alarm_v_stage_0;
+            esac;
+        next(atKitchen_v_stage_0) :=
+            case
+                !(c0.active) : atKitchen_v_stage_0;
+                TRUE : atKitchen_v_stage_0;
+            esac;
+        next(holdTools_v_stage_0) :=
+            case
+                !(c0.active) : holdTools_v_stage_0;
+                TRUE : holdTools_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        lowBattery := 2;
+        c2 := 3;
+        invValid := 4;
+        c3 := 5;
+        computInv := 6;
+        acceptInput := 7;
+        searchAns := 8;
+        c4 := 9;
+        c5 := 10;
+        roomKnown := 11;
+        goToRoom := 12;
+        sleeping := 13;
+        c6 := 14;
+        atKitchen := 15;
+        doTaskA := 16;
+        c7 := 17;
+        alarm := 18;
+        c8 := 19;
+        c9 := 20;
+        holdTools := 21;
+        goToKitchen := 22;
+        useExtinguisher := 23;
+        waitCharge := 24;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE lowBattery_module(lowBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (lowBattery_v_stage_0) ? success : failure;
+MODULE invValid_module(invValid_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (invValid_v_stage_0) ? success : failure;
+MODULE roomKnown_module(roomKnown_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (roomKnown_v_stage_0) ? success : failure;
+MODULE atKitchen_module(atKitchen_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atKitchen_v_stage_0) ? success : failure;
+MODULE alarm_module(alarm_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (alarm_v_stage_0) ? success : failure;
+MODULE holdTools_module(holdTools_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (holdTools_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

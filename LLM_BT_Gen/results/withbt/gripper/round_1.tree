@@ -1,0 +1,44 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} }
+}
+actions {
+    action { openGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveFingerToTargetPosition
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            lowBattery {}
+            openGripper {}
+            moveFingerToTargetPosition {}
+            closeGripper {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, lowBattery), (failure, lowBattery)))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, openGripper), (failure, openGripper), (running, openGripper)))))}
+    LTLSPEC {(globally, (implies, (success, moveFingerToTargetPosition), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))}
+    LTLSPEC {(globally, (implies, (success, openGripper), (next, (or, (success, moveFingerToTargetPosition), (failure, moveFingerToTargetPosition), (running, moveFingerToTargetPosition)))))}
+}

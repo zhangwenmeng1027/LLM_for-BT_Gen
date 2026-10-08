@@ -1,0 +1,127 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env atPosA_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env empty_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isHungry_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ atPosA_v assign{result{atPosA_v}} }
+    variable_statement{ empty_v assign{result{empty_v}} }
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} }
+    variable_statement{ isHungry_v assign{result{isHungry_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { atPosA arguments {} read_variables {atPosA_v} condition{atPosA_v} }
+    environment_check { empty arguments {} read_variables {empty_v} condition{empty_v} }
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} }
+    environment_check { isHungry arguments {} read_variables {isHungry_v} condition{isHungry_v} }
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { checkBattery
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { eatfood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { followHuman
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    goToPosA {}
+                    pickUp {}
+                    checkBattery {}
+                    doTaskA {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    atPosA {}
+                    empty {}
+                    pickUp_2 {}
+                    goToPosB {}
+                    putDown {}
+                    goToPosC {}
+                    doTaskC {}
+                }
+            }
+            composite {
+                c3 sequence
+                children {
+                    lowBattery {}
+                    goToStation {}
+                    charging {}
+                    isHungry {}
+                    eatfood {}
+                }
+            }
+            followHuman {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))}
+    LTLSPEC {(globally, (implies, (success, checkBattery), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, atPosA), (next, (or, (success, empty), (failure, empty)))))}
+    LTLSPEC {(globally, (implies, (success, empty), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, isHungry), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))}
+}

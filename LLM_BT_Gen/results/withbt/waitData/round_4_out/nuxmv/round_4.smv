@@ -1,0 +1,184 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.isDay.status = success) | (system.isDay.status = failure)));
+LTLSPEC G(((system.isDay.status = success) -> X(((system.hasInput.status = success) | (system.hasInput.status = failure)))));
+LTLSPEC G(((system.hasInput.status = failure) -> X(((system.waitInput.status = success) | (system.waitInput.status = failure) | (system.waitInput.status = running)))));
+LTLSPEC G(((system.isNight.status = success) -> X(((system.atCharge.status = success) | (system.atCharge.status = failure)))));
+LTLSPEC G(((system.atCharge.status = failure) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.fullBattery.status = success) -> X(((system.getTarget.status = success) | (system.getTarget.status = failure) | (system.getTarget.status = running)))));
+LTLSPEC G(((system.getTarget.status = success) -> X(((system.searchTarget.status = success) | (system.searchTarget.status = failure) | (system.searchTarget.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        isDay : isDay_module(isDay_v_stage_0);
+        hasInput : hasInput_module(hasInput_v_stage_0);
+        waitInput : success_DEFAULT_module();
+        c2 : composite_selector_without_memory_2(hasInput, waitInput);
+        searchTarget : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_3(isDay, c2, searchTarget);
+        isNight : isNight_module(isNight_v_stage_0);
+        atCharge : atCharge_module(atCharge_v_stage_0);
+        goToStation : success_DEFAULT_module();
+        c4 : composite_selector_without_memory_2(atCharge, goToStation);
+        charging : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_3(isNight, c4, charging);
+        fullBattery : fullBattery_module(fullBattery_v_stage_0);
+        getTarget : success_DEFAULT_module();
+        searchTarget_2 : success_DEFAULT_module();
+        c5 : composite_sequence_without_memory_3(fullBattery, getTarget, searchTarget_2);
+        c0 : composite_selector_without_memory_3(c1, c3, c5);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        isDay_v_stage_0 : boolean;
+        hasInput_v_stage_0 : boolean;
+        isNight_v_stage_0 : boolean;
+        atCharge_v_stage_0 : boolean;
+        fullBattery_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(isDay_v_stage_0) := {TRUE, FALSE};
+        init(hasInput_v_stage_0) := {TRUE, FALSE};
+        init(isNight_v_stage_0) := {TRUE, FALSE};
+        init(atCharge_v_stage_0) := {TRUE, FALSE};
+        init(fullBattery_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(isDay_v_stage_0) :=
+            case
+                !(c0.active) : isDay_v_stage_0;
+                TRUE : isDay_v_stage_0;
+            esac;
+        next(hasInput_v_stage_0) :=
+            case
+                !(c0.active) : hasInput_v_stage_0;
+                TRUE : hasInput_v_stage_0;
+            esac;
+        next(isNight_v_stage_0) :=
+            case
+                !(c0.active) : isNight_v_stage_0;
+                TRUE : isNight_v_stage_0;
+            esac;
+        next(atCharge_v_stage_0) :=
+            case
+                !(c0.active) : atCharge_v_stage_0;
+                TRUE : atCharge_v_stage_0;
+            esac;
+        next(fullBattery_v_stage_0) :=
+            case
+                !(c0.active) : fullBattery_v_stage_0;
+                TRUE : fullBattery_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        isDay := 2;
+        c2 := 3;
+        hasInput := 4;
+        waitInput := 5;
+        searchTarget := 6;
+        c3 := 7;
+        isNight := 8;
+        c4 := 9;
+        atCharge := 10;
+        goToStation := 11;
+        charging := 12;
+        c5 := 13;
+        fullBattery := 14;
+        getTarget := 15;
+        searchTarget_2 := 16;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE isDay_module(isDay_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isDay_v_stage_0) ? success : failure;
+MODULE hasInput_module(hasInput_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasInput_v_stage_0) ? success : failure;
+MODULE isNight_module(isNight_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isNight_v_stage_0) ? success : failure;
+MODULE atCharge_module(atCharge_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atCharge_v_stage_0) ? success : failure;
+MODULE fullBattery_module(fullBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (fullBattery_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

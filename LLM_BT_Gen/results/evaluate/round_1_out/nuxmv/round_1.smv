@@ -1,0 +1,118 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.abilityEvaluated.status = success) | (system.abilityEvaluated.status = failure)));
+LTLSPEC G(((system.abilityEvaluated.status = failure) -> X(((system.testPerformance.status = success) | (system.testPerformance.status = failure) | (system.testPerformance.status = running)))));
+LTLSPEC G(((system.testPerformance.status = success) -> X(((system.evaluationPerformance.status = success) | (system.evaluationPerformance.status = failure) | (system.evaluationPerformance.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.moveToDestination.status = success) | (system.moveToDestination.status = failure) | (system.moveToDestination.status = running)))));
+LTLSPEC G(((system.moveToDestination.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.putDown.status = success) -> X(((system.moveToParking.status = success) | (system.moveToParking.status = failure) | (system.moveToParking.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        abilityEvaluated : abilityEvaluated_module(abilityEvaluated_v_stage_0);
+        testPerformance : success_DEFAULT_module();
+        evaluationPerformance : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(testPerformance, evaluationPerformance);
+        c1 : composite_selector_without_memory_2(abilityEvaluated, c2);
+        pickUp : success_DEFAULT_module();
+        moveToDestination : success_DEFAULT_module();
+        putDown : success_DEFAULT_module();
+        moveToParking : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_4(pickUp, moveToDestination, putDown, moveToParking);
+        c0 : composite_sequence_without_memory_2(c1, c3);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        abilityEvaluated_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(abilityEvaluated_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(abilityEvaluated_v_stage_0) :=
+            case
+                !(c0.active) : abilityEvaluated_v_stage_0;
+                TRUE : abilityEvaluated_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        abilityEvaluated := 2;
+        c2 := 3;
+        testPerformance := 4;
+        evaluationPerformance := 5;
+        c3 := 6;
+        pickUp := 7;
+        moveToDestination := 8;
+        putDown := 9;
+        moveToParking := 10;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE abilityEvaluated_module(abilityEvaluated_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (abilityEvaluated_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

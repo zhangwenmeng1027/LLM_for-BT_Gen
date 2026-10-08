@@ -1,0 +1,58 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env atPos9_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPos6_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPos2_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ atPos9_v assign{result{atPos9_v}} }
+    variable_statement{ atPos6_v assign{result{atPos6_v}} }
+    variable_statement{ atPos2_v assign{result{atPos2_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { atPos9 arguments {} read_variables {atPos9_v} condition{atPos9_v} }
+    environment_check { atPos6 arguments {} read_variables {atPos6_v} condition{atPos6_v} }
+    environment_check { atPos2 arguments {} read_variables {atPos2_v} condition{atPos2_v} }
+}
+actions {
+    action { move6to9
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move3to6
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move1to2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            atPos9 {}
+            move6to9 {}
+            atPos6 {}
+            move3to6 {}
+            atPos2 {}
+            move1to2 {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, atPos9), (failure, atPos9)))}
+    LTLSPEC {(globally, (implies, (success, atPos9), (next, (or, (success, atPos9), (failure, atPos9)))))}
+    LTLSPEC {(globally, (implies, (failure, atPos9), (next, (or, (success, move6to9), (failure, move6to9), (running, move6to9)))))}
+    LTLSPEC {(globally, (implies, (success, move6to9), (next, (or, (success, atPos9), (failure, atPos9)))))}
+    LTLSPEC {(globally, (implies, (success, atPos6), (next, (or, (success, atPos9), (failure, atPos9)))))}
+    LTLSPEC {(globally, (implies, (failure, atPos6), (next, (or, (success, move3to6), (failure, move3to6), (running, move3to6)))))}
+    LTLSPEC {(globally, (implies, (success, move3to6), (next, (or, (success, atPos9), (failure, atPos9)))))}
+    LTLSPEC {(globally, (implies, (success, atPos2), (next, (or, (success, atPos9), (failure, atPos9)))))}
+    LTLSPEC {(globally, (implies, (failure, atPos2), (next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))))}
+    LTLSPEC {(globally, (implies, (success, move1to2), (next, (or, (success, atPos9), (failure, atPos9)))))}
+}

@@ -1,0 +1,104 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)));
+LTLSPEC G(((system.lowBattery.status = success) -> X(((system.atCharge.status = success) | (system.atCharge.status = failure)))));
+LTLSPEC G(((system.atCharge.status = failure) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        lowBattery : lowBattery_module(lowBattery_v_stage_0);
+        atCharge : atCharge_module(atCharge_v_stage_0);
+        goToStation : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_2(atCharge, goToStation);
+        charging : success_DEFAULT_module();
+        c0 : composite_sequence_without_memory_3(lowBattery, c1, charging);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        lowBattery_v_stage_0 : boolean;
+        atCharge_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(lowBattery_v_stage_0) := {TRUE, FALSE};
+        init(atCharge_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(lowBattery_v_stage_0) :=
+            case
+                !(c0.active) : lowBattery_v_stage_0;
+                TRUE : lowBattery_v_stage_0;
+            esac;
+        next(atCharge_v_stage_0) :=
+            case
+                !(c0.active) : atCharge_v_stage_0;
+                TRUE : atCharge_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        lowBattery := 1;
+        c1 := 2;
+        atCharge := 3;
+        goToStation := 4;
+        charging := 5;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE lowBattery_module(lowBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (lowBattery_v_stage_0) ? success : failure;
+MODULE atCharge_module(atCharge_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atCharge_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

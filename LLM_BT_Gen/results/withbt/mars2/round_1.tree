@@ -1,0 +1,89 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env haveData_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env hasSample_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env holdItem_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atStation_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ haveData_v assign{result{haveData_v}} }
+    variable_statement{ hasSample_v assign{result{hasSample_v}} }
+    variable_statement{ holdItem_v assign{result{holdItem_v}} }
+    variable_statement{ atStation_v assign{result{atStation_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { haveData arguments {} read_variables {haveData_v} condition{haveData_v} }
+    environment_check { hasSample arguments {} read_variables {hasSample_v} condition{hasSample_v} }
+    environment_check { holdItem arguments {} read_variables {holdItem_v} condition{holdItem_v} }
+    environment_check { atStation arguments {} read_variables {atStation_v} condition{atStation_v} }
+}
+actions {
+    action { analyze
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { analyze_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            haveData {}
+            composite {
+                c1 sequence
+                children {
+                    hasSample {}
+                    analyze {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    composite {
+                        c3 selector
+                        children {
+                            holdItem {}
+                            pickUp {}
+                        }
+                    }
+                    composite {
+                        c4 selector
+                        children {
+                            atStation {}
+                            goToStation {}
+                        }
+                    }
+                    putDown {}
+                    analyze_2 {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, haveData), (failure, haveData)))}
+    LTLSPEC {(globally, (implies, (failure, haveData), (next, (or, (success, hasSample), (failure, hasSample)))))}
+    LTLSPEC {(globally, (implies, (success, hasSample), (next, (or, (or, (success, analyze), (success, analyze_2)), (or, (failure, analyze), (failure, analyze_2)), (or, (running, analyze), (running, analyze_2))))))}
+    LTLSPEC {(globally, (implies, (failure, holdItem), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, atStation), (failure, atStation)))))}
+    LTLSPEC {(globally, (implies, (failure, atStation), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, putDown), (next, (or, (or, (success, analyze), (success, analyze_2)), (or, (failure, analyze), (failure, analyze_2)), (or, (running, analyze), (running, analyze_2))))))}
+}

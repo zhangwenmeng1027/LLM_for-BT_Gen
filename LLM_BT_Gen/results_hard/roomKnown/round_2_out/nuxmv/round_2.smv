@@ -1,0 +1,197 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.roomKnown.status = success) | (system.roomKnown.status = failure)));
+LTLSPEC G(((system.roomKnown.status = success) -> X(((system.goToTarRoom.status = success) | (system.goToTarRoom.status = failure) | (system.goToTarRoom.status = running)))));
+LTLSPEC G(((system.roomKnown.status = failure) -> X(((system.invValid.status = success) | (system.invValid.status = failure)))));
+LTLSPEC G(((system.goToTarRoom.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.doTaskA.status = success) -> X(((system.doTaskB.status = success) | (system.doTaskB.status = failure) | (system.doTaskB.status = running)))));
+LTLSPEC G(((system.doTaskB.status = success) -> X(((system.doTaskC.status = success) | (system.doTaskC.status = failure) | (system.doTaskC.status = running)))));
+LTLSPEC G(((system.doTaskC.status = success) -> X(((system.roomKnown.status = success) | (system.roomKnown.status = failure)))));
+LTLSPEC G(((system.invValid.status = success) -> X(((system.acceptData.status = success) | (system.acceptData.status = failure) | (system.acceptData.status = running)))));
+LTLSPEC G(((system.invValid.status = failure) -> X(((system.pushP.status = success) | (system.pushP.status = failure) | (system.pushP.status = running)))));
+LTLSPEC G(((system.acceptData.status = success) -> X(((system.searchTarget.status = success) | (system.searchTarget.status = failure) | (system.searchTarget.status = running)))));
+LTLSPEC G(((system.searchTarget.status = success) -> X(((system.TargetAdjacent.status = success) | (system.TargetAdjacent.status = failure)))));
+LTLSPEC G(((system.TargetAdjacent.status = success) -> X(((system.activateProcess.status = success) | (system.activateProcess.status = failure) | (system.activateProcess.status = running)))));
+LTLSPEC G(((system.TargetAdjacent.status = failure) -> X(((system.pushP.status = success) | (system.pushP.status = failure) | (system.pushP.status = running)))));
+LTLSPEC G(((system.activateProcess.status = success) -> X(((system.attackTarget.status = success) | (system.attackTarget.status = failure) | (system.attackTarget.status = running)))));
+LTLSPEC G(((system.attackTarget.status = success) -> X(((system.roomKnown.status = success) | (system.roomKnown.status = failure)))));
+LTLSPEC G(((system.pushP.status = success) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.sleeping.status = success) | (system.sleeping.status = failure) | (system.sleeping.status = running)))));
+LTLSPEC G(((system.sleeping.status = success) -> X(((system.roomKnown.status = success) | (system.roomKnown.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        roomKnown : roomKnown_module(roomKnown_v_stage_0);
+        goToTarRoom : success_DEFAULT_module();
+        doTaskA : success_DEFAULT_module();
+        doTaskB : success_DEFAULT_module();
+        doTaskC : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_5(roomKnown, goToTarRoom, doTaskA, doTaskB, doTaskC);
+        invValid : invValid_module(invValid_v_stage_0);
+        acceptData : success_DEFAULT_module();
+        searchTarget : success_DEFAULT_module();
+        TargetAdjacent : TargetAdjacent_module(TargetAdjacent_v_stage_0);
+        activateProcess : success_DEFAULT_module();
+        attackTarget : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_6(invValid, acceptData, searchTarget, TargetAdjacent, activateProcess, attackTarget);
+        pushP : success_DEFAULT_module();
+        goToStation : success_DEFAULT_module();
+        sleeping : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_3(pushP, goToStation, sleeping);
+        c0 : composite_selector_without_memory_3(c1, c2, c3);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        roomKnown_v_stage_0 : boolean;
+        invValid_v_stage_0 : boolean;
+        TargetAdjacent_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(roomKnown_v_stage_0) := {TRUE, FALSE};
+        init(invValid_v_stage_0) := {TRUE, FALSE};
+        init(TargetAdjacent_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(roomKnown_v_stage_0) :=
+            case
+                !(c0.active) : roomKnown_v_stage_0;
+                TRUE : roomKnown_v_stage_0;
+            esac;
+        next(invValid_v_stage_0) :=
+            case
+                !(c0.active) : invValid_v_stage_0;
+                TRUE : invValid_v_stage_0;
+            esac;
+        next(TargetAdjacent_v_stage_0) :=
+            case
+                !(c0.active) : TargetAdjacent_v_stage_0;
+                TRUE : TargetAdjacent_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        roomKnown := 2;
+        goToTarRoom := 3;
+        doTaskA := 4;
+        doTaskB := 5;
+        doTaskC := 6;
+        c2 := 7;
+        invValid := 8;
+        acceptData := 9;
+        searchTarget := 10;
+        TargetAdjacent := 11;
+        activateProcess := 12;
+        attackTarget := 13;
+        c3 := 14;
+        pushP := 15;
+        goToStation := 16;
+        sleeping := 17;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_5(child_0, child_1, child_2, child_3, child_4)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+MODULE composite_sequence_without_memory_6(child_0, child_1, child_2, child_3, child_4, child_5)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                !(child_5.internal_status = success) : child_5.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+        child_5.active := child_4.status = success;
+MODULE roomKnown_module(roomKnown_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (roomKnown_v_stage_0) ? success : failure;
+MODULE invValid_module(invValid_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (invValid_v_stage_0) ? success : failure;
+MODULE TargetAdjacent_module(TargetAdjacent_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (TargetAdjacent_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

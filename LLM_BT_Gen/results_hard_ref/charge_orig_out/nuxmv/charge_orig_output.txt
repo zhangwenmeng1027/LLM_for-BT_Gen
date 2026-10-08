@@ -1,0 +1,53 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.lowBattery.status = success | system.lowBattery.status = failure)  is true
+-- specification  G (system.lowBattery.status = success ->  X (system.atCharge.status = success | system.atCharge.status = failure))  is true
+-- specification  G (system.atCharge.status = failure ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.lowBattery_v_stage_0 = TRUE
+    system.atCharge_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.charging = 5
+    system.node_names.goToStation = 4
+    system.node_names.atCharge = 3
+    system.node_names.c1 = 2
+    system.node_names.lowBattery = 1
+    system.node_names.c0 = 0
+    system.lowBattery.internal_status = success
+    system.lowBattery.status = success
+    system.atCharge.internal_status = failure
+    system.atCharge.status = failure
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.atCharge.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.charging.internal_status = success
+    system.charging.status = invalid
+    system.charging.active = FALSE
+    system.c1.active = TRUE
+    system.lowBattery.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 1.2 <-
+-- specification  G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))  is true

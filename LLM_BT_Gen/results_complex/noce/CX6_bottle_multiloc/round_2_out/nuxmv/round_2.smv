@@ -1,0 +1,244 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)));
+LTLSPEC G(((system.bottleFound.status = success) -> X(((system.holdItem.status = success) | (system.holdItem.status = failure)))));
+LTLSPEC G(((system.bottleFound.status = failure) -> X(((system.bottleFound_2.status = success) | (system.bottleFound_2.status = failure)))));
+LTLSPEC G(((system.holdItem.status = success) -> X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)))));
+LTLSPEC G(((system.holdItem.status = failure) -> X(((system.fetchBottle.status = success) | (system.fetchBottle.status = failure) | (system.fetchBottle.status = running)))));
+LTLSPEC G(((system.fetchBottle.status = success) -> X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)))));
+LTLSPEC G(((system.bottleFound_2.status = success) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.bottleFound_2.status = failure) -> X(((system.bottleFound_3.status = success) | (system.bottleFound_3.status = failure)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.TargetAdjacent.status = success) | (system.TargetAdjacent.status = failure)))));
+LTLSPEC G(((system.TargetAdjacent.status = success) -> X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)))));
+LTLSPEC G(((system.TargetAdjacent.status = failure) -> X(((system.goToPosB_2.status = success) | (system.goToPosB_2.status = failure) | (system.goToPosB_2.status = running)))));
+LTLSPEC G(((system.goToPosB_2.status = success) -> X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)))));
+LTLSPEC G(((system.bottleFound_3.status = success) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.bottleFound_3.status = failure) -> X(((system.bottleFound_4.status = success) | (system.bottleFound_4.status = failure)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X(((system.TargetAdjacent_2.status = success) | (system.TargetAdjacent_2.status = failure)))));
+LTLSPEC G(((system.TargetAdjacent_2.status = success) -> X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)))));
+LTLSPEC G(((system.TargetAdjacent_2.status = failure) -> X(((system.goToPosC_2.status = success) | (system.goToPosC_2.status = failure) | (system.goToPosC_2.status = running)))));
+LTLSPEC G(((system.goToPosC_2.status = success) -> X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)))));
+LTLSPEC G(((system.bottleFound_4.status = success) -> X(((system.goToPos3.status = success) | (system.goToPos3.status = failure) | (system.goToPos3.status = running)))));
+LTLSPEC G(((system.bottleFound_4.status = failure) -> X(((system.goToKitchen.status = success) | (system.goToKitchen.status = failure) | (system.goToKitchen.status = running)))));
+LTLSPEC G(((system.goToPos3.status = success) -> X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)))));
+LTLSPEC G(((system.goToKitchen.status = success) -> X(((system.bottleFound.status = success) | (system.bottleFound.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        bottleFound : bottleFound_module(bottleFound_v_stage_0);
+        holdItem : success_DEFAULT_module();
+        fetchBottle : _DEFAULT_module();
+        c2 : composite_selector_without_memory_2(holdItem, fetchBottle);
+        c1 : composite_sequence_without_memory_2(bottleFound, c2);
+        bottleFound_2 : bottleFound_2_module(bottleFound_2_v_stage_0);
+        goToPosB : success_DEFAULT_module();
+        TargetAdjacent : TargetAdjacent_module(TargetAdjacent_v_stage_0);
+        goToPosB_2 : success_DEFAULT_module();
+        c4 : composite_selector_without_memory_2(TargetAdjacent, goToPosB_2);
+        c3 : composite_sequence_without_memory_3(bottleFound_2, goToPosB, c4);
+        bottleFound_3 : bottleFound_3_module(bottleFound_3_v_stage_0);
+        goToPosC : success_DEFAULT_module();
+        TargetAdjacent_2 : TargetAdjacent_2_module(TargetAdjacent_2_v_stage_0);
+        goToPosC_2 : success_DEFAULT_module();
+        c6 : composite_selector_without_memory_2(TargetAdjacent_2, goToPosC_2);
+        c5 : composite_sequence_without_memory_3(bottleFound_3, goToPosC, c6);
+        bottleFound_4 : bottleFound_4_module(bottleFound_4_v_stage_0);
+        goToPos3 : success_DEFAULT_module();
+        c7 : composite_sequence_without_memory_2(bottleFound_4, goToPos3);
+        goToKitchen : success_DEFAULT_module();
+        c0 : composite_selector_without_memory_5(c1, c3, c5, c7, goToKitchen);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        bottleFound_v_stage_0 : boolean;
+        bottleFound_2_v_stage_0 : boolean;
+        bottleFound_3_v_stage_0 : boolean;
+        bottleFound_4_v_stage_0 : boolean;
+        TargetAdjacent_v_stage_0 : boolean;
+        TargetAdjacent_2_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(bottleFound_v_stage_0) := {TRUE, FALSE};
+        init(bottleFound_2_v_stage_0) := {TRUE, FALSE};
+        init(bottleFound_3_v_stage_0) := {TRUE, FALSE};
+        init(bottleFound_4_v_stage_0) := {TRUE, FALSE};
+        init(TargetAdjacent_v_stage_0) := {TRUE, FALSE};
+        init(TargetAdjacent_2_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(bottleFound_v_stage_0) :=
+            case
+                !(c0.active) : bottleFound_v_stage_0;
+                TRUE : bottleFound_v_stage_0;
+            esac;
+        next(bottleFound_2_v_stage_0) :=
+            case
+                !(c0.active) : bottleFound_2_v_stage_0;
+                TRUE : bottleFound_2_v_stage_0;
+            esac;
+        next(bottleFound_3_v_stage_0) :=
+            case
+                !(c0.active) : bottleFound_3_v_stage_0;
+                TRUE : bottleFound_3_v_stage_0;
+            esac;
+        next(bottleFound_4_v_stage_0) :=
+            case
+                !(c0.active) : bottleFound_4_v_stage_0;
+                TRUE : bottleFound_4_v_stage_0;
+            esac;
+        next(TargetAdjacent_v_stage_0) :=
+            case
+                !(c0.active) : TargetAdjacent_v_stage_0;
+                TRUE : TargetAdjacent_v_stage_0;
+            esac;
+        next(TargetAdjacent_2_v_stage_0) :=
+            case
+                !(c0.active) : TargetAdjacent_2_v_stage_0;
+                TRUE : TargetAdjacent_2_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        bottleFound := 2;
+        c2 := 3;
+        holdItem := 4;
+        fetchBottle := 5;
+        c3 := 6;
+        bottleFound_2 := 7;
+        goToPosB := 8;
+        c4 := 9;
+        TargetAdjacent := 10;
+        goToPosB_2 := 11;
+        c5 := 12;
+        bottleFound_3 := 13;
+        goToPosC := 14;
+        c6 := 15;
+        TargetAdjacent_2 := 16;
+        goToPosC_2 := 17;
+        c7 := 18;
+        bottleFound_4 := 19;
+        goToPos3 := 20;
+        goToKitchen := 21;
+MODULE composite_selector_without_memory_5(child_0, child_1, child_2, child_3, child_4)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                !(child_4.internal_status = failure) : child_4.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+        child_4.active := child_3.status = failure;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE bottleFound_module(bottleFound_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (bottleFound_v_stage_0) ? success : failure;
+MODULE bottleFound_2_module(bottleFound_2_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (bottleFound_2_v_stage_0) ? success : failure;
+MODULE TargetAdjacent_module(TargetAdjacent_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (TargetAdjacent_v_stage_0) ? success : failure;
+MODULE bottleFound_3_module(bottleFound_3_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (bottleFound_3_v_stage_0) ? success : failure;
+MODULE TargetAdjacent_2_module(TargetAdjacent_2_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (TargetAdjacent_2_v_stage_0) ? success : failure;
+MODULE bottleFound_4_module(bottleFound_4_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (bottleFound_4_v_stage_0) ? success : failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

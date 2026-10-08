@@ -1,0 +1,63 @@
+configuration {} enumerations {} constants {}
+variables {
+}
+environment_update {
+}
+checks {}
+environment_checks {
+}
+actions {
+    action { goToPos1
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPos2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPos3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPos4
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPos5
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPos6
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPos7
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            goToPos1 {}
+            goToPos2 {}
+            goToPos3 {}
+            goToPos4 {}
+            goToPos5 {}
+            goToPos6 {}
+            goToPos7 {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, goToPos1), (failure, goToPos1), (running, goToPos1)))}
+    LTLSPEC {(globally, (implies, (success, goToPos1), (next, (or, (success, goToPos2), (failure, goToPos2), (running, goToPos2)))))}
+    LTLSPEC {(globally, (implies, (success, goToPos2), (next, (or, (success, goToPos3), (failure, goToPos3), (running, goToPos3)))))}
+    LTLSPEC {(globally, (implies, (success, goToPos3), (next, (or, (success, goToPos4), (failure, goToPos4), (running, goToPos4)))))}
+    LTLSPEC {(globally, (implies, (success, goToPos4), (next, (or, (success, goToPos5), (failure, goToPos5), (running, goToPos5)))))}
+    LTLSPEC {(globally, (implies, (success, goToPos5), (next, (or, (success, goToPos6), (failure, goToPos6), (running, goToPos6)))))}
+    LTLSPEC {(globally, (implies, (success, goToPos6), (next, (or, (success, goToPos7), (failure, goToPos7), (running, goToPos7)))))}
+}

@@ -1,0 +1,194 @@
+configuration {} 
+enumerations {} 
+constants {} 
+variables {
+    variable { env isDay_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isNight_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env visitedA_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env visitedB_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env visitedC_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atStation_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env fullBattery_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isDoorOpen_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isDay_v assign{result{isDay_v}} }
+    variable_statement{ isNight_v assign{result{isNight_v}} }
+    variable_statement{ visitedA_v assign{result{visitedA_v}} }
+    variable_statement{ visitedB_v assign{result{visitedB_v}} }
+    variable_statement{ visitedC_v assign{result{visitedC_v}} }
+    variable_statement{ atStation_v assign{result{atStation_v}} }
+    variable_statement{ fullBattery_v assign{result{fullBattery_v}} }
+    variable_statement{ isDoorOpen_v assign{result{isDoorOpen_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isDay arguments {} read_variables {isDay_v} condition{isDay_v} }
+    environment_check { isNight arguments {} read_variables {isNight_v} condition{isNight_v} }
+    environment_check { visitedA arguments {} read_variables {visitedA_v} condition{visitedA_v} }
+    environment_check { visitedB arguments {} read_variables {visitedB_v} condition{visitedB_v} }
+    environment_check { visitedC arguments {} read_variables {visitedC_v} condition{visitedC_v} }
+    environment_check { atStation arguments {} read_variables {atStation_v} condition{atStation_v} }
+    environment_check { fullBattery arguments {} read_variables {fullBattery_v} condition{fullBattery_v} }
+    environment_check { isDoorOpen arguments {} read_variables {isDoorOpen_v} condition{isDoorOpen_v} }
+}
+actions {
+    action { unfoldPanels
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { patroling
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { patroling_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { patroling_3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { foldPanels
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeDoor
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    isDay {}
+                    unfoldPanels {}
+                    composite {
+                        c2 selector
+                        children {
+                            visitedA {}
+                            composite {
+                                c3 sequence
+                                children {
+                                    goToPosA {}
+                                    patroling {}
+                                }
+                            }
+                        }
+                    }
+                    composite {
+                        c4 selector
+                        children {
+                            visitedB {}
+                            composite {
+                                c5 sequence
+                                children {
+                                    goToPosB {}
+                                    patroling_2 {}
+                                }
+                            }
+                        }
+                    }
+                    composite {
+                        c6 selector
+                        children {
+                            visitedC {}
+                            composite {
+                                c7 sequence
+                                children {
+                                    goToPosC {}
+                                    patroling_3 {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            composite {
+                c8 sequence
+                children {
+                    isNight {}
+                    composite {
+                        c9 selector
+                        children {
+                            atStation {}
+                            goToStation {}
+                        }
+                    }
+                    charging {}
+                    fullBattery {}
+                    foldPanels {}
+                    composite {
+                        c10 selector
+                        children {
+                            composite {
+                                c11 sequence
+                                children {
+                                    isDoorOpen {}
+                                    closeDoor {}
+                                }
+                            }
+                            isDay {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isDay), (failure, isDay)))}
+    LTLSPEC {(globally, (implies, (success, isDay), (next, (or, (success, unfoldPanels), (failure, unfoldPanels), (running, unfoldPanels)))))}
+    LTLSPEC {(globally, (implies, (failure, isDay), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, unfoldPanels), (next, (or, (success, visitedA), (failure, visitedA)))))}
+    LTLSPEC {(globally, (implies, (success, visitedA), (next, (or, (success, visitedB), (failure, visitedB)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedA), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, patroling), (failure, patroling), (running, patroling)))))}
+    LTLSPEC {(globally, (implies, (success, patroling), (next, (or, (success, visitedB), (failure, visitedB)))))}
+    LTLSPEC {(globally, (implies, (success, visitedB), (next, (or, (success, visitedC), (failure, visitedC)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, patroling_2), (failure, patroling_2), (running, patroling_2)))))}
+    LTLSPEC {(globally, (implies, (success, patroling_2), (next, (or, (success, visitedC), (failure, visitedC)))))}
+    LTLSPEC {(globally, (implies, (success, visitedC), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedC), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, patroling_3), (failure, patroling_3), (running, patroling_3)))))}
+    LTLSPEC {(globally, (implies, (success, patroling_3), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, isNight), (next, (or, (success, atStation), (failure, atStation)))))}
+    LTLSPEC {(globally, (implies, (failure, isNight), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, atStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (failure, atStation), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, charging), (next, (or, (success, fullBattery), (failure, fullBattery)))))}
+    LTLSPEC {(globally, (implies, (success, fullBattery), (next, (or, (success, isDoorOpen), (failure, isDoorOpen)))))}
+    LTLSPEC {(globally, (implies, (failure, fullBattery), (next, (or, (success, foldPanels), (failure, foldPanels), (running, foldPanels)))))}
+    LTLSPEC {(globally, (implies, (success, foldPanels), (next, (or, (success, isDoorOpen), (failure, isDoorOpen)))))}
+    LTLSPEC {(globally, (implies, (success, isDoorOpen), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (failure, isDoorOpen), (next, (or, (success, closeDoor), (failure, closeDoor), (running, closeDoor)))))}
+    LTLSPEC {(globally, (implies, (success, closeDoor), (next, (or, (success, isDay), (failure, isDay)))))}
+}

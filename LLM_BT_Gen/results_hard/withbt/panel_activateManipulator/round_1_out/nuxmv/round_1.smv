@@ -1,0 +1,56 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.moveToPanel.status = success) | (system.moveToPanel.status = failure)));
+LTLSPEC G(((system.moveToPanel.status = success) -> X(((system.activeManipulator.status = success) | (system.activeManipulator.status = failure) | (system.activeManipulator.status = running)))));
+LTLSPEC G(((system.activeManipulator.status = success) -> X(((system.moveToPanel.status = success) | (system.moveToPanel.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        moveToPanel : success_DEFAULT_module();
+        activeManipulator : success_DEFAULT_module();
+        c0 : composite_sequence_without_memory_2(moveToPanel, activeManipulator);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        moveToPanel := 1;
+        activeManipulator := 2;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

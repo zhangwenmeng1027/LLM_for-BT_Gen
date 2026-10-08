@@ -1,0 +1,26 @@
+
+执行指令
+
+  在 BTRun 文件夹打开 cmd/PowerShell:
+
+  :: 1. 工具链自检(不花 API 费)
+  BTRun.exe --selftest
+
+  :: 2. 连接自检(一次极小的 API 调用,验证 4sapi.org 直连和 key)
+  BTRun.exe --selftest --api
+
+  :: 3. 完整实验(默认:hard 70 + complex 10,3 模型 × 3 基线 × 5 重复,
+  ::    三种 LLM 并行,每个模型一个 worker 进程,基线在 worker 内串行)
+  BTRun.exe
+
+  其它常用命令:
+
+  BTRun.exe --parallel baselines     :: 改为三个基线并行(每个基线一个 worker)
+  BTRun.exe --suite hard             :: 只跑 70 个 hard 任务
+  BTRun.exe --suite complex          :: 只跑 10 个 complex 任务
+  BTRun.exe --repeat 1               :: 快速试点(每组合只跑 1 次)
+  BTRun.exe --limit 5                :: 冒烟测试:每套件只跑前 5 个任务
+  BTRun.exe --models gpt-4o,claude-opus-4-6
+  BTRun.exe --tasks ABC3,CX1_deep_delivery
+
+  结果写入 results_hard\ 和 results_complex\:summary_<model>_<baseline>_<N>.json/.xlsx(N 自动递增，中断重跑只补缺失的编号，不覆盖已有结果)。详细说明在包内 README.txt。

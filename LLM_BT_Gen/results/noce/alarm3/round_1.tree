@@ -1,0 +1,59 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env alarm_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ alarm_v assign{result{alarm_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { alarm arguments {} read_variables {alarm_v} condition{alarm_v} }
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    alarm {}
+                    goToPosA {}
+                    pickUp {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    goToPosB {}
+                    putDown {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(globally, (implies, (success, alarm), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (failure, alarm), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+}

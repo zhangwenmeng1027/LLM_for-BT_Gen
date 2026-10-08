@@ -1,0 +1,10 @@
+prefix=C:/msys64
+includedir=${prefix}/include
+libdir=${prefix}/lib
+
+Name: cudd
+Description: Decision diagrams package
+URL: https://github.com/ivmai/cudd
+Version: 2.4.1
+Libs: -L${libdir} -lcudd
+Cflags: -I${includedir}

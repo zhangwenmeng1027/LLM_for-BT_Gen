@@ -1,0 +1,112 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.goToPos1.status = success) | (system.goToPos1.status = failure) | (system.goToPos1.status = running)));
+LTLSPEC G(((system.goToPos1.status = success) -> X(((system.goToPos2.status = success) | (system.goToPos2.status = failure) | (system.goToPos2.status = running)))));
+LTLSPEC G(((system.goToPos2.status = success) -> X(((system.goToPos3.status = success) | (system.goToPos3.status = failure) | (system.goToPos3.status = running)))));
+LTLSPEC G(((system.goToPos3.status = failure) -> X(((system.goToPos4.status = success) | (system.goToPos4.status = failure) | (system.goToPos4.status = running)))));
+LTLSPEC G(((system.goToPos4.status = failure) -> X(((system.goToPos5.status = success) | (system.goToPos5.status = failure) | (system.goToPos5.status = running)))));
+LTLSPEC G(((system.goToPos5.status = failure) -> X(((system.goToPos6.status = success) | (system.goToPos6.status = failure) | (system.goToPos6.status = running)))));
+LTLSPEC G(((system.goToPos6.status = success) -> X(((system.goToPos7.status = success) | (system.goToPos7.status = failure) | (system.goToPos7.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        goToPos1 : success_DEFAULT_module();
+        goToPos2 : success_DEFAULT_module();
+        goToPos3 : success_DEFAULT_module();
+        goToPos4 : _DEFAULT_module();
+        goToPos5 : _DEFAULT_module();
+        goToPos6 : _DEFAULT_module();
+        goToPos7 : _DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(goToPos6, goToPos7);
+        c1 : composite_selector_without_memory_4(goToPos3, goToPos4, goToPos5, c2);
+        c0 : composite_sequence_without_memory_3(goToPos1, goToPos2, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        goToPos1 := 1;
+        goToPos2 := 2;
+        c1 := 3;
+        goToPos3 := 4;
+        goToPos4 := 5;
+        goToPos5 := 6;
+        c2 := 7;
+        goToPos6 := 8;
+        goToPos7 := 9;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_selector_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

@@ -1,0 +1,98 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.haveData.status = success | system.haveData.status = failure)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.hasData_v_stage_0 = FALSE
+    system.hasSample_v_stage_0 = FALSE
+    system.holdItem_v_stage_0 = FALSE
+    system.atStation_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.analyze_2 = 15
+    system.node_names.putDown = 14
+    system.node_names.goToStation = 13
+    system.node_names.atStation = 12
+    system.node_names.c5 = 11
+    system.node_names.pickUp = 10
+    system.node_names.holdItem = 9
+    system.node_names.c4 = 8
+    system.node_names.c3 = 7
+    system.node_names.analyze = 6
+    system.node_names.hasSample = 5
+    system.node_names.c2 = 4
+    system.node_names.haveData = 3
+    system.node_names.hasData = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.hasData.internal_status = failure
+    system.hasData.status = failure
+    system.haveData.internal_status = success
+    system.haveData.status = invalid
+    system.haveData.active = FALSE
+    system.hasData.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.hasSample.internal_status = failure
+    system.hasSample.status = failure
+    system.analyze.internal_status = success
+    system.analyze.status = invalid
+    system.analyze.active = FALSE
+    system.hasSample.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.holdItem.internal_status = failure
+    system.holdItem.status = failure
+    system.pickUp.internal_status = success
+    system.pickUp.status = success
+    system.pickUp.active = TRUE
+    system.holdItem.active = TRUE
+    system.c4.internal_status = success
+    system.c4.status = success
+    system.atStation.internal_status = failure
+    system.atStation.status = failure
+    system.goToStation.internal_status = success
+    system.goToStation.status = success
+    system.goToStation.active = TRUE
+    system.atStation.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.putDown.internal_status = success
+    system.putDown.status = success
+    system.analyze_2.internal_status = success
+    system.analyze_2.status = success
+    system.analyze_2.active = TRUE
+    system.putDown.active = TRUE
+    system.c5.active = TRUE
+    system.c4.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.c2.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.haveData.status = failure ->  X (system.hasSample.status = success | system.hasSample.status = failure))  is true
+-- specification  G (system.holdItem.status = failure ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is true
+-- specification  G (system.hasSample.status = success ->  X (((system.analyze.status = success | system.analyze_2.status = success) | (system.analyze.status = failure | system.analyze_2.status = failure)) | (system.analyze.status = running | system.analyze_2.status = running)))  is true
+-- specification  G (system.pickUp.status = success ->  X (system.atStation.status = success | system.atStation.status = failure))  is true
+-- specification  G (system.atStation.status = failure ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))  is true
+-- specification  G (system.putDown.status = success ->  X (((system.analyze.status = success | system.analyze_2.status = success) | (system.analyze.status = failure | system.analyze_2.status = failure)) | (system.analyze.status = running | system.analyze_2.status = running)))  is true

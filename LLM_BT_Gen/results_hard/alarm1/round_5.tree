@@ -1,0 +1,93 @@
+configuration {}
+enumerations {}
+constants {}
+variables {
+    variable { env alarm_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atPosA_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env taskFinishedA_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ alarm_v assign{result{alarm_v}} }
+    variable_statement{ atPosA_v assign{result{atPosA_v}} }
+    variable_statement{ taskFinishedA_v assign{result{taskFinishedA_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { alarm arguments {} read_variables {alarm_v} condition{alarm_v} }
+    environment_check { alarm_2 arguments {} read_variables {alarm_v} condition{alarm_v} }
+    environment_check { alarm_3 arguments {} read_variables {alarm_v} condition{alarm_v} }
+    environment_check { atPosA arguments {} read_variables {atPosA_v} condition{atPosA_v} }
+    environment_check { taskFinishedA arguments {} read_variables {taskFinishedA_v} condition{taskFinishedA_v} }
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    alarm {}
+                    taskFinishedA {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    alarm_2 {}
+                    composite {
+                        c3 selector
+                        children {
+                            composite {
+                                c4 sequence
+                                children {
+                                    atPosA {}
+                                    doTaskA {}
+                                }
+                            }
+                            composite {
+                                c5 sequence
+                                children {
+                                    alarm_3 {}
+                                    goToPosA {}
+                                    doTaskA_2 {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, alarm), (failure, alarm)))}
+    LTLSPEC {(globally, (implies, (success, alarm), (next, (or, (success, taskFinishedA), (failure, taskFinishedA)))))}
+    LTLSPEC {(globally, (implies, (failure, alarm), (next, (or, (success, alarm_2), (failure, alarm_2)))))}
+    LTLSPEC {(globally, (implies, (success, taskFinishedA), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (failure, taskFinishedA), (next, (or, (success, alarm_2), (failure, alarm_2)))))}
+    LTLSPEC {(globally, (implies, (success, alarm_2), (next, (or, (success, atPosA), (failure, atPosA)))))}
+    LTLSPEC {(globally, (implies, (failure, alarm_2), (next, (or, (success, alarm_3), (failure, alarm_3)))))}
+    LTLSPEC {(globally, (implies, (success, atPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (failure, atPosA), (next, (or, (success, alarm_3), (failure, alarm_3)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, alarm_3), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (failure, alarm_3), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, doTaskA_2), (failure, doTaskA_2), (running, doTaskA_2)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA_2), (next, (or, (success, alarm), (failure, alarm)))))}
+}

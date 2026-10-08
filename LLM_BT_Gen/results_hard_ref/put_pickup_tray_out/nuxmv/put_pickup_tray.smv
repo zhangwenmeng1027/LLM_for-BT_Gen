@@ -1,0 +1,95 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.goToPosA.status = success) | (system.goToPosA.status = failure)));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.pickUp.status = success) | (system.pickUp.status = failure) | (system.pickUp.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.putOnTray.status = success) | (system.putOnTray.status = failure) | (system.putOnTray.status = running)))));
+LTLSPEC G(((system.putOnTray.status = success) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X(((system.pickUpFromTray.status = success) | (system.pickUpFromTray.status = failure) | (system.pickUpFromTray.status = running)))));
+LTLSPEC G(((system.pickUpFromTray.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.putDown.status = success) -> X(((system.activateProcess.status = success) | (system.activateProcess.status = failure) | (system.activateProcess.status = running)))));
+LTLSPEC G(((system.activateProcess.status = success) -> X(((system.moveToParking.status = success) | (system.moveToParking.status = failure) | (system.moveToParking.status = running)))));
+LTLSPEC G(((system.moveToParking.status = success) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        goToPosA : success_DEFAULT_module();
+        pickUp : success_DEFAULT_module();
+        putOnTray : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_3(goToPosA, pickUp, putOnTray);
+        goToPosC : success_DEFAULT_module();
+        pickUpFromTray : success_DEFAULT_module();
+        putDown : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_3(goToPosC, pickUpFromTray, putDown);
+        activateProcess : success_DEFAULT_module();
+        moveToParking : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_2(activateProcess, moveToParking);
+        c0 : composite_sequence_without_memory_3(c1, c2, c3);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        goToPosA := 2;
+        pickUp := 3;
+        putOnTray := 4;
+        c2 := 5;
+        goToPosC := 6;
+        pickUpFromTray := 7;
+        putDown := 8;
+        c3 := 9;
+        activateProcess := 10;
+        moveToParking := 11;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

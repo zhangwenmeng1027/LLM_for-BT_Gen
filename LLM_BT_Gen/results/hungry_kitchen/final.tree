@@ -1,0 +1,71 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isHungry_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isHungry_v assign{result{isHungry_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isHungry arguments {} read_variables {isHungry_v} condition{isHungry_v} }
+}
+actions {
+    action { goToKitchen
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { followHuman
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { locateBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { fetchBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { askHelp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    isHungry {}
+                    composite {
+                        c2 sequence
+                        children {
+                            composite {
+                                c3 selector
+                                children {
+                                    goToKitchen {}
+                                    followHuman {}
+                                }
+                            }
+                            locateBottle {}
+                            fetchBottle {}
+                        }
+                    }
+                }
+            }
+            askHelp {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isHungry), (failure, isHungry)))}
+    LTLSPEC {(globally, (implies, (success, isHungry), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))}
+    LTLSPEC {(globally, (implies, (failure, goToKitchen), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))}
+    LTLSPEC {(globally, (implies, (success, followHuman), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))}
+    LTLSPEC {(globally, (implies, (success, locateBottle), (next, (or, (success, fetchBottle), (failure, fetchBottle), (running, fetchBottle)))))}
+    LTLSPEC {(globally, (implies, (failure, isHungry), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))}
+}

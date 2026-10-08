@@ -1,0 +1,27 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.isOnPasture.status = success | system.isOnPasture.status = failure)  is true
+-- specification  G (system.isOnPasture.status = success ->  X (system.isDay.status = success | system.isDay.status = failure))  is true
+-- specification  G (system.isDay.status = success ->  X (system.isInShed.status = success | system.isInShed.status = failure))  is true
+-- specification  G (system.isInShed.status = success ->  X ((system.leaveShed.status = success | system.leaveShed.status = failure) | system.leaveShed.status = running))  is true
+-- specification  G (system.leaveShed.status = success ->  X ((system.findRandomPastureField.status = success | system.findRandomPastureField.status = failure) | system.findRandomPastureField.status = running))  is true
+-- specification  G (system.findRandomPastureField.status = success ->  X (((system.randomMove.status = success | system.randomMove_2.status = success) | (system.randomMove.status = failure | system.randomMove_2.status = failure)) | (system.randomMove.status = running | system.randomMove_2.status = running)))  is true
+-- specification  G (system.isDay.status = failure ->  X (system.isNight.status = success | system.isNight.status = failure))  is true
+-- specification  G (system.isNight.status = success ->  X ((system.findShed.status = success | system.findShed.status = failure) | system.findShed.status = running))  is true
+-- specification  G (system.findShed.status = success ->  X ((system.moveToDestination.status = success | system.moveToDestination.status = failure) | system.moveToDestination.status = running))  is true
+-- specification  G (system.moveToDestination.status = success ->  X ((system.enterShed.status = success | system.enterShed.status = failure) | system.enterShed.status = running))  is true
+-- specification  G (system.isNight.status = failure ->  X (((system.randomMove.status = success | system.randomMove_2.status = success) | (system.randomMove.status = failure | system.randomMove_2.status = failure)) | (system.randomMove.status = running | system.randomMove_2.status = running)))  is true

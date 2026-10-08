@@ -1,0 +1,63 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isHungry_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isHungry_v assign{result{isHungry_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isHungry arguments {} read_variables {isHungry_v} condition{isHungry_v} }
+}
+actions {
+    action { findFood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findTableware
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { eatfood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { followHuman
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+        composite {
+            c1 sequence
+            children {
+                isHungry {}
+                findFood {}
+                goToPosA {}
+                findTableware {}
+                eatfood {}
+            }
+        }
+            followHuman {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isHungry), (failure, isHungry)))}
+    LTLSPEC {(globally, (implies, (success, isHungry), (next, (or, (success, findFood), (failure, findFood), (running, findFood)))))}
+    LTLSPEC {(globally, (implies, (failure, isHungry), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))}
+    LTLSPEC {(globally, (implies, (success, findFood), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, findTableware), (failure, findTableware), (running, findTableware)))))}
+    LTLSPEC {(globally, (implies, (success, findTableware), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))}
+    LTLSPEC {(globally, (implies, (success, eatfood), (next, (or, (success, isHungry), (failure, isHungry)))))}
+    LTLSPEC {(globally, (implies, (success, followHuman), (next, (or, (success, isHungry), (failure, isHungry)))))}
+}

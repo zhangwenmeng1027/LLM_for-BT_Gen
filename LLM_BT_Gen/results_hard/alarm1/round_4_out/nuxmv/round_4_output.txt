@@ -1,0 +1,92 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.alarm.status = success | system.alarm.status = failure)  is true
+-- specification  G (system.alarm.status = success ->  X (system.taskFinishedA.status = success | system.taskFinishedA.status = failure))  is true
+-- specification  G (system.alarm.status = failure ->  X (system.alarm_2.status = success | system.alarm_2.status = failure))  is true
+-- specification  G (system.taskFinishedA.status = success ->  X (system.alarm.status = success | system.alarm.status = failure))  is true
+-- specification  G (system.taskFinishedA.status = failure ->  X (system.alarm_2.status = success | system.alarm_2.status = failure))  is true
+-- specification  G (system.alarm_2.status = success ->  X (system.atPosA.status = success | system.atPosA.status = failure))  is true
+-- specification  G (system.alarm_2.status = failure ->  X (system.alarm_3.status = success | system.alarm_3.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.alarm_v_stage_0 = FALSE
+    system.atPosA_v_stage_0 = FALSE
+    system.taskFinishedA_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.doTaskA = 12
+    system.node_names.doTaskA_2 = 11
+    system.node_names.goToPosA = 10
+    system.node_names.alarm_3 = 9
+    system.node_names.c4 = 8
+    system.node_names.atPosA = 7
+    system.node_names.c3 = 6
+    system.node_names.alarm_2 = 5
+    system.node_names.c2 = 4
+    system.node_names.taskFinishedA = 3
+    system.node_names.alarm = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.alarm.internal_status = failure
+    system.alarm.status = failure
+    system.taskFinishedA.internal_status = failure
+    system.taskFinishedA.status = invalid
+    system.taskFinishedA.active = FALSE
+    system.alarm.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.alarm_2.internal_status = failure
+    system.alarm_2.status = failure
+    system.atPosA.internal_status = failure
+    system.atPosA.status = invalid
+    system.alarm_3.internal_status = failure
+    system.alarm_3.status = invalid
+    system.goToPosA.internal_status = success
+    system.goToPosA.status = invalid
+    system.doTaskA_2.internal_status = success
+    system.doTaskA_2.status = invalid
+    system.doTaskA_2.active = FALSE
+    system.goToPosA.active = FALSE
+    system.alarm_3.active = FALSE
+    system.c4.internal_status = failure
+    system.c4.status = invalid
+    system.c4.active = FALSE
+    system.atPosA.active = FALSE
+    system.c3.internal_status = failure
+    system.c3.status = invalid
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = invalid
+    system.doTaskA.active = FALSE
+    system.c3.active = FALSE
+    system.alarm_2.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.c2.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 1.2 <-
+-- specification  G (system.atPosA.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))  is true
+-- specification  G (system.atPosA.status = failure ->  X (system.alarm_3.status = success | system.alarm_3.status = failure))  is true
+-- specification  G (system.doTaskA.status = success ->  X (system.alarm.status = success | system.alarm.status = failure))  is true
+-- specification  G (system.alarm_3.status = success ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))  is true
+-- specification  G (system.alarm_3.status = failure ->  X (system.alarm.status = success | system.alarm.status = failure))  is true
+-- specification  G (system.goToPosA.status = success ->  X ((system.doTaskA_2.status = success | system.doTaskA_2.status = failure) | system.doTaskA_2.status = running))  is true
+-- specification  G (system.doTaskA_2.status = success ->  X (system.alarm.status = success | system.alarm.status = failure))  is true

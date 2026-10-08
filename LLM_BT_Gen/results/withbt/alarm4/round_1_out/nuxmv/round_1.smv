@@ -1,0 +1,167 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC G(((system.alarm.status = success) -> X(((system.taskFinishedA.status = success) | (system.taskFinishedA.status = failure)))));
+LTLSPEC G(((system.taskFinishedA.status = failure) -> X(((system.atPosA.status = success) | (system.atPosA.status = failure)))));
+LTLSPEC G(((system.atPosA.status = failure) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.alarm.status = failure) -> X(((system.taskFinishedB.status = success) | (system.taskFinishedB.status = failure)))));
+LTLSPEC G(((system.taskFinishedB.status = failure) -> X(((system.atPosB.status = success) | (system.atPosB.status = failure)))));
+LTLSPEC G(((system.atPosB.status = failure) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.doTaskB.status = success) | (system.doTaskB.status = failure) | (system.doTaskB.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        alarm : alarm_module(alarm_v_stage_0);
+        taskFinishedA : taskFinishedA_module(taskFinishedA_v_stage_0);
+        atPosA : atPosA_module(atPosA_v_stage_0);
+        goToPosA : success_DEFAULT_module();
+        doTaskA : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_2(goToPosA, doTaskA);
+        c3 : composite_selector_without_memory_2(atPosA, c4);
+        c2 : composite_selector_without_memory_2(taskFinishedA, c3);
+        c1 : composite_sequence_without_memory_2(alarm, c2);
+        taskFinishedB : taskFinishedB_module(taskFinishedB_v_stage_0);
+        atPosB : atPosB_module(atPosB_v_stage_0);
+        goToPosB : success_DEFAULT_module();
+        doTaskB : success_DEFAULT_module();
+        c7 : composite_sequence_without_memory_2(goToPosB, doTaskB);
+        c6 : composite_selector_without_memory_2(atPosB, c7);
+        c5 : composite_sequence_without_memory_2(taskFinishedB, c6);
+        c0 : composite_selector_without_memory_2(c1, c5);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        alarm_v_stage_0 : boolean;
+        taskFinishedA_v_stage_0 : boolean;
+        atPosA_v_stage_0 : boolean;
+        taskFinishedB_v_stage_0 : boolean;
+        atPosB_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(alarm_v_stage_0) := {TRUE, FALSE};
+        init(taskFinishedA_v_stage_0) := {TRUE, FALSE};
+        init(atPosA_v_stage_0) := {TRUE, FALSE};
+        init(taskFinishedB_v_stage_0) := {TRUE, FALSE};
+        init(atPosB_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(alarm_v_stage_0) :=
+            case
+                !(c0.active) : alarm_v_stage_0;
+                TRUE : alarm_v_stage_0;
+            esac;
+        next(taskFinishedA_v_stage_0) :=
+            case
+                !(c0.active) : taskFinishedA_v_stage_0;
+                TRUE : taskFinishedA_v_stage_0;
+            esac;
+        next(atPosA_v_stage_0) :=
+            case
+                !(c0.active) : atPosA_v_stage_0;
+                TRUE : atPosA_v_stage_0;
+            esac;
+        next(taskFinishedB_v_stage_0) :=
+            case
+                !(c0.active) : taskFinishedB_v_stage_0;
+                TRUE : taskFinishedB_v_stage_0;
+            esac;
+        next(atPosB_v_stage_0) :=
+            case
+                !(c0.active) : atPosB_v_stage_0;
+                TRUE : atPosB_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        alarm := 2;
+        c2 := 3;
+        taskFinishedA := 4;
+        c3 := 5;
+        atPosA := 6;
+        c4 := 7;
+        goToPosA := 8;
+        doTaskA := 9;
+        c5 := 10;
+        taskFinishedB := 11;
+        c6 := 12;
+        atPosB := 13;
+        c7 := 14;
+        goToPosB := 15;
+        doTaskB := 16;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE alarm_module(alarm_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (alarm_v_stage_0) ? success : failure;
+MODULE taskFinishedA_module(taskFinishedA_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (taskFinishedA_v_stage_0) ? success : failure;
+MODULE atPosA_module(atPosA_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosA_v_stage_0) ? success : failure;
+MODULE taskFinishedB_module(taskFinishedB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (taskFinishedB_v_stage_0) ? success : failure;
+MODULE atPosB_module(atPosB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosB_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

@@ -1,0 +1,22 @@
+{
+  "base_url": "https://4sapi.com/v1",
+  "proxy": "http://127.0.0.1:6789",
+  "model": "gpt-4o",
+  "api_key2": "sk-k6QsEKTjJAXe9wBBHjWj0f5uckRr7ehDBAh3u8uvoc7spPgb",
+  "base_url2": "https://4sapi.org",
+  "keys": {
+    "gpt": "sk-ZFUcggDdqW5Va3cQZbwgbDnM1iwaZPCAdEajbF1D5MRXQqcG",
+    "claude": "sk-RoXVfA3Fno4VPwxU7h6MgpDjz1NAJ4m8hBbrfXuPkLjBWGMV",
+    "gemini": "sk-AsNI0Wz1diOy2u1d7QD7bGl0KMwTbk8g6qfXHIpYa6Ympp3"
+  },
+  "prices": {
+    "gpt-4o-mini": [0.15, 0.6],
+    "gpt-4o": [2.5, 10.0],
+    "gpt-5.5": [5.0, 30.0],
+    "claude-opus": [5.0, 25.0],
+    "claude-sonnet": [3.0, 15.0],
+    "claude-haiku": [1.0, 5.0],
+    "gemini-2.5-pro": [1.25, 10.0],
+    "gemini-2.5-flash": [0.3, 2.5]
+  }
+}

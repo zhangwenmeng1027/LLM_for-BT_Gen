@@ -1,0 +1,68 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env alarm_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ alarm_v assign{result{alarm_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { alarm arguments {} read_variables {alarm_v} condition{alarm_v} }
+}
+actions {
+    action { move1to2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move1to3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move3to5
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+        composite {
+            c1 sequence
+            children {
+                alarm {}
+                move1to2 {}
+                doTaskA {}
+            }
+        }
+        composite {
+            c2 sequence
+            children {
+                move1to3 {}
+                move3to5 {}
+                doTaskB {}
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, alarm), (failure, alarm)))}
+    LTLSPEC {(globally, (implies, (success, alarm), (next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))))}
+    LTLSPEC {(globally, (implies, (failure, alarm), (next, (or, (success, move1to3), (failure, move1to3), (running, move1to3)))))}
+    LTLSPEC {(globally, (implies, (success, move1to2), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, move1to3), (next, (or, (success, move3to5), (failure, move3to5), (running, move3to5)))))}
+    LTLSPEC {(globally, (implies, (success, move3to5), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskB), (next, (or, (success, alarm), (failure, alarm)))))}
+}

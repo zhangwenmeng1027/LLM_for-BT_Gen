@@ -1,0 +1,38 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.goToPosA.status = success | system.goToPosA.status = failure)  is true
+-- specification  G (system.goToPosA.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is true
+-- specification  G (system.pickUp.status = success ->  X ((system.checkBattery.status = success | system.checkBattery.status = failure) | system.checkBattery.status = running))  is true
+-- specification  G (system.checkBattery.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))  is true
+-- specification  G (system.doTaskA.status = success ->  X (system.goToPosA.status = success | system.goToPosA.status = failure))  is true
+-- specification  G (system.pickUp_2.status = success ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))  is true
+-- specification  G (system.goToPosB.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))  is true
+-- specification  G (system.putDown.status = success ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is true
+-- specification  G (system.goToPosC.status = success ->  X ((system.doTaskC.status = success | system.doTaskC.status = failure) | system.doTaskC.status = running))  is true
+-- specification  G (system.doTaskC.status = success ->  X (system.goToPosA.status = success | system.goToPosA.status = failure))  is true
+-- specification  G (system.goToStation.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))  is true
+-- specification  G (system.eatfood.status = success ->  X (system.goToPosA.status = success | system.goToPosA.status = failure))  is true
+-- specification  G (system.followHuman.status = success ->  X (system.goToPosA.status = success | system.goToPosA.status = failure))  is true
+-- specification  G (system.charging.status = success ->  X (system.isHungry.status = success | system.isHungry.status = failure))  is true
+-- specification  G (system.isHungry.status = success ->  X ((system.eatfood.status = success | system.eatfood.status = failure) | system.eatfood.status = running))  is true
+-- specification  G (system.isHungry.status = failure ->  X ((system.followHuman.status = success | system.followHuman.status = failure) | system.followHuman.status = running))  is true
+-- specification  G (system.atPosA.status = success ->  X (system.empty.status = success | system.empty.status = failure))  is true
+-- specification  G (system.empty.status = success ->  X ((system.pickUp_2.status = success | system.pickUp_2.status = failure) | system.pickUp_2.status = running))  is true
+-- specification  G (system.atPosA.status = failure ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.empty.status = failure ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.lowBattery.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))  is true
+-- specification  G (system.lowBattery.status = failure ->  X ((system.followHuman.status = success | system.followHuman.status = failure) | system.followHuman.status = running))  is true

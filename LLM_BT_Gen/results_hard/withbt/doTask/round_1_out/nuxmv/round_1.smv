@@ -1,0 +1,90 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.doTaskA.status = success) | (system.doTaskA.status = failure)));
+LTLSPEC G(((system.doTaskA.status = success) -> X(((system.doTaskB.status = success) | (system.doTaskB.status = failure) | (system.doTaskB.status = running)))));
+LTLSPEC G(((system.doTaskB.status = success) -> X(((system.doTaskC.status = success) | (system.doTaskC.status = failure) | (system.doTaskC.status = running)))));
+LTLSPEC G(((system.doTaskC.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure)))));
+LTLSPEC G(((system.doTaskE.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure)))));
+LTLSPEC G(((system.doTaskD.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        doTaskA : success_DEFAULT_module();
+        doTaskB : success_DEFAULT_module();
+        doTaskC : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(doTaskB, doTaskC);
+        doTaskE : _DEFAULT_module();
+        doTaskD : _DEFAULT_module();
+        c3 : composite_selector_without_memory_2(doTaskE, doTaskD);
+        c1 : composite_selector_without_memory_2(c2, c3);
+        c0 : composite_sequence_without_memory_2(doTaskA, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        doTaskA := 1;
+        c1 := 2;
+        c2 := 3;
+        doTaskB := 4;
+        doTaskC := 5;
+        c3 := 6;
+        doTaskE := 7;
+        doTaskD := 8;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

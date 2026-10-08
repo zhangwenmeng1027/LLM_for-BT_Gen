@@ -1,0 +1,337 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.askHelp.status = success | system.askHelp.status = failure)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.roomKnown_v_stage_0 = FALSE
+    system.robotInRoom_v_stage_0 = FALSE
+    system.bottleFound_v_stage_0 = FALSE
+    system.bottleGripped_v_stage_0 = FALSE
+    system.invValid_v_stage_0 = FALSE
+    system.bottleLocated_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.askHelp = 21
+    system.node_names.graspBottle = 20
+    system.node_names.bottleLocated = 19
+    system.node_names.computInv = 18
+    system.node_names.invValid = 17
+    system.node_names.c8 = 16
+    system.node_names.c7 = 15
+    system.node_names.doTaskA = 14
+    system.node_names.bottleGripped = 13
+    system.node_names.c6 = 12
+    system.node_names.locateBottle = 11
+    system.node_names.bottleFound = 10
+    system.node_names.c5 = 9
+    system.node_names.goToRoom = 8
+    system.node_names.robotInRoom = 7
+    system.node_names.c4 = 6
+    system.node_names.roomKnown = 5
+    system.node_names.c3 = 4
+    system.node_names.followHuman = 3
+    system.node_names.c2 = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.followHuman.internal_status = success
+    system.followHuman.status = success
+    system.roomKnown.internal_status = failure
+    system.roomKnown.status = invalid
+    system.robotInRoom.internal_status = failure
+    system.robotInRoom.status = invalid
+    system.goToRoom.internal_status = invalid
+    system.goToRoom.status = invalid
+    system.goToRoom.active = FALSE
+    system.robotInRoom.active = FALSE
+    system.c4.internal_status = invalid
+    system.c4.status = invalid
+    system.c4.active = FALSE
+    system.roomKnown.active = FALSE
+    system.c3.internal_status = failure
+    system.c3.status = invalid
+    system.c3.active = FALSE
+    system.followHuman.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.bottleFound.internal_status = failure
+    system.bottleFound.status = failure
+    system.locateBottle.internal_status = success
+    system.locateBottle.status = success
+    system.locateBottle.active = TRUE
+    system.bottleFound.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.bottleGripped.internal_status = failure
+    system.bottleGripped.status = failure
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = success
+    system.invValid.internal_status = failure
+    system.invValid.status = invalid
+    system.computInv.internal_status = invalid
+    system.computInv.status = invalid
+    system.computInv.active = FALSE
+    system.invValid.active = FALSE
+    system.c8.internal_status = invalid
+    system.c8.status = invalid
+    system.bottleLocated.internal_status = failure
+    system.bottleLocated.status = invalid
+    system.graspBottle.internal_status = invalid
+    system.graspBottle.status = invalid
+    system.graspBottle.active = FALSE
+    system.bottleLocated.active = FALSE
+    system.c8.active = FALSE
+    system.c7.internal_status = invalid
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.doTaskA.active = TRUE
+    system.bottleGripped.active = TRUE
+    system.c6.internal_status = success
+    system.c6.status = success
+    system.c6.active = TRUE
+    system.c5.active = TRUE
+    system.c2.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.askHelp.internal_status = invalid
+    system.askHelp.status = invalid
+    system.askHelp.active = FALSE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.askHelp.status = success ->  X (system.askHelp.status = success | system.askHelp.status = failure))  is true
+-- specification  G (system.graspBottle.status = success ->  X (system.askHelp.status = success | system.askHelp.status = failure))  is true
+-- specification  G (system.roomKnown.status = failure ->  X (system.askHelp.status = success | system.askHelp.status = failure))  is true
+-- specification  G (system.roomKnown.status = success ->  X (system.robotInRoom.status = success | system.robotInRoom.status = failure))  is true
+-- specification  G (system.robotInRoom.status = failure ->  X ((system.goToRoom.status = success | system.goToRoom.status = failure) | system.goToRoom.status = running))  is true
+-- specification  G (system.followHuman.status = success ->  X (system.bottleFound.status = success | system.bottleFound.status = failure))  is true
+-- specification  G (system.robotInRoom.status = success ->  X (system.bottleFound.status = success | system.bottleFound.status = failure))  is true
+-- specification  G (system.goToRoom.status = success ->  X (system.bottleFound.status = success | system.bottleFound.status = failure))  is true
+-- specification  G (system.bottleFound.status = failure ->  X ((system.locateBottle.status = success | system.locateBottle.status = failure) | system.locateBottle.status = running))  is true
+-- specification  G (system.bottleFound.status = success ->  X ((system.bottleGripped.status = success | system.bottleGripped.status = failure) | system.bottleGripped.status = running))  is true
+-- specification  G (system.locateBottle.status = success ->  X ((system.bottleGripped.status = success | system.bottleGripped.status = failure) | system.bottleGripped.status = running))  is true
+-- specification  G (system.bottleGripped.status = success ->  X (system.askHelp.status = success | system.askHelp.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 2.1 <-
+    system.roomKnown_v_stage_0 = FALSE
+    system.robotInRoom_v_stage_0 = FALSE
+    system.bottleFound_v_stage_0 = FALSE
+    system.bottleGripped_v_stage_0 = TRUE
+    system.invValid_v_stage_0 = FALSE
+    system.bottleLocated_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.askHelp = 21
+    system.node_names.graspBottle = 20
+    system.node_names.bottleLocated = 19
+    system.node_names.computInv = 18
+    system.node_names.invValid = 17
+    system.node_names.c8 = 16
+    system.node_names.c7 = 15
+    system.node_names.doTaskA = 14
+    system.node_names.bottleGripped = 13
+    system.node_names.c6 = 12
+    system.node_names.locateBottle = 11
+    system.node_names.bottleFound = 10
+    system.node_names.c5 = 9
+    system.node_names.goToRoom = 8
+    system.node_names.robotInRoom = 7
+    system.node_names.c4 = 6
+    system.node_names.roomKnown = 5
+    system.node_names.c3 = 4
+    system.node_names.followHuman = 3
+    system.node_names.c2 = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.followHuman.internal_status = success
+    system.followHuman.status = success
+    system.roomKnown.internal_status = failure
+    system.roomKnown.status = invalid
+    system.robotInRoom.internal_status = failure
+    system.robotInRoom.status = invalid
+    system.goToRoom.internal_status = invalid
+    system.goToRoom.status = invalid
+    system.goToRoom.active = FALSE
+    system.robotInRoom.active = FALSE
+    system.c4.internal_status = invalid
+    system.c4.status = invalid
+    system.c4.active = FALSE
+    system.roomKnown.active = FALSE
+    system.c3.internal_status = failure
+    system.c3.status = invalid
+    system.c3.active = FALSE
+    system.followHuman.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.bottleFound.internal_status = failure
+    system.bottleFound.status = failure
+    system.locateBottle.internal_status = success
+    system.locateBottle.status = success
+    system.locateBottle.active = TRUE
+    system.bottleFound.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.bottleGripped.internal_status = success
+    system.bottleGripped.status = success
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = invalid
+    system.invValid.internal_status = failure
+    system.invValid.status = invalid
+    system.computInv.internal_status = invalid
+    system.computInv.status = invalid
+    system.computInv.active = FALSE
+    system.invValid.active = FALSE
+    system.c8.internal_status = invalid
+    system.c8.status = invalid
+    system.bottleLocated.internal_status = failure
+    system.bottleLocated.status = invalid
+    system.graspBottle.internal_status = invalid
+    system.graspBottle.status = invalid
+    system.graspBottle.active = FALSE
+    system.bottleLocated.active = FALSE
+    system.c8.active = FALSE
+    system.c7.internal_status = invalid
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.doTaskA.active = FALSE
+    system.bottleGripped.active = TRUE
+    system.c6.internal_status = success
+    system.c6.status = success
+    system.c6.active = TRUE
+    system.c5.active = TRUE
+    system.c2.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.askHelp.internal_status = invalid
+    system.askHelp.status = invalid
+    system.askHelp.active = FALSE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 2.2 <-
+-- specification  G (system.doTaskA.status = success ->  X (system.askHelp.status = success | system.askHelp.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 3.1 <-
+    system.roomKnown_v_stage_0 = FALSE
+    system.robotInRoom_v_stage_0 = FALSE
+    system.bottleFound_v_stage_0 = FALSE
+    system.bottleGripped_v_stage_0 = FALSE
+    system.invValid_v_stage_0 = FALSE
+    system.bottleLocated_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.askHelp = 21
+    system.node_names.graspBottle = 20
+    system.node_names.bottleLocated = 19
+    system.node_names.computInv = 18
+    system.node_names.invValid = 17
+    system.node_names.c8 = 16
+    system.node_names.c7 = 15
+    system.node_names.doTaskA = 14
+    system.node_names.bottleGripped = 13
+    system.node_names.c6 = 12
+    system.node_names.locateBottle = 11
+    system.node_names.bottleFound = 10
+    system.node_names.c5 = 9
+    system.node_names.goToRoom = 8
+    system.node_names.robotInRoom = 7
+    system.node_names.c4 = 6
+    system.node_names.roomKnown = 5
+    system.node_names.c3 = 4
+    system.node_names.followHuman = 3
+    system.node_names.c2 = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.followHuman.internal_status = success
+    system.followHuman.status = success
+    system.roomKnown.internal_status = failure
+    system.roomKnown.status = invalid
+    system.robotInRoom.internal_status = failure
+    system.robotInRoom.status = invalid
+    system.goToRoom.internal_status = invalid
+    system.goToRoom.status = invalid
+    system.goToRoom.active = FALSE
+    system.robotInRoom.active = FALSE
+    system.c4.internal_status = invalid
+    system.c4.status = invalid
+    system.c4.active = FALSE
+    system.roomKnown.active = FALSE
+    system.c3.internal_status = failure
+    system.c3.status = invalid
+    system.c3.active = FALSE
+    system.followHuman.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.bottleFound.internal_status = failure
+    system.bottleFound.status = failure
+    system.locateBottle.internal_status = success
+    system.locateBottle.status = success
+    system.locateBottle.active = TRUE
+    system.bottleFound.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.bottleGripped.internal_status = failure
+    system.bottleGripped.status = failure
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = success
+    system.invValid.internal_status = failure
+    system.invValid.status = invalid
+    system.computInv.internal_status = invalid
+    system.computInv.status = invalid
+    system.computInv.active = FALSE
+    system.invValid.active = FALSE
+    system.c8.internal_status = invalid
+    system.c8.status = invalid
+    system.bottleLocated.internal_status = failure
+    system.bottleLocated.status = invalid
+    system.graspBottle.internal_status = invalid
+    system.graspBottle.status = invalid
+    system.graspBottle.active = FALSE
+    system.bottleLocated.active = FALSE
+    system.c8.active = FALSE
+    system.c7.internal_status = invalid
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.doTaskA.active = TRUE
+    system.bottleGripped.active = TRUE
+    system.c6.internal_status = success
+    system.c6.status = success
+    system.c6.active = TRUE
+    system.c5.active = TRUE
+    system.c2.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.askHelp.internal_status = invalid
+    system.askHelp.status = invalid
+    system.askHelp.active = FALSE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 3.2 <-
+-- specification  G (system.invValid.status = failure ->  X ((system.computInv.status = success | system.computInv.status = failure) | system.computInv.status = running))  is true
+-- specification  G (system.invValid.status = success ->  X ((system.bottleLocated.status = success | system.bottleLocated.status = failure) | system.bottleLocated.status = running))  is true
+-- specification  G (system.computInv.status = success ->  X ((system.bottleLocated.status = success | system.bottleLocated.status = failure) | system.bottleLocated.status = running))  is true
+-- specification  G (system.bottleLocated.status = success ->  X ((system.graspBottle.status = success | system.graspBottle.status = failure) | system.graspBottle.status = running))  is true

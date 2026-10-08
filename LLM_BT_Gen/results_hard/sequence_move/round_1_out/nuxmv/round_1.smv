@@ -1,0 +1,66 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.goToStationA.status = success) | (system.goToStationA.status = failure)));
+LTLSPEC G(((system.goToStationA.status = success) -> X(((system.goToStationB.status = success) | (system.goToStationB.status = failure) | (system.goToStationB.status = running)))));
+LTLSPEC G(((system.goToStationB.status = success) -> X(((system.goToStationC.status = success) | (system.goToStationC.status = failure) | (system.goToStationC.status = running)))));
+LTLSPEC G(((system.goToStationC.status = success) -> X(((system.moveToParking.status = success) | (system.moveToParking.status = failure) | (system.moveToParking.status = running)))));
+LTLSPEC G(((system.moveToParking.status = success) -> X(((system.goToStationA.status = success) | (system.goToStationA.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        goToStationA : success_DEFAULT_module();
+        goToStationB : success_DEFAULT_module();
+        goToStationC : success_DEFAULT_module();
+        moveToParking : success_DEFAULT_module();
+        c0 : composite_sequence_without_memory_4(goToStationA, goToStationB, goToStationC, moveToParking);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        goToStationA := 1;
+        goToStationB := 2;
+        goToStationC := 3;
+        moveToParking := 4;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

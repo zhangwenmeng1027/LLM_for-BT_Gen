@@ -1,0 +1,54 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env goToKitchen_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env locateBottle_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ goToKitchen_v assign{result{goToKitchen_v}} }
+    variable_statement{ locateBottle_v assign{result{locateBottle_v}} }
+}
+checks {}
+environment_checks {
+}
+actions {
+    action { goToKitchen
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { locateBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { fetchBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { askHelp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    goToKitchen {}
+                    locateBottle {}
+                    fetchBottle {}
+                }
+            }
+            askHelp {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))}
+    LTLSPEC {(globally, (implies, (success, goToKitchen), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))}
+    LTLSPEC {(globally, (implies, (success, locateBottle), (next, (or, (success, fetchBottle), (failure, fetchBottle), (running, fetchBottle)))))}
+    LTLSPEC {(globally, (implies, (failure, goToKitchen), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))}
+}

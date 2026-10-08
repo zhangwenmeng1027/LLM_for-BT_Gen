@@ -1,0 +1,85 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.roomKnown.status = success | system.roomKnown.status = failure)  is true
+-- specification  G (system.roomKnown.status = success ->  X ((system.goToRoom.status = success | system.goToRoom.status = failure) | system.goToRoom.status = running))  is true
+-- specification  G (system.roomKnown.status = failure ->  X ((system.followHuman.status = success | system.followHuman.status = failure) | system.followHuman.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.roomKnown_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.askHelp = 12
+    system.node_names.followHuman = 11
+    system.node_names.pourDrink = 10
+    system.node_names.fetchGlass = 9
+    system.node_names.findGlass = 8
+    system.node_names.fetchBottle = 7
+    system.node_names.findBottle = 6
+    system.node_names.c3 = 5
+    system.node_names.goToRoom = 4
+    system.node_names.roomKnown = 3
+    system.node_names.c2 = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.roomKnown.internal_status = failure
+    system.roomKnown.status = failure
+    system.goToRoom.internal_status = success
+    system.goToRoom.status = invalid
+    system.goToRoom.active = FALSE
+    system.roomKnown.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.findBottle.internal_status = success
+    system.findBottle.status = invalid
+    system.fetchBottle.internal_status = success
+    system.fetchBottle.status = invalid
+    system.findGlass.internal_status = success
+    system.findGlass.status = invalid
+    system.fetchGlass.internal_status = success
+    system.fetchGlass.status = invalid
+    system.pourDrink.internal_status = success
+    system.pourDrink.status = invalid
+    system.pourDrink.active = FALSE
+    system.fetchGlass.active = FALSE
+    system.findGlass.active = FALSE
+    system.fetchBottle.active = FALSE
+    system.findBottle.active = FALSE
+    system.c3.internal_status = success
+    system.c3.status = invalid
+    system.followHuman.internal_status = success
+    system.followHuman.status = invalid
+    system.followHuman.active = FALSE
+    system.c3.active = FALSE
+    system.c2.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.askHelp.internal_status = success
+    system.askHelp.status = success
+    system.askHelp.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.goToRoom.status = success ->  X ((system.findBottle.status = success | system.findBottle.status = failure) | system.findBottle.status = running))  is true
+-- specification  G (system.findBottle.status = success ->  X ((system.fetchBottle.status = success | system.fetchBottle.status = failure) | system.fetchBottle.status = running))  is true
+-- specification  G (system.fetchBottle.status = success ->  X ((system.findGlass.status = success | system.findGlass.status = failure) | system.findGlass.status = running))  is true
+-- specification  G (system.findGlass.status = success ->  X ((system.fetchGlass.status = success | system.fetchGlass.status = failure) | system.fetchGlass.status = running))  is true
+-- specification  G (system.fetchGlass.status = success ->  X ((system.pourDrink.status = success | system.pourDrink.status = failure) | system.pourDrink.status = running))  is true
+-- specification  G (system.fetchGlass.status = failure ->  X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running))  is true

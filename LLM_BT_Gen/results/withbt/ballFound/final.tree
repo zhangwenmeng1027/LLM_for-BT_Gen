@@ -1,0 +1,103 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env ballFound_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env ballClose_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env ballGrasped_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env boxFound_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env boxNear_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ ballFound_v assign{result{ballFound_v}} }
+    variable_statement{ ballClose_v assign{result{ballClose_v}} }
+    variable_statement{ ballGrasped_v assign{result{ballGrasped_v}} }
+    variable_statement{ boxFound_v assign{result{boxFound_v}} }
+    variable_statement{ boxNear_v assign{result{boxNear_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { ballFound arguments {} read_variables {ballFound_v} condition{ballFound_v} }
+    environment_check { ballClose arguments {} read_variables {ballClose_v} condition{ballClose_v} }
+    environment_check { ballGrasped arguments {} read_variables {ballGrasped_v} condition{ballGrasped_v} }
+    environment_check { boxFound arguments {} read_variables {boxFound_v} condition{boxFound_v} }
+    environment_check { boxNear arguments {} read_variables {boxNear_v} condition{boxNear_v} }
+}
+actions {
+    action { searchForBall
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeToBall
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { graspBall
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchForBox
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeToBox
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { ballPlaced
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            composite {
+                c1 selector
+                children {
+                    ballFound {}
+                    searchForBall {}
+                }
+            }
+            composite {
+                c2 selector
+                children {
+                    ballClose {}
+                    closeToBall {}
+                }
+            }
+            composite {
+                c3 selector
+                children {
+                    ballGrasped {}
+                    graspBall {}
+                }
+            }
+            composite {
+                c4 selector
+                children {
+                    boxFound {}
+                    searchForBox {}
+                }
+            }
+            composite {
+                c5 selector
+                children {
+                    boxNear {}
+                    closeToBox {}
+                }
+            }
+            ballPlaced {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, ballFound), (failure, ballFound)))}
+    LTLSPEC {(globally, (implies, (failure, ballFound), (next, (or, (success, searchForBall), (failure, searchForBall), (running, searchForBall)))))}
+    LTLSPEC {(globally, (implies, (failure, ballClose), (next, (or, (success, closeToBall), (failure, closeToBall), (running, closeToBall)))))}
+    LTLSPEC {(globally, (implies, (failure, ballGrasped), (next, (or, (success, graspBall), (failure, graspBall), (running, graspBall)))))}
+    LTLSPEC {(globally, (implies, (failure, boxFound), (next, (or, (success, searchForBox), (failure, searchForBox), (running, searchForBox)))))}
+    LTLSPEC {(globally, (implies, (failure, boxNear), (next, (or, (success, closeToBox), (failure, closeToBox), (running, closeToBox)))))}
+    LTLSPEC {(globally, (implies, (success, closeToBox), (next, (or, (success, ballPlaced), (failure, ballPlaced)))))}
+}

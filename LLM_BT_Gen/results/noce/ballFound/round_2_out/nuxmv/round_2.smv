@@ -1,0 +1,174 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.ballFound.status = success) | (system.ballFound.status = failure)));
+LTLSPEC G(((system.ballFound.status = failure) -> X(((system.searchForBall.status = success) | (system.searchForBall.status = failure) | (system.searchForBall.status = running)))));
+LTLSPEC G(((system.ballClose.status = failure) -> X(((system.closeToBall.status = success) | (system.closeToBall.status = failure) | (system.closeToBall.status = running)))));
+LTLSPEC G(((system.ballGrasped.status = failure) -> X(((system.graspBall.status = success) | (system.graspBall.status = failure) | (system.graspBall.status = running)))));
+LTLSPEC G(((system.boxFound.status = failure) -> X(((system.searchForBox.status = success) | (system.searchForBox.status = failure) | (system.searchForBox.status = running)))));
+LTLSPEC G(((system.boxNear.status = failure) -> X(((system.closeToBox.status = success) | (system.closeToBox.status = failure) | (system.closeToBox.status = running)))));
+LTLSPEC G(((system.closeToBox.status = success) -> X(((system.ballPlaced.status = success) | (system.ballPlaced.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        ballFound : ballFound_module(ballFound_v_stage_0);
+        searchForBall : success_DEFAULT_module();
+        c1 : composite_selector_without_memory_2(ballFound, searchForBall);
+        ballClose : ballClose_module(ballClose_v_stage_0);
+        closeToBall : success_DEFAULT_module();
+        c2 : composite_selector_without_memory_2(ballClose, closeToBall);
+        ballGrasped : ballGrasped_module(ballGrasped_v_stage_0);
+        graspBall : success_DEFAULT_module();
+        c3 : composite_selector_without_memory_2(ballGrasped, graspBall);
+        boxFound : boxFound_module(boxFound_v_stage_0);
+        searchForBox : success_DEFAULT_module();
+        c4 : composite_selector_without_memory_2(boxFound, searchForBox);
+        boxNear : boxNear_module(boxNear_v_stage_0);
+        closeToBox : success_DEFAULT_module();
+        c5 : composite_selector_without_memory_2(boxNear, closeToBox);
+        ballPlaced : success_DEFAULT_module();
+        c0 : composite_sequence_without_memory_6(c1, c2, c3, c4, c5, ballPlaced);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        ballFound_v_stage_0 : boolean;
+        ballClose_v_stage_0 : boolean;
+        ballGrasped_v_stage_0 : boolean;
+        boxFound_v_stage_0 : boolean;
+        boxNear_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(ballFound_v_stage_0) := {TRUE, FALSE};
+        init(ballClose_v_stage_0) := {TRUE, FALSE};
+        init(ballGrasped_v_stage_0) := {TRUE, FALSE};
+        init(boxFound_v_stage_0) := {TRUE, FALSE};
+        init(boxNear_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(ballFound_v_stage_0) :=
+            case
+                !(c0.active) : ballFound_v_stage_0;
+                TRUE : ballFound_v_stage_0;
+            esac;
+        next(ballClose_v_stage_0) :=
+            case
+                !(c0.active) : ballClose_v_stage_0;
+                TRUE : ballClose_v_stage_0;
+            esac;
+        next(ballGrasped_v_stage_0) :=
+            case
+                !(c0.active) : ballGrasped_v_stage_0;
+                TRUE : ballGrasped_v_stage_0;
+            esac;
+        next(boxFound_v_stage_0) :=
+            case
+                !(c0.active) : boxFound_v_stage_0;
+                TRUE : boxFound_v_stage_0;
+            esac;
+        next(boxNear_v_stage_0) :=
+            case
+                !(c0.active) : boxNear_v_stage_0;
+                TRUE : boxNear_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        ballFound := 2;
+        searchForBall := 3;
+        c2 := 4;
+        ballClose := 5;
+        closeToBall := 6;
+        c3 := 7;
+        ballGrasped := 8;
+        graspBall := 9;
+        c4 := 10;
+        boxFound := 11;
+        searchForBox := 12;
+        c5 := 13;
+        boxNear := 14;
+        closeToBox := 15;
+        ballPlaced := 16;
+MODULE composite_sequence_without_memory_6(child_0, child_1, child_2, child_3, child_4, child_5)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                !(child_5.internal_status = success) : child_5.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+        child_5.active := child_4.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE ballFound_module(ballFound_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (ballFound_v_stage_0) ? success : failure;
+MODULE ballClose_module(ballClose_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (ballClose_v_stage_0) ? success : failure;
+MODULE ballGrasped_module(ballGrasped_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (ballGrasped_v_stage_0) ? success : failure;
+MODULE boxFound_module(boxFound_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (boxFound_v_stage_0) ? success : failure;
+MODULE boxNear_module(boxNear_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (boxNear_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

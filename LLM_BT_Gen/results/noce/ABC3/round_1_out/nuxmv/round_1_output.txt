@@ -1,0 +1,23 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  G (system.atPosA.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))  is true
+-- specification  G (system.atPosB.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))  is true
+-- specification  G (system.goToPosA.status = failure ->  X (system.atPosB.status = success | system.atPosB.status = failure))  is true
+-- specification  G (system.atPosC.status = failure ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is true
+-- specification  G (system.goToPosB.status = failure ->  X (system.atPosC.status = success | system.atPosC.status = failure))  is true
+-- specification  G (system.atPos3.status = failure ->  X ((system.goToPos3.status = success | system.goToPos3.status = failure) | system.goToPos3.status = running))  is true
+-- specification  G (system.goToPosC.status = failure ->  X (system.atPos3.status = success | system.atPos3.status = failure))  is true

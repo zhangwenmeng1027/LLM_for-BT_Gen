@@ -1,0 +1,41 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.lowBattery.status = success | system.lowBattery.status = failure)  is true
+-- specification  G (system.lowBattery.status = success ->  X (system.atPosA.status = success | system.atPosA.status = failure))  is true
+-- specification  G (system.atPosA.status = success ->  X (system.empty.status = success | system.empty.status = failure))  is true
+-- specification  G (system.empty.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is true
+-- specification  G (system.pickUp.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))  is true
+-- specification  G (system.doTaskA.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))  is true
+-- specification  G (system.putDown.status = success ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.lowBattery.status = failure ->  X (system.lowBattery_2.status = success | system.lowBattery_2.status = failure))  is true
+-- specification  G (system.atPosA.status = failure ->  X (system.lowBattery_2.status = success | system.lowBattery_2.status = failure))  is true
+-- specification  G (system.empty.status = failure ->  X (system.lowBattery_2.status = success | system.lowBattery_2.status = failure))  is true
+-- specification  G (system.lowBattery_2.status = success ->  X (system.atPosB.status = success | system.atPosB.status = failure))  is true
+-- specification  G (system.atPosB.status = success ->  X (system.empty_2.status = success | system.empty_2.status = failure))  is true
+-- specification  G (system.empty_2.status = success ->  X ((system.pickUp_2.status = success | system.pickUp_2.status = failure) | system.pickUp_2.status = running))  is true
+-- specification  G (system.pickUp_2.status = success ->  X ((system.doTaskB.status = success | system.doTaskB.status = failure) | system.doTaskB.status = running))  is true
+-- specification  G (system.doTaskB.status = success ->  X ((system.putDown_2.status = success | system.putDown_2.status = failure) | system.putDown_2.status = running))  is true
+-- specification  G (system.putDown_2.status = success ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.lowBattery_2.status = failure ->  X (system.atPosC.status = success | system.atPosC.status = failure))  is true
+-- specification  G (system.atPosB.status = failure ->  X (system.atPosC.status = success | system.atPosC.status = failure))  is true
+-- specification  G (system.empty_2.status = failure ->  X (system.atPosC.status = success | system.atPosC.status = failure))  is true
+-- specification  G (system.atPosC.status = failure ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.atPosC.status = success ->  X (system.empty_3.status = success | system.empty_3.status = failure))  is true
+-- specification  G (system.empty_3.status = success ->  X ((system.approachTarget.status = success | system.approachTarget.status = failure) | system.approachTarget.status = running))  is true
+-- specification  G (system.empty_3.status = failure ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.approachTarget.status = success ->  X ((system.doTaskC.status = success | system.doTaskC.status = failure) | system.doTaskC.status = running))  is true
+-- specification  G (system.doTaskC.status = success ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true

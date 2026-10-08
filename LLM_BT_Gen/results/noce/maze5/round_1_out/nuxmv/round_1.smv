@@ -1,0 +1,99 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.alarm.status = success) | (system.alarm.status = failure)));
+LTLSPEC G(((system.alarm.status = success) -> X(((system.move1to2.status = success) | (system.move1to2.status = failure) | (system.move1to2.status = running)))));
+LTLSPEC G(((system.move1to2.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.alarm.status = failure) -> X(((system.move1to3.status = success) | (system.move1to3.status = failure) | (system.move1to3.status = running)))));
+LTLSPEC G(((system.move1to3.status = success) -> X(((system.move3to5.status = success) | (system.move3to5.status = failure) | (system.move3to5.status = running)))));
+LTLSPEC G(((system.move3to5.status = success) -> X(((system.doTaskB.status = success) | (system.doTaskB.status = failure) | (system.doTaskB.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        alarm : alarm_module(alarm_v_stage_0);
+        move1to2 : success_DEFAULT_module();
+        doTaskA : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_3(alarm, move1to2, doTaskA);
+        move1to3 : success_DEFAULT_module();
+        move3to5 : success_DEFAULT_module();
+        doTaskB : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_3(move1to3, move3to5, doTaskB);
+        c0 : composite_selector_without_memory_2(c1, c2);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        alarm_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(alarm_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(alarm_v_stage_0) :=
+            case
+                !(c0.active) : alarm_v_stage_0;
+                TRUE : alarm_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        alarm := 2;
+        move1to2 := 3;
+        doTaskA := 4;
+        c2 := 5;
+        move1to3 := 6;
+        move3to5 := 7;
+        doTaskB := 8;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE alarm_module(alarm_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (alarm_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

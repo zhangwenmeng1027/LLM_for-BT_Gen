@@ -1,0 +1,353 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)));
+LTLSPEC G(((system.lowBattery.status = success) -> X(((system.atCharge.status = success) | (system.atCharge.status = failure)))));
+LTLSPEC G(((system.lowBattery.status = failure) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.atCharge.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.atCharge.status = failure) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.charging.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.alarm.status = success) -> X(((system.hasFire.status = success) | (system.hasFire.status = failure)))));
+LTLSPEC G(((system.alarm.status = failure) -> X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)))));
+LTLSPEC G(((system.hasFire.status = success) -> X(((system.closeDoor.status = success) | (system.closeDoor.status = failure) | (system.closeDoor.status = running)))));
+LTLSPEC G(((system.hasFire.status = failure) -> X(((system.useExtinguisher.status = success) | (system.useExtinguisher.status = failure) | (system.useExtinguisher.status = running)))));
+LTLSPEC G(((system.useExtinguisher.status = success) -> X(((system.closeDoor.status = success) | (system.closeDoor.status = failure) | (system.closeDoor.status = running)))));
+LTLSPEC G(((system.closeDoor.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.hasVictim.status = success) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+LTLSPEC G(((system.hasVictim.status = failure) -> X(((system.empty.status = success) | (system.empty.status = failure)))));
+LTLSPEC G(((system.checkReachable.status = success) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.checkReachable.status = failure) -> X(((system.askHelp.status = success) | (system.askHelp.status = failure) | (system.askHelp.status = running)))));
+LTLSPEC G(((system.askHelp.status = success) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X(((system.saveVictim.status = success) | (system.saveVictim.status = failure) | (system.saveVictim.status = running)))));
+LTLSPEC G(((system.saveVictim.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.empty.status = success) -> X(((system.TargetFound.status = success) | (system.TargetFound.status = failure)))));
+LTLSPEC G(((system.empty.status = failure) -> X(((system.isDay.status = success) | (system.isDay.status = failure)))));
+LTLSPEC G(((system.TargetFound.status = success) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.TargetFound.status = failure) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.pickUp.status = success) | (system.pickUp.status = failure) | (system.pickUp.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.placeB.status = success) | (system.placeB.status = failure) | (system.placeB.status = running)))));
+LTLSPEC G(((system.placeB.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.isDay.status = success) -> X(((system.goToPos3.status = success) | (system.goToPos3.status = failure) | (system.goToPos3.status = running)))));
+LTLSPEC G(((system.isDay.status = failure) -> X(((system.isNight.status = success) | (system.isNight.status = failure)))));
+LTLSPEC G(((system.goToPos3.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.doTaskA.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.isNight.status = success) -> X(((system.goToKitchen.status = success) | (system.goToKitchen.status = failure) | (system.goToKitchen.status = running)))));
+LTLSPEC G(((system.isNight.status = failure) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.goToKitchen.status = success) -> X(((system.closeDoor_2.status = success) | (system.closeDoor_2.status = failure) | (system.closeDoor_2.status = running)))));
+LTLSPEC G(((system.closeDoor_2.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        lowBattery : lowBattery_module(lowBattery_v_stage_0);
+        atCharge : atCharge_module(atCharge_v_stage_0);
+        goToStation : success_DEFAULT_module();
+        c2 : composite_selector_without_memory_2(atCharge, goToStation);
+        charging : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_3(lowBattery, c2, charging);
+        alarm : alarm_module(alarm_v_stage_0);
+        hasFire : hasFire_module(hasFire_v_stage_0);
+        useExtinguisher : success_DEFAULT_module();
+        c4 : composite_selector_without_memory_2(hasFire, useExtinguisher);
+        closeDoor : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_3(alarm, c4, closeDoor);
+        hasVictim : hasVictim_module(hasVictim_v_stage_0);
+        checkReachable : checkReachable_module(checkReachable_v_stage_0);
+        askHelp : success_DEFAULT_module();
+        c6 : composite_selector_without_memory_2(checkReachable, askHelp);
+        goToPosC : success_DEFAULT_module();
+        saveVictim : success_DEFAULT_module();
+        c5 : composite_sequence_without_memory_4(hasVictim, c6, goToPosC, saveVictim);
+        empty : empty_module(empty_v_stage_0);
+        TargetFound : TargetFound_module(TargetFound_v_stage_0);
+        goToPosA : success_DEFAULT_module();
+        pickUp : success_DEFAULT_module();
+        c9 : composite_sequence_without_memory_2(goToPosA, pickUp);
+        c8 : composite_selector_without_memory_2(TargetFound, c9);
+        goToPosB : success_DEFAULT_module();
+        placeB : success_DEFAULT_module();
+        c7 : composite_sequence_without_memory_4(empty, c8, goToPosB, placeB);
+        isDay : isDay_module(isDay_v_stage_0);
+        goToPos3 : success_DEFAULT_module();
+        doTaskA : success_DEFAULT_module();
+        c10 : composite_sequence_without_memory_3(isDay, goToPos3, doTaskA);
+        isNight : isNight_module(isNight_v_stage_0);
+        goToKitchen : success_DEFAULT_module();
+        closeDoor_2 : success_DEFAULT_module();
+        c11 : composite_sequence_without_memory_3(isNight, goToKitchen, closeDoor_2);
+        c0 : composite_selector_without_memory_6(c1, c3, c5, c7, c10, c11);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        lowBattery_v_stage_0 : boolean;
+        atCharge_v_stage_0 : boolean;
+        alarm_v_stage_0 : boolean;
+        hasFire_v_stage_0 : boolean;
+        hasVictim_v_stage_0 : boolean;
+        checkReachable_v_stage_0 : boolean;
+        empty_v_stage_0 : boolean;
+        TargetFound_v_stage_0 : boolean;
+        isDay_v_stage_0 : boolean;
+        isNight_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(lowBattery_v_stage_0) := {TRUE, FALSE};
+        init(atCharge_v_stage_0) := {TRUE, FALSE};
+        init(alarm_v_stage_0) := {TRUE, FALSE};
+        init(hasFire_v_stage_0) := {TRUE, FALSE};
+        init(hasVictim_v_stage_0) := {TRUE, FALSE};
+        init(checkReachable_v_stage_0) := {TRUE, FALSE};
+        init(empty_v_stage_0) := {TRUE, FALSE};
+        init(TargetFound_v_stage_0) := {TRUE, FALSE};
+        init(isDay_v_stage_0) := {TRUE, FALSE};
+        init(isNight_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(lowBattery_v_stage_0) :=
+            case
+                !(c0.active) : lowBattery_v_stage_0;
+                TRUE : lowBattery_v_stage_0;
+            esac;
+        next(atCharge_v_stage_0) :=
+            case
+                !(c0.active) : atCharge_v_stage_0;
+                TRUE : atCharge_v_stage_0;
+            esac;
+        next(alarm_v_stage_0) :=
+            case
+                !(c0.active) : alarm_v_stage_0;
+                TRUE : alarm_v_stage_0;
+            esac;
+        next(hasFire_v_stage_0) :=
+            case
+                !(c0.active) : hasFire_v_stage_0;
+                TRUE : hasFire_v_stage_0;
+            esac;
+        next(hasVictim_v_stage_0) :=
+            case
+                !(c0.active) : hasVictim_v_stage_0;
+                TRUE : hasVictim_v_stage_0;
+            esac;
+        next(checkReachable_v_stage_0) :=
+            case
+                !(c0.active) : checkReachable_v_stage_0;
+                TRUE : checkReachable_v_stage_0;
+            esac;
+        next(empty_v_stage_0) :=
+            case
+                !(c0.active) : empty_v_stage_0;
+                TRUE : empty_v_stage_0;
+            esac;
+        next(TargetFound_v_stage_0) :=
+            case
+                !(c0.active) : TargetFound_v_stage_0;
+                TRUE : TargetFound_v_stage_0;
+            esac;
+        next(isDay_v_stage_0) :=
+            case
+                !(c0.active) : isDay_v_stage_0;
+                TRUE : isDay_v_stage_0;
+            esac;
+        next(isNight_v_stage_0) :=
+            case
+                !(c0.active) : isNight_v_stage_0;
+                TRUE : isNight_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        lowBattery := 2;
+        c2 := 3;
+        atCharge := 4;
+        goToStation := 5;
+        charging := 6;
+        c3 := 7;
+        alarm := 8;
+        c4 := 9;
+        hasFire := 10;
+        useExtinguisher := 11;
+        closeDoor := 12;
+        c5 := 13;
+        hasVictim := 14;
+        c6 := 15;
+        checkReachable := 16;
+        askHelp := 17;
+        goToPosC := 18;
+        saveVictim := 19;
+        c7 := 20;
+        empty := 21;
+        c8 := 22;
+        TargetFound := 23;
+        c9 := 24;
+        goToPosA := 25;
+        pickUp := 26;
+        goToPosB := 27;
+        placeB := 28;
+        c10 := 29;
+        isDay := 30;
+        goToPos3 := 31;
+        doTaskA := 32;
+        c11 := 33;
+        isNight := 34;
+        goToKitchen := 35;
+        closeDoor_2 := 36;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_selector_without_memory_6(child_0, child_1, child_2, child_3, child_4, child_5)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                !(child_4.internal_status = failure) : child_4.internal_status;
+                !(child_5.internal_status = failure) : child_5.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+        child_4.active := child_3.status = failure;
+        child_5.active := child_4.status = failure;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE lowBattery_module(lowBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (lowBattery_v_stage_0) ? success : failure;
+MODULE atCharge_module(atCharge_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atCharge_v_stage_0) ? success : failure;
+MODULE alarm_module(alarm_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (alarm_v_stage_0) ? success : failure;
+MODULE hasFire_module(hasFire_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasFire_v_stage_0) ? success : failure;
+MODULE hasVictim_module(hasVictim_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasVictim_v_stage_0) ? success : failure;
+MODULE checkReachable_module(checkReachable_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (checkReachable_v_stage_0) ? success : failure;
+MODULE empty_module(empty_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (empty_v_stage_0) ? success : failure;
+MODULE TargetFound_module(TargetFound_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (TargetFound_v_stage_0) ? success : failure;
+MODULE isDay_module(isDay_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isDay_v_stage_0) ? success : failure;
+MODULE isNight_module(isNight_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isNight_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

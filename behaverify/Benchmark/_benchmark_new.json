@@ -1,0 +1,1141 @@
+[
+ {
+  "task": "ABC_bottle",
+  "orig_task": "ABC_bottle",
+  "description": "Choose to execute the following three branch tasks:\n\nTask 1: Check if it is located at position A or check if it is located at position B, then check if the hand is empty, and finally pick up the object in front of you.\n\nTask 2: Check if it is located at position C, and then execute task A.\n\nTask 3: Check if it is located in the kitchen and then locate the bottle.",
+  "specs": [
+   "(next, (or, (success, atPosA), (failure, atPosA)))",
+   "(globally, (implies, (failure, atPosA), (next, (or, (success, atPosB), (failure, atPosB)))))",
+   "(globally, (implies, (success, atPosB), (next, (or, (success, empty), (failure, empty)))))",
+   "(globally, (implies, (success, empty), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, atPosC), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))",
+   "(globally, (implies, (success, atKitchen), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))"
+  ],
+  "bt_pretty": "selector(sequence(selector(atPosA, atPosB), empty, pickUp), sequence(atPosC, doTaskA), sequence(atKitchen, locateBottle))",
+  "tree_file": "trees/ABC_bottle.tree",
+  "status": "ok"
+ },
+ {
+  "task": "ABC3",
+  "orig_task": "ABC3",
+  "description": "Selectively execute the following four branch tasks:\n\nTask 1: Check if you are at location A or have navigated to location A.\n\nTask 2: Check if you are at location B or have navigated to location B.\n\nTask 3: Check if you are at location C or have navigated to location C.\n\nTask 4: Check if it is at position 3 or navigate to position 3.",
+  "specs": [
+   "(globally, (implies, (failure, atPosA), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (failure, atPosB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (failure, atPosC), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))",
+   "(globally, (implies, (failure, atPos3), (next, (or, (success, goToPos3), (failure, goToPos3), (running, goToPos3)))))",
+   "(globally, (implies, (failure, goToPosA), (next, (or, (success, atPosB), (failure, atPosB)))))",
+   "(globally, (implies, (failure, goToPosB), (next, (or, (success, atPosC), (failure, atPosC)))))",
+   "(globally, (implies, (failure, goToPosC), (next, (or, (success, atPos3), (failure, atPos3)))))"
+  ],
+  "bt_pretty": "selector(selector(atPosA, goToPosA), selector(atPosB, goToPosB), selector(atPosC, goToPosC), selector(atPos3, goToPos3))",
+  "tree_file": "trees/ABC3.tree",
+  "status": "ok"
+ },
+ {
+  "task": "ABCholdKnife",
+  "orig_task": "ABCholdKnife",
+  "description": "Execute the following three tasks in sequence:\n\nTask 1: Execute Task A or Task B.\n\nTask 2: Move to the kitchen\n\nTask 3: Check if you are currently holding a knife, and then execute Task C.",
+  "specs": [
+   "(globally, (implies, (failure, doTaskA), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))",
+   "(globally, (implies, (success, doTaskA), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))",
+   "(globally, (implies, (success, goToKitchen), (next, (or, (success, holdKnife), (failure, holdKnife)))))",
+   "(globally, (implies, (success, holdKnife), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))"
+  ],
+  "bt_pretty": "sequence(selector(doTaskA, doTaskB), goToKitchen, sequence(holdKnife, doTaskC))",
+  "tree_file": "trees/ABCholdKnife.tree",
+  "status": "ok"
+ },
+ {
+  "task": "acceptDoOtherTask",
+  "orig_task": "acceptDoOtherTask",
+  "description": "The robot chooses to perform the following two branch tasks:\n\nTask 1: If the current robot is in a low battery state, turn off the gripper, navigate to the charging station location, and start charging.Task 2: Sequential execution of sub tasks: Subtask 1: The robot move to position A and execute task A, move to position B and execute task B, and move to position C and execute task C. Subtask 2: Check if there is any input information or wait for input. Subtask 3: Check if the inv is valid or calculate the inv value. Finally, the robot searches for the target object and then activates the manipulator. ",
+  "specs": [
+   "(globally, (implies, (success, lowBattery), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))",
+   "(globally, (implies, (success, closeGripper), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))",
+   "(globally, (implies, (failure, lowBattery), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))",
+   "(globally, (implies, (success, doTaskA), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))",
+   "(globally, (implies, (success, doTaskB), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))",
+   "(globally, (implies, (success, goToPosC), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))",
+   "(globally, (implies, (success, doTaskC), (next, (or, (success, hasInput), (failure, hasInput)))))",
+   "(globally, (implies, (failure, invValid), (next, (or, (success, computInv), (failure, computInv), (running, computInv)))))",
+   "(globally, (implies, (failure, hasInput), (next, (or, (success, waitInput), (failure, waitInput), (running, waitInput)))))",
+   "(globally, (implies, (success, hasInput), (next, (or, (success, invValid), (failure, invValid)))))",
+   "(globally, (implies, (success, invValid), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))",
+   "(globally, (implies, (success, computInv), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))",
+   "(globally, (implies, (success, searchTarget), (next, (or, (success, activeManipulator), (failure, activeManipulator), (running, activeManipulator)))))"
+  ],
+  "bt_pretty": "selector(sequence(lowBattery, closeGripper, goToStation, charging), sequence(sequence(goToPosA, doTaskA, goToPosB, doTaskB, goToPosC, doTaskC), selector(hasInput, waitInput), selector(invValid, computInv), sequence(searchTarget, activeManipulator)))",
+  "tree_file": "trees/acceptDoOtherTask.tree",
+  "status": "ok"
+ },
+ {
+  "task": "acceptMoveFinger",
+  "orig_task": "acceptMoveFinger",
+  "description": "Execute the following tasks in sequence: Accept the destination location point, and then move the operating finger towards the target location.",
+  "specs": [
+   "(next, (or, (success, acceptInput), (failure, acceptInput), (running, acceptInput)))",
+   "(globally, (implies, (success, acceptInput), (next, (or, (success, moveFingerToTargetPosition), (failure, moveFingerToTargetPosition), (running, moveFingerToTargetPosition)))))"
+  ],
+  "bt_pretty": "sequence(acceptInput, moveFingerToTargetPosition)",
+  "tree_file": "trees/acceptMoveFinger.tree",
+  "status": "ok"
+ },
+ {
+  "task": "alarm1",
+  "orig_task": "alarm1",
+  "description": "Choose one of two tasks to execute\nTask 1: The alarm is sounding, check if Task A has been completed.\nTask 2 contains two options: either the alarm is in the sounding state and check if it is in position A, then execute Task A. Either the alarm sounds and navigates to position A, then executes task A.\n\n",
+  "specs": [
+   "(globally, (implies, (or, (success, alarm), (success, alarm_2), (success, alarm_3)), (next, (or, (success, taskFinishedA), (failure, taskFinishedA), (success, atPosA), (failure, atPosA), (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, atPosA), (next, (or, (or, (success, doTaskA), (success, doTaskA_2)), (or, (failure, doTaskA), (failure, doTaskA_2)), (or, (running, doTaskA), (running, doTaskA_2))))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (or, (success, doTaskA), (success, doTaskA_2)), (or, (failure, doTaskA), (failure, doTaskA_2)), (or, (running, doTaskA), (running, doTaskA_2))))))"
+  ],
+  "bt_pretty": "selector(sequence(alarm, taskFinishedA), selector(sequence(alarm_2, atPosA, doTaskA), sequence(alarm_3, goToPosA, doTaskA_2)))",
+  "tree_file": "trees/alarm1.tree",
+  "status": "ok"
+ },
+ {
+  "task": "alarm2",
+  "orig_task": "alarm2",
+  "description": "Execute the following tasks in sequence:\nTask 1: First navigate to location A, then pick up the item.\nTask 2: Choose to execute the following branch tasks:\nSubtask 1: When the alarm sounds, navigate to location B and place the item at location B.\nSubtask 2: Navigate to location C and place the item at location C.",
+  "specs": [
+   "(next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, alarm), (failure, alarm)))))",
+   "(globally, (implies, (success, alarm), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, placeB), (failure, placeB), (running, placeB)))))",
+   "(globally, (implies, (failure, alarm), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))",
+   "(globally, (implies, (success, goToPosC), (next, (or, (success, placeC), (failure, placeC), (running, placeC)))))"
+  ],
+  "bt_pretty": "sequence(sequence(goToPosA, pickUp), selector(sequence(alarm, goToPosB, placeB), sequence(goToPosC, placeC)))",
+  "tree_file": "trees/alarm2.tree",
+  "status": "ok"
+ },
+ {
+  "task": "alarm3",
+  "orig_task": "alarm3",
+  "description": "When the alarm sounds, first navigate to location A and pick up the item on the ground. Otherwise, first navigate to location B and put down the item in your hand.",
+  "specs": [
+   "(globally, (implies, (success, alarm), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (failure, alarm), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))"
+  ],
+  "bt_pretty": "selector(sequence(alarm, goToPosA, pickUp), sequence(goToPosB, putDown))",
+  "tree_file": "trees/alarm3.tree",
+  "status": "ok"
+ },
+ {
+  "task": "alarm4",
+  "orig_task": "alarm4",
+  "description": "There are two tasks to choose from:\nTask 1: Check if the alarm sounds, select to execute the following two subtasks: Subtask 1.1: Check if Task A has been completed. Subtask 1.2: Check if it is located at position A, if not, navigate to position A, and then, execute task A.\nTask 2: Choose to execute the following two subtasks: Subtask 2.1: Check if Task B has been completed. Subtask 2.2: Check if it is located at position B ,if not, navigate to position B, and then, execute task B.",
+  "specs": [
+   "(globally, (implies, (success, alarm), (next, (or, (success, taskFinishedA), (failure, taskFinishedA)))))",
+   "(globally, (implies, (failure, taskFinishedA), (next, (or, (success, atPosA), (failure, atPosA)))))",
+   "(globally, (implies, (failure, atPosA), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))",
+   "(globally, (implies, (failure, alarm), (next, (or, (success, taskFinishedB), (failure, taskFinishedB)))))",
+   "(globally, (implies, (failure, taskFinishedB), (next, (or, (success, atPosB), (failure, atPosB)))))",
+   "(globally, (implies, (failure, atPosB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))"
+  ],
+  "bt_pretty": "selector(sequence(alarm, selector(taskFinishedA, sequence(selector(atPosA, goToPosA), doTaskA))), selector(taskFinishedB, sequence(selector(atPosB, goToPosB), doTaskB)))",
+  "tree_file": "trees/alarm4.tree",
+  "status": "ok"
+ },
+ {
+  "task": "alarm5",
+  "orig_task": "alarm5",
+  "description": "Select the tasks that can be executed based on the alert status:\nWhen the alarm rings, then perform the following three optional tasks: either check if task A has been completed, or check if it is located at position A and execute task A, or navigate to position A and execute task A.\nWhen the alarm does not sound, then perform the following three optional tasks: either check if Task B has been completed. Or check if it is located at position B and execute task B. Or navigate to location B and execute task B.",
+  "specs": [
+   "(globally, (implies, (success, alarm), (next, (or, (success, taskFinishedA), (failure, taskFinishedA)))))",
+   "(globally, (implies, (failure, taskFinishedA), (next, (or, (success, atPosA), (failure, atPosA)))))",
+   "(globally, (implies, (success, atPosA), (next, (or, (or, (success, doTaskA), (success, doTaskA_2)), (or, (failure, doTaskA), (failure, doTaskA_2)), (or, (running, doTaskA), (running, doTaskA_2))))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (or, (success, doTaskA), (success, doTaskA_2)), (or, (failure, doTaskA), (failure, doTaskA_2)), (or, (running, doTaskA), (running, doTaskA_2))))))",
+   "(globally, (implies, (failure, alarm), (next, (or, (success, taskFinishedB), (failure, taskFinishedB)))))",
+   "(globally, (implies, (failure, taskFinishedB), (next, (or, (success, atPosB), (failure, atPosB)))))",
+   "(globally, (implies, (success, atPosB), (next, (or, (or, (success, doTaskB), (success, doTaskB_2)), (or, (failure, doTaskB), (failure, doTaskB_2)), (or, (running, doTaskB), (running, doTaskB_2))))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (or, (success, doTaskB), (success, doTaskB_2)), (or, (failure, doTaskB), (failure, doTaskB_2)), (or, (running, doTaskB), (running, doTaskB_2))))))"
+  ],
+  "bt_pretty": "selector(sequence(alarm, selector(taskFinishedA, sequence(atPosA, doTaskA), sequence(goToPosA, doTaskA_2))), selector(taskFinishedB, sequence(atPosB, doTaskB), sequence(goToPosB, doTaskB_2)))",
+  "tree_file": "trees/alarm5.tree",
+  "status": "ok"
+ },
+ {
+  "task": "attack",
+  "orig_task": "attack",
+  "description": "Robots can choose to perform the following two branch tasks:\n\nTask 1: Firstly, acquire the target, and then move to the target location, then check if the target is nearby, and finally attack the target.\n\nTask 2: Follow humans to move.",
+  "specs": [
+   "(next, (or, (success, getTarget), (failure, getTarget), (running, getTarget)))",
+   "(globally, (implies, (success, getTarget), (next, (or, (success, approachTarget), (failure, approachTarget), (running, approachTarget)))))",
+   "(globally, (implies, (success, approachTarget), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))",
+   "(globally, (implies, (success, TargetAdjacent), (next, (or, (success, attackTarget), (failure, attackTarget), (running, attackTarget)))))",
+   "(globally, (implies, (failure, getTarget), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))"
+  ],
+  "bt_pretty": "selector(sequence(getTarget, approachTarget, TargetAdjacent, attackTarget), followHuman)",
+  "tree_file": "trees/attack.tree",
+  "status": "ok"
+ },
+ {
+  "task": "attack_taskA",
+  "orig_task": "attack_taskA",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Check if it is located at position A, and then complete task A.\n\nTask 2: Obtain the target and then move to the destination.\n\nTask 3: Check if the target is nearby and then attack the target.\n\nTask 4: Finally check if Task A has been completed.",
+  "specs": [
+   "(next, (or, (success, atPosA), (failure, atPosA)))",
+   "(globally, (implies, (success, atPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))",
+   "(globally, (implies, (success, doTaskA), (next, (or, (success, getTarget), (failure, getTarget), (running, getTarget)))))",
+   "(globally, (implies, (success, getTarget), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))",
+   "(globally, (implies, (success, moveToDestination), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))",
+   "(globally, (implies, (success, TargetAdjacent), (next, (or, (success, attackTarget), (failure, attackTarget), (running, attackTarget)))))",
+   "(globally, (implies, (success, attackTarget), (next, (or, (success, taskFinishedA), (failure, taskFinishedA)))))"
+  ],
+  "bt_pretty": "sequence(sequence(atPosA, doTaskA), sequence(getTarget, moveToDestination), sequence(TargetAdjacent, attackTarget), taskFinishedA)",
+  "tree_file": "trees/attack_taskA.tree",
+  "status": "ok"
+ },
+ {
+  "task": "attackTarget",
+  "orig_task": "attackTarget",
+  "description": "The robot chooses to perform the following two branch tasks:\n\nTask 1: Perform the following actions in sequence: First, obtain the target, and then move to position A. Check if the target is nearby, then attack the target.\n\nTask 2: Choose to execute the following two branch tasks: Subtask 1: Check for hunger and then search for food. Afterwards, move to position B, search for utensils, and finally eat food. Subtask 2: Follow humans to move.",
+  "specs": [
+   "(next, (or, (success, getTarget), (failure, getTarget), (running, getTarget)))",
+   "(globally, (implies, (success, getTarget), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))",
+   "(globally, (implies, (success, TargetAdjacent), (next, (or, (success, attackTarget), (failure, attackTarget), (running, attackTarget)))))",
+   "(globally, (implies, (success, isHungry), (next, (or, (success, findFood), (failure, findFood), (running, findFood)))))",
+   "(globally, (implies, (success, findFood), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, findTableware), (failure, findTableware), (running, findTableware)))))",
+   "(globally, (implies, (success, findTableware), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))",
+   "(globally, (implies, (failure, isHungry), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))"
+  ],
+  "bt_pretty": "selector(sequence(getTarget, goToPosA, selector(TargetAdjacent, attackTarget)), selector(sequence(isHungry, findFood, goToPosB, findTableware, eatfood), followHuman))",
+  "tree_file": "trees/attackTarget.tree",
+  "status": "ok"
+ },
+ {
+  "task": "autonomus",
+  "orig_task": "autonomus",
+  "description": "Choose to execute the following branch tasks:Task 1: Check if the room number is known, then check if the robot is already in the room or has moved to the room.Task 2: Check if the bottle has been found or find the bottle .Task 3: Check if the bottle has been picked up.Task 4: Execute the following tasks in sequence: Task 4.1: Check if the inv value is valid or compute the inv value. Task 4.2: Check if the robot is at the inv position or has moved to the invPose position. Task 4.3: Check if the bottle has been found or find for the bottle.Task 5: Follow the person or seek help.",
+  "specs": [
+   "(next, (or, (success, roomKnown), (failure, roomKnown)))",
+   "(globally, (implies, (success, roomKnown), (next, (or, (success, robotInRoom), (failure, robotInRoom)))))",
+   "(globally, (implies, (failure, robotInRoom), (next, (or, (success, goToRoom), (failure, goToRoom), (running, goToRoom)))))",
+   "(globally, (implies, (or, (failure, bottleFound), (failure, bottleFound_2)), (next, (or, (or, (success, findBottle), (success, findBottle_2)), (or, (failure, findBottle), (failure, findBottle_2)), (or, (running, findBottle), (running, findBottle_2))))))",
+   "(globally, (implies, (failure, ballGrasped), (next, (or, (success, invValid), (failure, invValid)))))",
+   "(globally, (implies, (success, invValid), (next, (or, (success, computInv), (failure, computInv), (running, computInv)))))",
+   "(globally, (implies, (success, computInv), (next, (or, (success, RobotAtInvPose), (failure, RobotAtInvPose)))))",
+   "(globally, (implies, (failure, RobotAtInvPose), (next, (or, (success, goToInvPose), (failure, goToInvPose), (running, goToInvPose)))))",
+   "(globally, (implies, (success, goToInvPose), (next, (or, (or, (success, bottleFound), (success, bottleFound_2)), (or, (failure, bottleFound), (failure, bottleFound_2))))))",
+   "(globally, (implies, (failure, followHuman), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))"
+  ],
+  "bt_pretty": "selector(sequence(roomKnown, selector(robotInRoom, goToRoom)), selector(bottleFound, findBottle), selector(ballGrasped, sequence(invValid, sequence(computInv, selector(RobotAtInvPose, sequence(goToInvPose, selector(bottleFound_2, findBottle_2)))))), selector(followHuman, askHelp))",
+  "tree_file": "trees/autonomus.tree",
+  "status": "ok"
+ },
+ {
+  "task": "ballFound",
+  "orig_task": "ballFound",
+  "description": "Execute the following tasks in sequence: The ball has been found or search for the ball. The ball is nearby or close to the ball. Check if the ball has been grabbed or grasp the ball. Check if the box has been found or search for the box. Then check if the box is nearby or close to the box. Finally, put down the ball.",
+  "specs": [
+   "(next, (or, (success, ballFound), (failure, ballFound)))",
+   "(globally, (implies, (failure, ballFound), (next, (or, (success, searchForBall), (failure, searchForBall), (running, searchForBall)))))",
+   "(globally, (implies, (failure, ballClose), (next, (or, (success, closeToBall), (failure, closeToBall), (running, closeToBall)))))",
+   "(globally, (implies, (failure, ballGrasped), (next, (or, (success, graspBall), (failure, graspBall), (running, graspBall)))))",
+   "(globally, (implies, (failure, boxFound), (next, (or, (success, searchForBox), (failure, searchForBox), (running, searchForBox)))))",
+   "(globally, (implies, (failure, boxNear), (next, (or, (success, closeToBox), (failure, closeToBox), (running, closeToBox)))))",
+   "(globally, (implies, (success, closeToBox), (next, (or, (success, ballPlaced), (failure, ballPlaced)))))"
+  ],
+  "bt_pretty": "sequence(selector(ballFound, searchForBall), selector(ballClose, closeToBall), selector(ballGrasped, graspBall), selector(boxFound, sequence(searchForBox, selector(boxNear, sequence(closeToBox, selector(ballPlaced, putDownBall))))))",
+  "tree_file": "trees/ballFound.tree",
+  "status": "ok"
+ },
+ {
+  "task": "charge",
+  "orig_task": "charge",
+  "description": "Firstly, check if the battery level of the robot is in a low state. Then perform one of the following tasks: either the robot is already in the charging station position, or the robot navigates to the charging station position. Finally, charge it.",
+  "specs": [
+   "(next, (or, (success, lowBattery), (failure, lowBattery)))",
+   "(globally, (implies, (success, lowBattery), (next, (or, (success, atCharge), (failure, atCharge)))))",
+   "(globally, (implies, (failure, atCharge), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))"
+  ],
+  "bt_pretty": "sequence(lowBattery, selector(atCharge, goToStation), charging)",
+  "tree_file": "trees/charge.tree",
+  "status": "ok"
+ },
+ {
+  "task": "chargeFull",
+  "orig_task": "chargeFull",
+  "description": "\nChoose to execute the following branch task: Task 1: Check if the robot's battery is fully charged, then check if it is charging, and then stop charging. Task 2: Check if the battery level is not sufficient, then  connect it to the charging station, and then go charge it. Task 3: seek help from humans, move to the charging station location, and then wait for charging.",
+  "specs": [
+   "(next, (or, (success, fullBattery), (failure, fullBattery)))",
+   "(globally, (implies, (success, fullBattery), (next, (or, (success, isCharge), (failure, isCharge)))))",
+   "(globally, (implies, (success, isCharge), (next, (or, (success, stopCharge), (failure, stopCharge), (running, stopCharge)))))",
+   "(globally, (implies, (failure, fullBattery), (next, (or, (success, lowBattery), (failure, lowBattery)))))",
+   "(globally, (implies, (success, lowBattery), (next, (or, (success, connectToStation), (failure, connectToStation), (running, connectToStation)))))",
+   "(globally, (implies, (success, connectToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))",
+   "(globally, (implies, (success, askHelp), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, goToStation), (next, (or, (success, waitCharge), (failure, waitCharge), (running, waitCharge)))))"
+  ],
+  "bt_pretty": "selector(sequence(fullBattery, isCharge, stopCharge), sequence(lowBattery, connectToStation, charging), sequence(askHelp, goToStation, waitCharge))",
+  "tree_file": "trees/chargeFull.tree",
+  "status": "ok"
+ },
+ {
+  "task": "checkBattery_ABC",
+  "orig_task": "checkBattery_ABC",
+  "description": "Robots have the following four branch tasks:\n\nTask 1: Navigate to position A and pick up the items in front of you. Then check if the battery level is sufficient, and execute task A.\n\nTask 2: Check if the current position is A, and then check if the current hand is empty. Then pick up the object in front of you. Then navigate to position B and put down the object in your hand. Finally, navigate to location C and execute task C.\n\nTask 3: Check if the battery is low, navigate to the charging station location, and start charging. Then check if the robot is hungry and eat food.\n\nTask 4: Follow human movement.",
+  "specs": [
+   "(next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))",
+   "(globally, (implies, (success, checkBattery), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))",
+   "(globally, (implies, (success, atPosA), (next, (or, (success, empty), (failure, empty)))))",
+   "(globally, (implies, (success, empty), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))",
+   "(globally, (implies, (success, goToPosC), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))",
+   "(globally, (implies, (success, lowBattery), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))",
+   "(globally, (implies, (success, isHungry), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))"
+  ],
+  "bt_pretty": "selector(sequence(goToPosA, pickUp, checkBattery, doTaskA), sequence(sequence(atPosA, empty), pickUp_2, goToPosB, putDown, goToPosC, doTaskC), sequence(sequence(lowBattery, goToStation, charging), sequence(isHungry, eatfood)), followHuman)",
+  "tree_file": "trees/checkBattery_ABC.tree",
+  "status": "ok"
+ },
+ {
+  "task": "checkTarget",
+  "orig_task": "checkTarget",
+  "description": "Perform the following tasks in sequence: navigate to the destination, check for the presence of the target object, and pick up the target object.",
+  "specs": [
+   "(next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))",
+   "(globally, (implies, (success, moveToDestination), (next, (or, (success, TargetFound), (failure, TargetFound)))))",
+   "(globally, (implies, (success, TargetFound), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))"
+  ],
+  "bt_pretty": "sequence(moveToDestination, TargetFound, pickUp)",
+  "tree_file": "trees/checkTarget.tree",
+  "status": "ok"
+ },
+ {
+  "task": "doTask",
+  "orig_task": "doTask",
+  "description": "Execute Task A, and then choose to execute the following two tasks: Task 1:  Execute Task B, and execute Task C. Task 2: Execute task E or task D.",
+  "specs": [
+   "(next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))",
+   "(globally, (implies, (success, doTaskA), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))",
+   "(globally, (implies, (success, doTaskB), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))",
+   "(globally, (implies, (failure, doTaskB), (next, (or, (success, doTaskE), (failure, doTaskE), (running, doTaskE)))))",
+   "(globally, (implies, (failure, doTaskE), (next, (or, (success, doTaskD), (failure, doTaskD), (running, doTaskD)))))"
+  ],
+  "bt_pretty": "sequence(doTaskA, selector(sequence(doTaskB, doTaskC), selector(doTaskE, doTaskD)))",
+  "tree_file": "trees/doTask.tree",
+  "status": "ok"
+ },
+ {
+  "task": "evaluate",
+  "orig_task": "evaluate",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Check if the ability has been evaluated. Or conduct performance testing and evaluate its capabilities.\n\nTask 2: Pick up the item and move it to the destination, put down the item, and finally move it to the parking lot.",
+  "specs": [
+   "(next, (or, (success, abilityEvaluated), (failure, abilityEvaluated)))",
+   "(globally, (implies, (failure, abilityEvaluated), (next, (or, (success, testPerformance), (failure, testPerformance), (running, testPerformance)))))",
+   "(globally, (implies, (success, testPerformance), (next, (or, (success, evaluationPerformance), (failure, evaluationPerformance), (running, evaluationPerformance)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))",
+   "(globally, (implies, (success, moveToDestination), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))",
+   "(globally, (implies, (success, putDown), (next, (or, (success, moveToParking), (failure, moveToParking), (running, moveToParking)))))"
+  ],
+  "bt_pretty": "sequence(selector(abilityEvaluated, sequence(testPerformance, evaluationPerformance)), sequence(pickUp, moveToDestination, putDown, moveToParking))",
+  "tree_file": "trees/evaluate.tree",
+  "status": "ok"
+ },
+ {
+  "task": "explore",
+  "orig_task": "explore",
+  "description": "Execute the following tasks in sequence: First, check if the detection is complete, generate a new detection location, and move to the detection location.",
+  "specs": [
+   "(next, (or, (success, detectionCompleted), (failure, detectionCompleted)))",
+   "(globally, (implies, (success, detectionCompleted), (next, (or, (success, generateDetection), (failure, generateDetection), (running, generateDetection)))))",
+   "(globally, (implies, (success, generateDetection), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))"
+  ],
+  "bt_pretty": "sequence(detectionCompleted, generateDetection, moveToDestination)",
+  "tree_file": "trees/explore.tree",
+  "status": "ok"
+ },
+ {
+  "task": "fetch_bottle",
+  "orig_task": "fetch_bottle",
+  "description": "Robots have two selectable events:\n1、 The robot navigates to the kitchen, then locate the bottle, navigates to the position of the bottle, and retrieves the bottle.\n2、 Request help.",
+  "specs": [
+   "(next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))",
+   "(globally, (implies, (success, goToKitchen), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))",
+   "(globally, (implies, (success, locateBottle), (next, (or, (success, goToBottle), (failure, goToBottle), (running, goToBottle)))))",
+   "(globally, (implies, (success, goToBottle), (next, (or, (success, fetchBottle), (failure, fetchBottle), (running, fetchBottle)))))",
+   "(globally, (implies, (failure, goToKitchen), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))"
+  ],
+  "bt_pretty": "selector(sequence(goToKitchen, locateBottle, goToBottle, fetchBottle), askHelp)",
+  "tree_file": "trees/fetch_bottle.tree",
+  "status": "ok"
+ },
+ {
+  "task": "fetchBottle",
+  "orig_task": "fetchBottle",
+  "description": "Choose to execute the following branch tasks:\n\nTask 1: Move to the kitchen, find the location of the bottle, and retrieve it.\n\nTask 2: Seeking Help",
+  "specs": [
+   "(next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))",
+   "(globally, (implies, (success, goToKitchen), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))",
+   "(globally, (implies, (success, locateBottle), (next, (or, (success, fetchBottle), (failure, fetchBottle), (running, fetchBottle)))))",
+   "(globally, (implies, (failure, goToKitchen), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))"
+  ],
+  "bt_pretty": "selector(sequence(goToKitchen, locateBottle, fetchBottle), askHelp)",
+  "tree_file": "trees/fetchBottle.tree",
+  "status": "ok"
+ },
+ {
+  "task": "findfood",
+  "orig_task": "findfood",
+  "description": "Perform the following actions in sequence: Task1: First, search for food, then move to the target destination and then pick up the food. Task 2: search for tableware and then move the tableware. Task 3: check if you have reached a state of fullness or continue eating.",
+  "specs": [
+   "(next, (or, (success, findFood), (failure, findFood), (running, findFood)))",
+   "(globally, (implies, (success, findFood), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))",
+   "(globally, (implies, (success, moveToDestination), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, findTableware), (failure, findTableware), (running, findTableware)))))",
+   "(globally, (implies, (success, findTableware), (next, (or, (success, moveToTableware), (failure, moveToTableware), (running, moveToTableware)))))",
+   "(globally, (implies, (success, moveToTableware), (next, (or, (success, isFull), (failure, isFull)))))",
+   "(globally, (implies, (failure, isFull), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))"
+  ],
+  "bt_pretty": "sequence(sequence(findFood, moveToDestination, pickUp), sequence(findTableware, moveToTableware), selector(isFull, eatfood))",
+  "tree_file": "trees/findfood.tree",
+  "status": "ok"
+ },
+ {
+  "task": "firefighting",
+  "orig_task": "firefighting",
+  "description": "Three selectable execution tasks:\nTask 1: Check if there are any victims present and rescue them.\nTask 2:  If there is still a fire source in the room, use a fire extinguisher to extinguish the fire. \nTask 3: Transfer to another room and then continue rescue.\n﻿",
+  "specs": [
+   "(next, (or, (success, hasVictim), (failure, hasVictim)))",
+   "(globally, (implies, (success, hasVictim), (next, (or, (success, saveVictim), (failure, saveVictim), (running, saveVictim)))))",
+   "(globally, (implies, (success, hasFire), (next, (or, (success, useExtinguisher), (failure, useExtinguisher), (running, useExtinguisher)))))",
+   "(globally, (implies, (success, moveToOtherRoom), (next, (or, (success, Rescue), (failure, Rescue), (running, Rescue)))))"
+  ],
+  "bt_pretty": "selector(sequence(hasVictim, saveVictim), sequence(hasFire, useExtinguisher), sequence(moveToOtherRoom, Rescue))",
+  "tree_file": "trees/firefighting.tree",
+  "status": "ok"
+ },
+ {
+  "task": "followHuman",
+  "orig_task": "followHuman",
+  "description": "You can choose to seek help from humans or perform the following tasks:\n\nExecute the following two subtasks in the order of tasks:\n\nSubtask 1: Follow human movement. Or check if the room number is known and then check if the robot is in the room or navigating to the room.\n\nSubtask 2: Execute the following two subtasks in sequence: Subtask 1: Check if the bottle has been found or search for the bottle. Subtask 2: Check if the bottle has been grabbed, or perform task A, or perform the following sequence of tasks: either inv has already been calculated and is a valid value, or calculate the value of Inv. Then, check if the bottle is located or positioned, and grab the bottle.",
+  "specs": [
+   "(next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))",
+   "(globally, (implies, (success, roomKnown), (next, (or, (success, robotInRoom), (failure, robotInRoom)))))",
+   "(globally, (implies, (failure, robotInRoom), (next, (or, (success, goToRoom), (failure, goToRoom), (running, goToRoom)))))",
+   "(globally, (implies, (failure, bottleFound), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))",
+   "(globally, (implies, (failure, bottleGripped), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))",
+   "(globally, (implies, (failure, invValid), (next, (or, (success, computInv), (failure, computInv), (running, computInv)))))",
+   "(globally, (implies, (success, invValid), (next, (or, (success, bottleLocated), (failure, bottleLocated)))))",
+   "(globally, (implies, (success, bottleLocated), (next, (or, (success, graspBottle), (failure, graspBottle), (running, graspBottle)))))"
+  ],
+  "bt_pretty": "selector(askHelp, sequence(selector(followHuman, sequence(roomKnown, selector(robotInRoom, goToRoom))), sequence(selector(bottleFound, locateBottle), selector(bottleGripped, doTaskA, sequence(selector(invValid, computInv), sequence(bottleLocated, graspBottle))))))",
+  "tree_file": "trees/followHuman.tree",
+  "status": "ok"
+ },
+ {
+  "task": "get_food",
+  "orig_task": "get_food",
+  "description": " Check the robot has no food, then there are two events to choose from:\n1、check there is an apple tree nearby, and then pick apples.\n2、check it either has a knife in its hand or will pick it up. And then walk towards the cow, ultimately killing it.",
+  "specs": [
+   "(next, (or, (success, noFood), (failure, noFood)))",
+   "(globally, (implies, (success, noFood), (next, (or, (success, hasApple), (failure, hasApple)))))",
+   "(globally, (implies, (success, hasApple), (next, (or, (success, pickApple), (failure, pickApple), (running, pickApple)))))",
+   "(globally, (implies, (failure, hasApple), (next, (or, (success, holdKnife), (failure, holdKnife)))))",
+   "(globally, (implies, (failure, holdKnife), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, goCow), (failure, goCow), (running, goCow)))))",
+   "(globally, (implies, (success, goCow), (next, (or, (success, killCow), (failure, killCow), (running, killCow)))))"
+  ],
+  "bt_pretty": "sequence(noFood, selector(sequence(hasApple, pickApple), sequence(selector(holdKnife, pickUp), sequence(goCow, killCow))))",
+  "tree_file": "trees/get_food.tree",
+  "status": "ok"
+ },
+ {
+  "task": "go",
+  "orig_task": "go",
+  "description": "Execute the following actions in sequence: move to position 1, move to position 2, move to position 3, move to position 4, move to position 5, move to position 6, and move to position 7.",
+  "specs": [
+   "(next, (or, (success, goToPos1), (failure, goToPos1), (running, goToPos1)))",
+   "(globally, (implies, (success, goToPos1), (next, (or, (success, goToPos2), (failure, goToPos2), (running, goToPos2)))))",
+   "(globally, (implies, (success, goToPos2), (next, (or, (success, goToPos3), (failure, goToPos3), (running, goToPos3)))))",
+   "(globally, (implies, (success, goToPos3), (next, (or, (success, goToPos4), (failure, goToPos4), (running, goToPos4)))))",
+   "(globally, (implies, (success, goToPos4), (next, (or, (success, goToPos5), (failure, goToPos5), (running, goToPos5)))))",
+   "(globally, (implies, (success, goToPos5), (next, (or, (success, goToPos6), (failure, goToPos6), (running, goToPos6)))))",
+   "(globally, (implies, (success, goToPos6), (next, (or, (success, goToPos7), (failure, goToPos7), (running, goToPos7)))))"
+  ],
+  "bt_pretty": "sequence(goToPos1, goToPos2, goToPos3, goToPos4, goToPos5, goToPos6, goToPos7)",
+  "tree_file": "trees/go.tree",
+  "status": "ok"
+ },
+ {
+  "task": "grip_put",
+  "orig_task": "grip_put",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Open the gripper, move to the target position, and close the gripper.\n\nTask 2: Move to position A, and finally put down the object.",
+  "specs": [
+   "(next, (or, (success, openGripper), (failure, openGripper), (running, openGripper)))",
+   "(globally, (implies, (success, openGripper), (next, (or, (success, moveFingerToTargetPosition), (failure, moveFingerToTargetPosition), (running, moveFingerToTargetPosition)))))",
+   "(globally, (implies, (success, moveFingerToTargetPosition), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))",
+   "(globally, (implies, (success, closeGripper), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))"
+  ],
+  "bt_pretty": "sequence(sequence(openGripper, moveFingerToTargetPosition, closeGripper), sequence(goToPosA, putDown))",
+  "tree_file": "trees/grip_put.tree",
+  "status": "ok"
+ },
+ {
+  "task": "gripper",
+  "orig_task": "gripper",
+  "description": "Check if the battery is low, open the gripper, move to the target position, and close the gripper.",
+  "specs": [
+   "(next, (or, (success, lowBattery), (failure, lowBattery)))",
+   "(globally, (implies, (success, lowBattery), (next, (or, (success, openGripper), (failure, openGripper), (running, openGripper)))))",
+   "(globally, (implies, (success, moveFingerToTargetPosition), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))",
+   "(globally, (implies, (success, openGripper), (next, (or, (success, moveFingerToTargetPosition), (failure, moveFingerToTargetPosition), (running, moveFingerToTargetPosition)))))"
+  ],
+  "bt_pretty": "sequence(lowBattery, openGripper, moveFingerToTargetPosition, closeGripper)",
+  "tree_file": "trees/gripper.tree",
+  "status": "ok"
+ },
+ {
+  "task": "hungry",
+  "orig_task": "hungry",
+  "description": "Choose to execute the following two branch tasks:\n\nTask 1: Check for hunger and then search for food. Afterwards, move to position A, search for utensils, and finally eat food.\n\nTask 2: Follow humans to move.",
+  "specs": [
+   "(next, (or, (success, isHungry), (failure, isHungry)))",
+   "(globally, (implies, (success, isHungry), (next, (or, (success, findFood), (failure, findFood), (running, findFood)))))",
+   "(globally, (implies, (success, findFood), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, findTableware), (failure, findTableware), (running, findTableware)))))",
+   "(globally, (implies, (success, findTableware), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))",
+   "(globally, (implies, (failure, isHungry), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))"
+  ],
+  "bt_pretty": "selector(sequence(isHungry, findFood, goToPosA, findTableware, eatfood), followHuman)",
+  "tree_file": "trees/hungry.tree",
+  "status": "ok"
+ },
+ {
+  "task": "hungry_kitchen",
+  "orig_task": "hungry_kitchen",
+  "description": "Choose to execute the following two branch tasks:\n\nTask 1: Execute the following tasks in sequence: Subtask 1: Firstly, check if you are hungry, then navigate to the kitchen or follow human movement. Subtask 2: Search for the bottle and then grab the bottle.\n\nTask 2: Seek help.",
+  "specs": [
+   "(next, (or, (success, isHungry), (failure, isHungry)))",
+   "(globally, (implies, (success, isHungry), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))",
+   "(globally, (implies, (failure, goToKitchen), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))",
+   "(globally, (implies, (success, followHuman), (next, (or, (success, locateBottle), (failure, locateBottle), (running, locateBottle)))))",
+   "(globally, (implies, (success, locateBottle), (next, (or, (success, fetchBottle), (failure, fetchBottle), (running, fetchBottle)))))",
+   "(globally, (implies, (failure, isHungry), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))"
+  ],
+  "bt_pretty": "selector(sequence(isHungry, selector(goToKitchen, followHuman), sequence(locateBottle, fetchBottle)), askHelp)",
+  "tree_file": "trees/hungry_kitchen.tree",
+  "status": "ok"
+ },
+ {
+  "task": "inputTarget",
+  "orig_task": "inputTarget",
+  "description": "The robot executes the following tasks in sequence:\nTask 1: Firstly, the robot receives input data and sets the parameters to the values of this data.\nTask 2: Choose to execute the following two subtasks:\nSubtask 1: Execute the following three tasks in sequence: Task 1: Check the battery status. If the battery status is good, search for the target object. Task 2:  If the target object has been found, open the gripper, pick the object, and finally close the gripper.  Task 3: If the target has already been captured, move to the target room, and finally put down the object.\nSubtask 2: If the battery is low, move it to a charging station for charging.",
+  "specs": [
+   "(globally, (implies, (success, acceptInput), (next, (or, (success, setValue), (failure, setValue), (running, setValue)))))",
+   "(globally, (implies, (success, setValue), (next, (or, (success, BatteryOK), (failure, BatteryOK)))))",
+   "(globally, (implies, (success, BatteryOK), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))",
+   "(globally, (implies, (success, searchTarget), (next, (or, (success, TargetFound), (failure, TargetFound)))))",
+   "(globally, (implies, (success, TargetFound), (next, (or, (success, openGripper), (failure, openGripper), (running, openGripper)))))",
+   "(globally, (implies, (success, openGripper), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))",
+   "(globally, (implies, (success, TargetCaptured), (next, (or, (success, goToTarRoom), (failure, goToTarRoom), (running, goToTarRoom)))))",
+   "(globally, (implies, (success, goToTarRoom), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))",
+   "(globally, (implies, (success, lowBattery), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))"
+  ],
+  "bt_pretty": "sequence(acceptInput, setValue, selector(sequence(BatteryOK, searchTarget, selector(sequence(TargetFound, openGripper, pickUp, closeGripper), sequence(TargetCaptured, goToTarRoom, putDown))), sequence(lowBattery, goToStation, charging)))",
+  "tree_file": "trees/inputTarget.tree",
+  "status": "ok"
+ },
+ {
+  "task": "intCompare",
+  "orig_task": "intCompare",
+  "description": "Perform the following tasks in sequence:\n\nTask 1: First, the robot receives input data and sets the parameters to the values ​​corresponding to that data. Then, it compares the current parameter values ​​with the preset values.\n\nTask 2: If the values ​​are equal, stop the search. Otherwise, search for the target.\n\nTask 3: Pick up the target and move it to the kitchen, then place it down. Alternatively, move it to location A and complete Task A.",
+  "specs": [
+   "(next, (or, (success, acceptInput), (failure, acceptInput), (running, acceptInput)))",
+   "(globally, (implies, (success, acceptInput), (next, (or, (success, setValue), (failure, setValue), (running, setValue)))))",
+   "(globally, (implies, (success, setValue), (next, (or, (success, compareValue), (failure, compareValue), (running, compareValue)))))",
+   "(globally, (implies, (success, equalVal), (next, (or, (success, stopSearch), (failure, stopSearch), (running, stopSearch)))))",
+   "(globally, (implies, (failure, equalVal), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))",
+   "(globally, (implies, (success, goToKitchen), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))",
+   "(globally, (implies, (failure, goToKitchen), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))"
+  ],
+  "bt_pretty": "sequence(sequence(acceptInput, setValue, compareValue), selector(sequence(equalVal, stopSearch), searchTarget), sequence(pickUp, selector(sequence(goToKitchen, putDown), sequence(goToPosA, doTaskA))))",
+  "tree_file": "trees/intCompare.tree",
+  "status": "ok"
+ },
+ {
+  "task": "isFull",
+  "orig_task": "isFull",
+  "description": "Check if the robot is full and then move to position A.",
+  "specs": [
+   "(next, (or, (success, isFull), (failure, isFull)))",
+   "(globally, (implies, (success, isFull), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))"
+  ],
+  "bt_pretty": "sequence(isFull, goToPosA)",
+  "tree_file": "trees/isFull.tree",
+  "status": "ok"
+ },
+ {
+  "task": "lowBattery_ABC",
+  "orig_task": "lowBattery_ABC",
+  "description": "Choose to execute the following three branch tasks:\n\nSubtask 1: Perform the following actions in sequence: Check if it is in a low battery state, then check if it is in position A, and then check if the hand is empty. Then pick up the object, perform task A, and finally put the object down.\n\nSubtask 2: Perform the following actions in sequence: Check if it is in a low battery state, then check if it is in position B, and then check if the hand is empty. Then pick up the object, perform task B, and finally put the object down.\n\nSubtask 3: Perform the following actions in sequence: Check if the robot is located at position C, then check if the hand is empty, then move to the target position, and finally execute task C.",
+  "specs": [
+   "(next, (or, (or, (success, lowBattery), (success, lowBattery_2)), (or, (failure, lowBattery), (failure, lowBattery_2))))",
+   "(globally, (implies, (success, atPosA), (next, (or, (or, (success, empty), (success, empty_2), (success, empty_3)), (or, (failure, empty), (failure, empty_2), (failure, empty_3))))))",
+   "(globally, (implies, (or, (success, empty), (success, empty_2), (success, empty_3)), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2)), (success, approachTarget), (failure, approachTarget), (running, approachTarget)))))",
+   "(globally, (implies, (or, (success, pickUp), (success, pickUp_2)), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA), (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))",
+   "(globally, (implies, (success, doTaskA), (next, (or, (or, (success, putDown), (success, putDown_2)), (or, (failure, putDown), (failure, putDown_2)), (or, (running, putDown), (running, putDown_2))))))",
+   "(globally, (implies, (success, doTaskB), (next, (or, (or, (success, putDown), (success, putDown_2)), (or, (failure, putDown), (failure, putDown_2)), (or, (running, putDown), (running, putDown_2))))))",
+   "(globally, (implies, (success, atPosB), (next, (or, (or, (success, empty), (success, empty_2), (success, empty_3)), (or, (failure, empty), (failure, empty_2), (failure, empty_3))))))",
+   "(globally, (implies, (success, atPosC), (next, (or, (or, (success, empty), (success, empty_2), (success, empty_3)), (or, (failure, empty), (failure, empty_2), (failure, empty_3))))))",
+   "(globally, (implies, (success, approachTarget), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))"
+  ],
+  "bt_pretty": "selector(sequence(lowBattery, atPosA, empty, pickUp, doTaskA, putDown), sequence(lowBattery_2, atPosB, empty_2, pickUp_2, doTaskB, putDown_2), sequence(atPosC, empty_3, approachTarget, doTaskC))",
+  "tree_file": "trees/lowBattery_ABC.tree",
+  "status": "ok"
+ },
+ {
+  "task": "manipulate_parking",
+  "orig_task": "manipulate_parking",
+  "description": "Execute the following tasks in sequence: Move to the control panel, move the mechanical finger towards the target position, follow the given ID operation, and move to the parking lot.",
+  "specs": [
+   "(next, (or, (success, moveToPanel), (failure, moveToPanel), (running, moveToPanel)))",
+   "(globally, (implies, (success, moveToPanel), (next, (or, (success, moveFingerToTargetPosition), (failure, moveFingerToTargetPosition), (running, moveFingerToTargetPosition)))))",
+   "(globally, (implies, (success, moveFingerToTargetPosition), (next, (or, (success, followOperation), (failure, followOperation), (running, followOperation)))))",
+   "(globally, (implies, (success, followOperation), (next, (or, (success, moveToParking), (failure, moveToParking), (running, moveToParking)))))"
+  ],
+  "bt_pretty": "sequence(moveToPanel, moveFingerToTargetPosition, followOperation, moveToParking)",
+  "tree_file": "trees/manipulate_parking.tree",
+  "status": "ok"
+ },
+ {
+  "task": "mars",
+  "orig_task": "mars",
+  "description": "When the battery of the Mars rover is low, deploy the solar panel. Alternatively, during a storm, retract the solar panels; Otherwise, obtain and send data.",
+  "specs": [
+   "(next, (or, (success, lowBattery), (failure, lowBattery)))",
+   "(globally, (implies, (success, lowBattery), (next, (or, (success, unfoldPanels), (failure, unfoldPanels), (running, unfoldPanels)))))",
+   "(globally, (implies, (failure, lowBattery), (next, (or, (success, storm), (failure, storm)))))",
+   "(globally, (implies, (success, storm), (next, (or, (success, foldPanels), (failure, foldPanels), (running, foldPanels)))))",
+   "(globally, (implies, (failure, storm), (next, (or, (success, getData), (failure, getData), (running, getData)))))",
+   "(globally, (implies, (success, getData), (next, (or, (success, send), (failure, send), (running, send)))))"
+  ],
+  "bt_pretty": "selector(sequence(lowBattery, unfoldPanels), selector(sequence(storm, foldPanels), sequence(getData, send)))",
+  "tree_file": "trees/mars.tree",
+  "status": "ok"
+ },
+ {
+  "task": "mars2",
+  "orig_task": "mars2",
+  "description": "There are three selectable execution tasks: 1、 There is currently data available. 2、 When there is already sampled data, analyze the data. 3、First check if you are holding the sample in your hand otherwise picking up objects. Then check if it is already located at the base station ,otherwise navigate to the base station. Finally, put down the item and analyze it.",
+  "specs": [
+   "(next, (or, (success, haveData), (failure, haveData)))",
+   "(globally, (implies, (failure, haveData), (next, (or, (success, hasSample), (failure, hasSample)))))",
+   "(globally, (implies, (success, hasSample), (next, (or, (or, (success, analyze), (success, analyze_2)), (or, (failure, analyze), (failure, analyze_2)), (or, (running, analyze), (running, analyze_2))))))",
+   "(globally, (implies, (failure, holdItem), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, atStation), (failure, atStation)))))",
+   "(globally, (implies, (failure, atStation), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, putDown), (next, (or, (or, (success, analyze), (success, analyze_2)), (or, (failure, analyze), (failure, analyze_2)), (or, (running, analyze), (running, analyze_2))))))"
+  ],
+  "bt_pretty": "selector(haveData, sequence(hasSample, analyze), sequence(selector(holdItem, pickUp), selector(atStation, goToStation), sequence(putDown, analyze_2)))",
+  "tree_file": "trees/mars2.tree",
+  "status": "ok"
+ },
+ {
+  "task": "maze1",
+  "orig_task": "maze1",
+  "description": "Execute the following two subtasks in sequence: Task 1: Either check the robot is in position A or it moves downwards.  Task 2: Either check if the robot is in position B, or the robot will move to the right.",
+  "specs": [
+   "(next, (or, (success, atPosA), (failure, atPosA)))",
+   "(globally, (implies, (failure, atPosA), (next, (or, (success, moveDown), (failure, moveDown), (running, moveDown)))))",
+   "(globally, (implies, (success, moveDown), (next, (or, (success, atPosB), (failure, atPosB)))))",
+   "(globally, (implies, (failure, atPosB), (next, (or, (success, moveRight), (failure, moveRight), (running, moveRight)))))"
+  ],
+  "bt_pretty": "sequence(selector(atPosA, moveDown), selector(atPosB, moveRight))",
+  "tree_file": "trees/maze1.tree",
+  "status": "ok"
+ },
+ {
+  "task": "maze2",
+  "orig_task": "maze2",
+  "description": "Firstly, check if the robot is located at position 3, or navigate from position 1 to position 3. Then check if it is located at position 2, or navigate from position 3 to position 2\n",
+  "specs": [
+   "(next, (or, (success, atPos3), (failure, atPos3)))",
+   "(globally, (implies, (failure, atPos3), (next, (or, (success, move1to3), (failure, move1to3), (running, move1to3)))))",
+   "(globally, (implies, (success, atPos3), (next, (or, (success, atPos2), (failure, atPos2)))))",
+   "(globally, (implies, (failure, atPos2), (next, (or, (success, move3to2), (failure, move3to2), (running, move3to2)))))"
+  ],
+  "bt_pretty": "sequence(selector(atPos3, move1to3), selector(atPos2, move3to2))",
+  "tree_file": "trees/maze2.tree",
+  "status": "ok"
+ },
+ {
+  "task": "maze3",
+  "orig_task": "maze3",
+  "description": "Three optional execution options:\nTask 1: Check if the robot is in position 9, or if it is moving from position 6 to position 9. Task 2: check if the robot is in position 6, or perform a move from position 3 to position 6. Task 3:  check if the robot is in position 2, or move from position 1 to position 2.\n",
+  "specs": [
+   "(next, (or, (success, atPos9), (failure, atPos9)))",
+   "(globally, (implies, (failure, atPos9), (next, (or, (success, move6to9), (failure, move6to9), (running, move6to9)))))",
+   "(globally, (implies, (failure, move6to9), (next, (or, (success, atPos6), (failure, atPos6)))))",
+   "(globally, (implies, (failure, atPos6), (next, (or, (success, move3to6), (failure, move3to6), (running, move3to6)))))",
+   "(globally, (implies, (failure, move3to6), (next, (or, (success, atPos2), (failure, atPos2)))))",
+   "(globally, (implies, (failure, atPos2), (next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))))"
+  ],
+  "bt_pretty": "selector(selector(atPos9, move6to9), selector(atPos6, move3to6), selector(atPos2, move1to2))",
+  "tree_file": "trees/maze3.tree",
+  "status": "ok"
+ },
+ {
+  "task": "maze4",
+  "orig_task": "maze4",
+  "description": "Firstly, move from position 1 to position 3, then pick up the object below, then navigate from position 3 to position 6, and then lower the object.",
+  "specs": [
+   "(next, (or, (success, move1to3), (failure, move1to3), (running, move1to3)))",
+   "(globally, (implies, (success, move1to3), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, move3to6), (failure, move3to6), (running, move3to6)))))",
+   "(globally, (implies, (success, move3to6), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))"
+  ],
+  "bt_pretty": "sequence(move1to3, pickUp, move3to6, putDown)",
+  "tree_file": "trees/maze4.tree",
+  "status": "ok"
+ },
+ {
+  "task": "maze5",
+  "orig_task": "maze5",
+  "description": "\nWhen the alarm is on, first navigate from position 1 to position 2, and then complete task A.\nOtherwise, first navigate from 1 to 3, then navigate from 3 to 5, and then complete Task B.",
+  "specs": [
+   "(next, (or, (success, alarm), (failure, alarm)))",
+   "(globally, (implies, (success, alarm), (next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))))",
+   "(globally, (implies, (success, move1to2), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))",
+   "(globally, (implies, (failure, alarm), (next, (or, (success, move1to3), (failure, move1to3), (running, move1to3)))))",
+   "(globally, (implies, (success, move1to3), (next, (or, (success, move3to5), (failure, move3to5), (running, move3to5)))))",
+   "(globally, (implies, (success, move3to5), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))"
+  ],
+  "bt_pretty": "selector(sequence(alarm, move1to2, doTaskA), sequence(move1to3, move3to5, doTaskB))",
+  "tree_file": "trees/maze5.tree",
+  "status": "ok"
+ },
+ {
+  "task": "moveActivate",
+  "orig_task": "moveActivate",
+  "description": "Execute the following four tasks in sequence:\n\nTask 1: Move from position 1 to position 2 and activate the robotic arm.\n\nTask 2: Move from position 2 to position 3 and activate the robotic arm.\n\nTask 3: Move from position 3 to position 4 and activate the robotic arm.\n\nTask 4: Move from position 4 to position 5 and activate the robotic arm.",
+  "specs": [
+   "(next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))",
+   "(globally, (implies, (success, move1to2), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))",
+   "(globally, (implies, (success, move2to3), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))",
+   "(globally, (implies, (success, move3to4), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))",
+   "(globally, (implies, (success, move4to5), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))"
+  ],
+  "bt_pretty": "sequence(sequence(move1to2, activeManipulator), sequence(move2to3, activeManipulator_2), sequence(move3to4, activeManipulator_3), sequence(move4to5, activeManipulator_4))",
+  "tree_file": "trees/moveActivate.tree",
+  "status": "ok"
+ },
+ {
+  "task": "moveActivate2",
+  "orig_task": "moveActivate2",
+  "description": "First check accessibility, and then choose to perform the following four tasks:\n﻿\nTask 1: move from position 1 to position 2, and then activate the robotic arm.\n﻿\nTask 2: move from position 2 to position 3, and then activate the robotic arm.\n﻿\nTask 3:  move from position 3 to position 4, and then activate the robotic arm.\n﻿\nTask 4: move from position 4 to position 5, and then activate the robotic arm.",
+  "specs": [
+   "(next, (or, (success, checkReachable), (failure, checkReachable)))",
+   "(globally, (implies, (success, checkReachable), (next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))))",
+   "(globally, (implies, (success, move1to2), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))",
+   "(globally, (implies, (success, move2to3), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))",
+   "(globally, (implies, (success, move3to4), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))",
+   "(globally, (implies, (success, move4to5), (next, (or, (or, (success, activeManipulator), (success, activeManipulator_2), (success, activeManipulator_3), (success, activeManipulator_4)), (or, (failure, activeManipulator), (failure, activeManipulator_2), (failure, activeManipulator_3), (failure, activeManipulator_4)), (or, (running, activeManipulator), (running, activeManipulator_2), (running, activeManipulator_3), (running, activeManipulator_4))))))"
+  ],
+  "bt_pretty": "sequence(checkReachable, selector(sequence(move1to2, activeManipulator), sequence(move2to3, activeManipulator_2), sequence(move3to4, activeManipulator_3), sequence(move4to5, activeManipulator_4)))",
+  "tree_file": "trees/moveActivate2.tree",
+  "status": "ok"
+ },
+ {
+  "task": "moveContinue",
+  "orig_task": "moveContinue",
+  "description": "First check reachable. Then, move from position 1 to position 2 or move from position 2 to position 3 or move from position 3 to position 4 or move from position 4 to position 5. Finally, continue to execute.",
+  "specs": [
+   "(next, (or, (success, checkReachable), (failure, checkReachable)))",
+   "(globally, (implies, (success, checkReachable), (next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))))",
+   "(globally, (implies, (failure, move1to2), (next, (or, (success, move2to3), (failure, move2to3), (running, move2to3)))))",
+   "(globally, (implies, (failure, move2to3), (next, (or, (success, move3to4), (failure, move3to4), (running, move3to4)))))",
+   "(globally, (implies, (failure, move3to4), (next, (or, (success, move4to5), (failure, move4to5), (running, move4to5)))))",
+   "(globally, (implies, (success, move1to2), (next, (or, (success, continueTask), (failure, continueTask), (running, continueTask)))))"
+  ],
+  "bt_pretty": "sequence(checkReachable, selector(move1to2, move2to3, move3to4, move4to5), continueTask)",
+  "tree_file": "trees/moveContinue.tree",
+  "status": "ok"
+ },
+ {
+  "task": "moveToPos",
+  "orig_task": "moveToPos",
+  "description": "Execute the following two tasks in sequence:\n\nTask 1: Move to Position 1 and then move to Position 2.\n\nTask 2: Either move to position 3, or move to position 4, or move to position 5, or move to position 6 and move to position 7",
+  "specs": [
+   "(next, (or, (success, goToPos1), (failure, goToPos1), (running, goToPos1)))",
+   "(globally, (implies, (success, goToPos1), (next, (or, (success, goToPos2), (failure, goToPos2), (running, goToPos2)))))",
+   "(globally, (implies, (success, goToPos2), (next, (or, (success, goToPos3), (failure, goToPos3), (running, goToPos3)))))",
+   "(globally, (implies, (failure, goToPos3), (next, (or, (success, goToPos4), (failure, goToPos4), (running, goToPos4)))))",
+   "(globally, (implies, (failure, goToPos4), (next, (or, (success, goToPos5), (failure, goToPos5), (running, goToPos5)))))",
+   "(globally, (implies, (failure, goToPos5), (next, (or, (success, goToPos6), (failure, goToPos6), (running, goToPos6)))))",
+   "(globally, (implies, (success, goToPos6), (next, (or, (success, goToPos7), (failure, goToPos7), (running, goToPos7)))))"
+  ],
+  "bt_pretty": "sequence(sequence(goToPos1, goToPos2), selector(goToPos3, goToPos4, goToPos5, sequence(goToPos6, goToPos7)))",
+  "tree_file": "trees/moveToPos.tree",
+  "status": "ok"
+ },
+ {
+  "task": "openDoor",
+  "orig_task": "openDoor",
+  "description": "Check that the current door is open. Otherwise, open the door and pass through the door.",
+  "specs": [
+   "(next, (or, (success, isDoorOpen), (failure, isDoorOpen)))",
+   "(globally, (implies, (failure, isDoorOpen), (next, (or, (success, openDoor), (failure, openDoor), (running, openDoor)))))",
+   "(globally, (implies, (success, openDoor), (next, (or, (success, passThroughDoor), (failure, passThroughDoor), (running, passThroughDoor)))))"
+  ],
+  "bt_pretty": "selector(isDoorOpen, sequence(openDoor, passThroughDoor))",
+  "tree_file": "trees/openDoor.tree",
+  "status": "ok"
+ },
+ {
+  "task": "openDoor2",
+  "orig_task": "openDoor2",
+  "description": "Check if the door is currently open or open the door, then pass through the door, and finally close the door.",
+  "specs": [
+   "(next, (or, (success, isDoorOpen), (failure, isDoorOpen)))",
+   "(globally, (implies, (success, isDoorOpen), (next, (or, (success, passThroughDoor), (failure, passThroughDoor), (running, passThroughDoor)))))",
+   "(globally, (implies, (success, passThroughDoor), (next, (or, (success, closeDoor), (failure, closeDoor), (running, closeDoor)))))",
+   "(globally, (implies, (failure, isDoorOpen), (next, (or, (success, openDoor), (failure, openDoor), (running, openDoor)))))",
+   "(globally, (implies, (success, openDoor), (next, (or, (success, passThroughDoor), (failure, passThroughDoor), (running, passThroughDoor)))))"
+  ],
+  "bt_pretty": "sequence(selector(isDoorOpen, openDoor), passThroughDoor, closeDoor)",
+  "tree_file": "trees/openDoor2.tree",
+  "status": "ok"
+ },
+ {
+  "task": "panel_activateManipulator",
+  "orig_task": "panel_activateManipulator",
+  "description": "First move to the control panel, and then activate the robotic arm.",
+  "specs": [
+   "(next, (or, (success, moveToPanel), (failure, moveToPanel), (running, moveToPanel)))",
+   "(globally, (implies, (success, moveToPanel), (next, (or, (success, activeManipulator), (failure, activeManipulator), (running, activeManipulator)))))"
+  ],
+  "bt_pretty": "sequence(moveToPanel, activeManipulator)",
+  "tree_file": "trees/panel_activateManipulator.tree",
+  "status": "ok"
+ },
+ {
+  "task": "passThroughDoor",
+  "orig_task": "passThroughDoor",
+  "description": "Choose to execute the following three branch tasks:\n\nTask 1: If the door is open, pass through it and finally close the door.\n\nTask 2: Otherwise, first open the door, then pass through the door, and finally close the door.\n\nTask 3: Pass through the window.",
+  "specs": [
+   "(next, (or, (success, isDoorOpen), (failure, isDoorOpen)))",
+   "(globally, (implies, (success, isDoorOpen), (next, (or, (or, (success, passThroughDoor), (success, passThroughDoor_2)), (or, (failure, passThroughDoor), (failure, passThroughDoor_2)), (or, (running, passThroughDoor), (running, passThroughDoor_2))))))",
+   "(globally, (implies, (or, (success, passThroughDoor), (success, passThroughDoor_2)), (next, (or, (or, (success, closeDoor), (success, closeDoor_2)), (or, (failure, closeDoor), (failure, closeDoor_2)), (or, (running, closeDoor), (running, closeDoor_2))))))",
+   "(globally, (implies, (failure, isDoorOpen), (next, (or, (success, openDoor), (failure, openDoor), (running, openDoor)))))",
+   "(globally, (implies, (success, openDoor), (next, (or, (or, (success, passThroughDoor), (success, passThroughDoor_2)), (or, (failure, passThroughDoor), (failure, passThroughDoor_2)), (or, (running, passThroughDoor), (running, passThroughDoor_2))))))",
+   "(globally, (implies, (failure, openDoor), (next, (or, (success, passThroughWindow), (failure, passThroughWindow), (running, passThroughWindow)))))"
+  ],
+  "bt_pretty": "selector(sequence(isDoorOpen, passThroughDoor, closeDoor), sequence(openDoor, passThroughDoor_2, closeDoor_2), passThroughWindow)",
+  "tree_file": "trees/passThroughDoor.tree",
+  "status": "ok"
+ },
+ {
+  "task": "passThroughDoor2",
+  "orig_task": "passThroughDoor2",
+  "description": "Choose to execute the following three branches\n\nTask 1: First, check that the door is open, and then pass through the door.\n\nTask 2: Otherwise, open the door and finally pass through it.\n\nTask 3: Pass through the window.",
+  "specs": [
+   "(next, (or, (success, isDoorOpen), (failure, isDoorOpen)))",
+   "(globally, (implies, (success, isDoorOpen), (next, (or, (or, (success, passThroughDoor), (success, passThroughDoor_2)), (or, (failure, passThroughDoor), (failure, passThroughDoor_2)), (or, (running, passThroughDoor), (running, passThroughDoor_2))))))",
+   "(globally, (implies, (failure, isDoorOpen), (next, (or, (success, openDoor), (failure, openDoor), (running, openDoor)))))",
+   "(globally, (implies, (success, openDoor), (next, (or, (or, (success, passThroughDoor), (success, passThroughDoor_2)), (or, (failure, passThroughDoor), (failure, passThroughDoor_2)), (or, (running, passThroughDoor), (running, passThroughDoor_2))))))",
+   "(globally, (implies, (failure, openDoor), (next, (or, (success, passThroughWindow), (failure, passThroughWindow), (running, passThroughWindow)))))"
+  ],
+  "bt_pretty": "selector(sequence(isDoorOpen, passThroughDoor), sequence(openDoor, passThroughDoor_2), passThroughWindow)",
+  "tree_file": "trees/passThroughDoor2.tree",
+  "status": "ok"
+ },
+ {
+  "task": "patrol1",
+  "orig_task": "patrol1",
+  "description": "Firstly, check if location A has been accessed, or navigate to location A and perform patrol actions. Then, check if location B has been accessed, or navigate to location B and perform patrol actions. Finally, check if location C has been accessed, or navigate to location C and patrol",
+  "specs": [
+   "(next, (or, (success, visitedA), (failure, visitedA)))",
+   "(globally, (implies, (failure, visitedA), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (or, (success, patroling), (success, patroling_2), (success, patroling_3)), (or, (failure, patroling), (failure, patroling_2), (failure, patroling_3)), (or, (running, patroling), (running, patroling_2), (running, patroling_3))))))",
+   "(globally, (implies, (success, visitedA), (next, (or, (success, visitedB), (failure, visitedB)))))",
+   "(globally, (implies, (failure, visitedB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (or, (success, patroling), (success, patroling_2), (success, patroling_3)), (or, (failure, patroling), (failure, patroling_2), (failure, patroling_3)), (or, (running, patroling), (running, patroling_2), (running, patroling_3))))))",
+   "(globally, (implies, (success, visitedB), (next, (or, (success, visitedC), (failure, visitedC)))))",
+   "(globally, (implies, (failure, visitedC), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))",
+   "(globally, (implies, (success, goToPosC), (next, (or, (or, (success, patroling), (success, patroling_2), (success, patroling_3)), (or, (failure, patroling), (failure, patroling_2), (failure, patroling_3)), (or, (running, patroling), (running, patroling_2), (running, patroling_3))))))"
+  ],
+  "bt_pretty": "sequence(selector(visitedA, sequence(goToPosA, patroling)), selector(visitedB, sequence(goToPosB, patroling_2)), selector(visitedC, sequence(goToPosC, patroling_3)))",
+  "tree_file": "trees/patrol1.tree",
+  "status": "ok"
+ },
+ {
+  "task": "pickDeliver",
+  "orig_task": "pickDeliver",
+  "description": "Choose to execute the following four branch tasks:\n\nTask 1: Move to the default delivery location and then deliver the items.\nTask 2: Move to the designated delivery location and then deliver the item.\nTask 3: Check no task has been delivered at this time,then move to the charging station location and start charging.\nTask 4: Approach the target, then detect the item and finally pick it up.",
+  "specs": [
+   "(next, (or, (success, moveDefaultDeliverPos), (failure, moveDefaultDeliverPos), (running, moveDefaultDeliverPos)))",
+   "(globally, (implies, (success, moveDefaultDeliverPos), (next, (or, (or, (success, deliverObj), (success, deliverObj_2)), (or, (failure, deliverObj), (failure, deliverObj_2)), (or, (running, deliverObj), (running, deliverObj_2))))))",
+   "(globally, (implies, (failure, moveDefaultDeliverPos), (next, (or, (success, moveDesignPos), (failure, moveDesignPos), (running, moveDesignPos)))))",
+   "(globally, (implies, (success, moveDesignPos), (next, (or, (or, (success, deliverObj), (success, deliverObj_2)), (or, (failure, deliverObj), (failure, deliverObj_2)), (or, (running, deliverObj), (running, deliverObj_2))))))",
+   "(globally, (implies, (success, noDeliverTask), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))",
+   "(globally, (implies, (success, approachTarget), (next, (or, (success, detectObj), (failure, detectObj), (running, detectObj)))))",
+   "(globally, (implies, (success, detectObj), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))"
+  ],
+  "bt_pretty": "selector(sequence(moveDefaultDeliverPos, deliverObj), sequence(moveDesignPos, deliverObj_2), sequence(noDeliverTask, goToStation, charging), sequence(approachTarget, detectObj, pickUp))",
+  "tree_file": "trees/pickDeliver.tree",
+  "status": "ok"
+ },
+ {
+  "task": "pickUp",
+  "orig_task": "pickUp",
+  "description": "Firstly, check if the item has been extracted, or navigate to location A and extract the item. Then, check if the item has been placed, or navigate to location B and place the item.",
+  "specs": [
+   "(next, (or, (success, picked), (failure, picked)))",
+   "(globally, (implies, (failure, picked), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, placed), (failure, placed)))))",
+   "(globally, (implies, (failure, placed), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))"
+  ],
+  "bt_pretty": "sequence(selector(picked, sequence(goToPosA, pickUp)), selector(placed, sequence(goToPosB, putDown)))",
+  "tree_file": "trees/pickUp.tree",
+  "status": "ok"
+ },
+ {
+  "task": "pickUp_place",
+  "orig_task": "pickUp_place",
+  "description": "The robot has two possible events:\n\n1. Check if the object is placed at position B.\n\n2. First, check if the robotic arm is empty. If empty, either check if the robot is at position A, or navigate to position A without conflict and pick up the object.\n\nOtherwise, check if the object has been picked up, and either check if the robot is at position B, or navigate to position B without conflict. Finally, place the object.",
+  "specs": [
+   "(next, (or, (success, placedB), (failure, placedB)))",
+   "(globally, (implies, (success, picked), (next, (or, (success, atPosB), (failure, atPosB)))))",
+   "(globally, (implies, (success, empty), (next, (or, (success, atPosA), (failure, atPosA)))))",
+   "(globally, (implies, (or, (success, noCollision), (success, noCollision_2)), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA), (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (failure, atPosB), (next, (or, (or, (success, noCollision), (success, noCollision_2)), (or, (failure, noCollision), (failure, noCollision_2))))))",
+   "(globally, (implies, (failure, atPosA), (next, (or, (or, (success, noCollision), (success, noCollision_2)), (or, (failure, noCollision), (failure, noCollision_2))))))",
+   "(globally, (implies, (success, atPosB), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))"
+  ],
+  "bt_pretty": "selector(placedB, sequence(empty, selector(atPosA, sequence(noCollision, goToPosA, pickUp)), sequence(picked, selector(atPosB, sequence(noCollision_2, goToPosB)), putDown)))",
+  "tree_file": "trees/pickUp_place.tree",
+  "status": "ok"
+ },
+ {
+  "task": "pickUp2",
+  "orig_task": "pickUp2",
+  "description": "The robot needs to complete the following two events in sequence:\nTask 1: Select to perform the following task: 1.1  Either the object has already been picked up, 1.2  check if the robot is in position A and pick up the object. 1.3 navigate to position A and then pick up the object.\nTask 2: Select to perform the following task: 2.1 either the object has been placed, 2.2  first check if the robot is in position B and place the object. 2.3  navigate to position B and then put down the object.",
+  "specs": [
+   "(next, (or, (success, picked), (failure, picked)))",
+   "(globally, (implies, (failure, picked), (next, (or, (success, atPosA), (failure, atPosA)))))",
+   "(globally, (implies, (success, atPosA), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))",
+   "(globally, (implies, (failure, atPosA), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))",
+   "(globally, (implies, (failure, placed), (next, (or, (success, atPosB), (failure, atPosB)))))",
+   "(globally, (implies, (success, atPosB), (next, (or, (or, (success, putDown), (success, putDown_2)), (or, (failure, putDown), (failure, putDown_2)), (or, (running, putDown), (running, putDown_2))))))",
+   "(globally, (implies, (failure, atPosB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (or, (success, putDown), (success, putDown_2)), (or, (failure, putDown), (failure, putDown_2)), (or, (running, putDown), (running, putDown_2))))))"
+  ],
+  "bt_pretty": "sequence(selector(picked, sequence(atPosA, pickUp), sequence(goToPosA, pickUp_2)), selector(placed, sequence(atPosB, putDown), sequence(goToPosB, putDown_2)))",
+  "tree_file": "trees/pickUp2.tree",
+  "status": "ok"
+ },
+ {
+  "task": "place",
+  "orig_task": "place",
+  "description": "Firstly, check if the item has been picked, or navigate to location A and pick up the item. Then check if it is placed in position B, or navigate to position B and place it in position B. Then pick up the items. Finally, check if it is placed in position C, or navigate to position C and place it in position C.",
+  "specs": [
+   "(next, (or, (success, picked), (failure, picked)))",
+   "(globally, (implies, (failure, picked), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))",
+   "(globally, (implies, (failure, placedB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))",
+   "(globally, (implies, (success, goToPosB), (next, (or, (success, placeB), (failure, placeB), (running, placeB)))))",
+   "(globally, (implies, (success, placeB), (next, (or, (or, (success, pickUp), (success, pickUp_2)), (or, (failure, pickUp), (failure, pickUp_2)), (or, (running, pickUp), (running, pickUp_2))))))",
+   "(globally, (implies, (failure, placedC), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))",
+   "(globally, (implies, (success, goToPosC), (next, (or, (success, placeC), (failure, placeC), (running, placeC)))))"
+  ],
+  "bt_pretty": "sequence(selector(picked, sequence(goToPosA, pickUp)), selector(placedB, sequence(goToPosB, placeB)), pickUp_2, selector(placedC, sequence(goToPosC, placeC)))",
+  "tree_file": "trees/place.tree",
+  "status": "ok"
+ },
+ {
+  "task": "pour_drink",
+  "orig_task": "pour_drink",
+  "description": "Select to perform the following task:\nTask 1: Execute the following tasks in sequence: Subtask 1.1: Select to perform the following task: Task 1.1.1 Check know the room number and then move to the room . Task 1.1.2 Follow the movement of humans. Subtask 1.2: Execute the following five action in sequence: Find the bottle and then grab it. Afterwards, search for the glass cup, and then grab it, and finally pour water.\nTask 2: Seek help.",
+  "specs": [
+   "(next, (or, (success, roomKnown), (failure, roomKnown)))",
+   "(globally, (implies, (success, roomKnown), (next, (or, (success, goToRoom), (failure, goToRoom), (running, goToRoom)))))",
+   "(globally, (implies, (failure, roomKnown), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))",
+   "(globally, (implies, (success, goToRoom), (next, (or, (success, findBottle), (failure, findBottle), (running, findBottle)))))",
+   "(globally, (implies, (success, findBottle), (next, (or, (success, fetchBottle), (failure, fetchBottle), (running, fetchBottle)))))",
+   "(globally, (implies, (success, fetchBottle), (next, (or, (success, findGlass), (failure, findGlass), (running, findGlass)))))",
+   "(globally, (implies, (success, findGlass), (next, (or, (success, fetchGlass), (failure, fetchGlass), (running, fetchGlass)))))",
+   "(globally, (implies, (success, fetchGlass), (next, (or, (success, pourDrink), (failure, pourDrink), (running, pourDrink)))))",
+   "(globally, (implies, (failure, fetchGlass), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))"
+  ],
+  "bt_pretty": "selector(sequence(selector(sequence(roomKnown, goToRoom), followHuman), sequence(findBottle, fetchBottle, findGlass, fetchGlass, pourDrink)), askHelp)",
+  "tree_file": "trees/pour_drink.tree",
+  "status": "ok"
+ },
+ {
+  "task": "processMaterial",
+  "orig_task": "processMaterial",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Press the R button.\n\nTask 2: Check if the raw materials have been received and then press the P button to proceed with processing.\n\nTask 3: Check if the material has been processed and finally press the C button to indicate completion.",
+  "specs": [
+   "(next, (or, (success, pushR), (failure, pushR), (running, pushR)))",
+   "(globally, (implies, (success, pushR), (next, (or, (success, acceptedMaterial), (failure, acceptedMaterial)))))",
+   "(globally, (implies, (success, acceptedMaterial), (next, (or, (success, pushP), (failure, pushP), (running, pushP)))))",
+   "(globally, (implies, (success, pushP), (next, (or, (success, isProcessed), (failure, isProcessed)))))",
+   "(globally, (implies, (success, isProcessed), (next, (or, (success, pushC), (failure, pushC), (running, pushC)))))"
+  ],
+  "bt_pretty": "sequence(pushR, sequence(acceptedMaterial, pushP), sequence(isProcessed, pushC))",
+  "tree_file": "trees/processMaterial.tree",
+  "status": "ok"
+ },
+ {
+  "task": "put_pickup_tray",
+  "orig_task": "put_pickup_tray",
+  "description": "Execute the following tasks in sequence:\n\nTask 1: Move to position A, pick up an object at position A, and place the object on the robot's tray.\n\nTask 2: Move to position C, pick up the object from the tray, and put down the item.\n\nTask 3: Activate the assembly process and then move  to the parking lot.",
+  "specs": [
+   "(next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))",
+   "(globally, (implies, (success, goToPosA), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))",
+   "(globally, (implies, (success, pickUp), (next, (or, (success, putOnTray), (failure, putOnTray), (running, putOnTray)))))",
+   "(globally, (implies, (success, putOnTray), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))",
+   "(globally, (implies, (success, goToPosC), (next, (or, (success, pickUpFromTray), (failure, pickUpFromTray), (running, pickUpFromTray)))))",
+   "(globally, (implies, (success, pickUpFromTray), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))",
+   "(globally, (implies, (success, putDown), (next, (or, (success, activateProcess), (failure, activateProcess), (running, activateProcess)))))",
+   "(globally, (implies, (success, activateProcess), (next, (or, (success, moveToParking), (failure, moveToParking), (running, moveToParking)))))"
+  ],
+  "bt_pretty": "sequence(sequence(goToPosA, pickUp, putOnTray), sequence(goToPosC, pickUpFromTray, putDown), sequence(activateProcess, moveToParking))",
+  "tree_file": "trees/put_pickup_tray.tree",
+  "status": "ok"
+ },
+ {
+  "task": "roomKnown",
+  "orig_task": "roomKnown",
+  "description": "Choose to execute the following three branch tasks:\nTask 1: If the current room number is known, move to the target room to perform tasks A, B, and C.\nTask 2: If the inv value is valid, receive the ID information and search for the target. If the target is nearby, activate the operator and attack the target. \nTask 3: Press the P button and move to the charging station position to enter sleep mode.",
+  "specs": [
+   "(globally, (implies, (failure, invValid), (next, (or, (success, pushP), (failure, pushP), (running, pushP)))))",
+   "(globally, (implies, (success, pushP), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, goToStation), (next, (or, (success, sleeping), (failure, sleeping), (running, sleeping)))))"
+  ],
+  "bt_pretty": "selector(sequence(roomKnown, goToTarRoom, doTaskA, doTaskB, doTaskC), sequence(invValid, acceptData, searchTarget, sequence(TargetAdjacent, activateProcess, attackTarget)), sequence(pushP, goToStation, sleeping))",
+  "tree_file": "trees/roomKnown.tree",
+  "status": "ok"
+ },
+ {
+  "task": "searchAns",
+  "orig_task": "searchAns",
+  "description": "Execute the following tasks in sequence: Task 1: Wait for input requests. Task 2: Check for current input requests, accept input information, search for answers in the knowledge base, and finally provide feedback to the user.",
+  "specs": [
+   "(next, (or, (success, waitInput), (failure, waitInput), (running, waitInput)))",
+   "(globally, (implies, (success, waitInput), (next, (or, (success, hasInput), (failure, hasInput)))))",
+   "(globally, (implies, (success, hasInput), (next, (or, (success, acceptInput), (failure, acceptInput), (running, acceptInput)))))",
+   "(globally, (implies, (success, acceptInput), (next, (or, (success, searchAns), (failure, searchAns), (running, searchAns)))))",
+   "(globally, (implies, (success, searchAns), (next, (or, (success, outputAns), (failure, outputAns), (running, outputAns)))))"
+  ],
+  "bt_pretty": "sequence(waitInput, sequence(hasInput, acceptInput, searchAns, outputAns))",
+  "tree_file": "trees/searchAns.tree",
+  "status": "ok"
+ },
+ {
+  "task": "sequence_move",
+  "orig_task": "sequence_move",
+  "description": "Execute the following tasks in sequence: move to station A, move to station B, move to station C, and move to the parking lot.",
+  "specs": [
+   "(next, (or, (success, goToStationA), (failure, goToStationA), (running, goToStationA)))",
+   "(globally, (implies, (success, goToStationA), (next, (or, (success, goToStationB), (failure, goToStationB), (running, goToStationB)))))",
+   "(globally, (implies, (success, goToStationB), (next, (or, (success, goToStationC), (failure, goToStationC), (running, goToStationC)))))",
+   "(globally, (implies, (success, goToStationC), (next, (or, (success, moveToParking), (failure, moveToParking), (running, moveToParking)))))"
+  ],
+  "bt_pretty": "sequence(goToStationA, goToStationB, goToStationC, moveToParking)",
+  "tree_file": "trees/sequence_move.tree",
+  "status": "ok"
+ },
+ {
+  "task": "shedTree",
+  "orig_task": "shedTree",
+  "description": "Check if it is on the pasture, and then choose to perform the following task: Task 1:  check if it is daytime, then check if it is in the shed, and then leave the shed, randomly find a piece of pasture land, and move randomly. Task 2: Check if it was night, search for the shed, move to the destination, and finally enter the shed. Task 3: move randomly.",
+  "specs": [
+   "(next, (or, (success, isOnPasture), (failure, isOnPasture)))",
+   "(globally, (implies, (success, isOnPasture), (next, (or, (success, isDay), (failure, isDay)))))",
+   "(globally, (implies, (success, isDay), (next, (or, (success, isInShed), (failure, isInShed)))))",
+   "(globally, (implies, (success, isInShed), (next, (or, (success, leaveShed), (failure, leaveShed), (running, leaveShed)))))",
+   "(globally, (implies, (success, leaveShed), (next, (or, (success, findRandomPastureField), (failure, findRandomPastureField), (running, findRandomPastureField)))))",
+   "(globally, (implies, (success, findRandomPastureField), (next, (or, (or, (success, randomMove), (success, randomMove_2)), (or, (failure, randomMove), (failure, randomMove_2)), (or, (running, randomMove), (running, randomMove_2))))))",
+   "(globally, (implies, (failure, isDay), (next, (or, (success, isNight), (failure, isNight)))))",
+   "(globally, (implies, (success, isNight), (next, (or, (success, findShed), (failure, findShed), (running, findShed)))))",
+   "(globally, (implies, (success, findShed), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))",
+   "(globally, (implies, (success, moveToDestination), (next, (or, (success, enterShed), (failure, enterShed), (running, enterShed)))))",
+   "(globally, (implies, (failure, isNight), (next, (or, (or, (success, randomMove), (success, randomMove_2)), (or, (failure, randomMove), (failure, randomMove_2)), (or, (running, randomMove), (running, randomMove_2))))))"
+  ],
+  "bt_pretty": "sequence(isOnPasture, selector(sequence(isDay, isInShed, leaveShed, findRandomPastureField, randomMove), sequence(isNight, findShed, moveToDestination, enterShed), randomMove_2))",
+  "tree_file": "trees/shedTree.tree",
+  "status": "ok"
+ },
+ {
+  "task": "attack2",
+  "orig_task": "",
+  "description": "Choose to execute the following branch tasks:\nTask 1: First, obtain target information, then move to the target, and check the target information is nearby, and then attack the target.\nTask 2: Randomly move.",
+  "specs": [
+   "(next, (or, (success, getTarget), (failure, getTarget), (running, getTarget)))",
+   "(globally, (implies, (success, getTarget), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))",
+   "(globally, (implies, (success, moveToDestination), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))",
+   "(globally, (implies, (success, TargetAdjacent), (next, (or, (success, attackTarget), (failure, attackTarget), (running, attackTarget)))))",
+   "(globally, (implies, (failure, getTarget), (next, (or, (success, randomMove), (failure, randomMove), (running, randomMove)))))"
+  ],
+  "bt_pretty": "selector(sequence(getTarget, moveToDestination, TargetAdjacent, attackTarget), randomMove)",
+  "tree_file": "trees/attack2.tree",
+  "status": "ok"
+ },
+ {
+  "task": "invTask",
+  "orig_task": "invTask",
+  "description": "The robot chooses to perform the following tasks:\nTask 1: The robot sequentially executes the following tasks:\nSubtask 1: Check if the current battery level has reached a low state, and then calculate the value of inv or if the inv value has already been calculated. Then accept the input value and search for the answer. If the robot knows the room number, it moves to that room and enters sleep mode.\nSubtask 2: Check if the robot is already in the kitchen. Finally, execute task A.\nTask 2: When the alarm sounds, check if you are holding a tool and navigate to the kitchen to use a fire extinguisher.\nTask 3: Wait for charging.",
+  "specs": [
+   "(next, (or, (success, lowBattery), (failure, lowBattery)))",
+   "(globally, (implies, (success, lowBattery), (next, (or, (success, invValid), (failure, invValid)))))",
+   "(globally, (implies, (failure, invValid), (next, (or, (success, computInv), (failure, computInv), (running, computInv)))))",
+   "(globally, (implies, (success, invValid), (next, (or, (success, acceptInput), (failure, acceptInput), (running, acceptInput)))))",
+   "(globally, (implies, (success, acceptInput), (next, (or, (success, searchAns), (failure, searchAns), (running, searchAns)))))",
+   "(globally, (implies, (success, roomKnown), (next, (or, (success, goToRoom), (failure, goToRoom), (running, goToRoom)))))",
+   "(globally, (implies, (success, goToRoom), (next, (or, (success, sleeping), (failure, sleeping), (running, sleeping)))))",
+   "(globally, (implies, (success, atKitchen), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))",
+   "(globally, (implies, (success, alarm), (next, (or, (success, holdTools), (failure, holdTools)))))",
+   "(globally, (implies, (success, holdTools), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))",
+   "(globally, (implies, (success, goToKitchen), (next, (or, (success, useExtinguisher), (failure, useExtinguisher), (running, useExtinguisher)))))"
+  ],
+  "bt_pretty": "selector(sequence(sequence(lowBattery, selector(invValid, computInv), acceptInput, searchAns, sequence(roomKnown, goToRoom, sleeping)), sequence(atKitchen, doTaskA)), sequence(alarm, sequence(holdTools, goToKitchen, useExtinguisher)), waitCharge)",
+  "tree_file": "trees/invTask.tree",
+  "status": "ok"
+ },
+ {
+  "task": "waitData",
+  "orig_task": "waitData",
+  "description": "The robot chooses to perform the following tasks:\nTask 1: The robot checks if it is currently daytime, then checks if there is any input data or waits for input, and then searches for answers.\nTask 2: The robot checks that it is currently nighttime and whether it is at the charging station location or navigating to the charging station. Charge it.\nTask 3: Check if the current battery is full, then retrieve the target and search for it.",
+  "specs": [
+   "(next, (or, (success, isDay), (failure, isDay)))",
+   "(globally, (implies, (success, isDay), (next, (or, (success, hasInput), (failure, hasInput)))))",
+   "(globally, (implies, (failure, hasInput), (next, (or, (success, waitInput), (failure, waitInput), (running, waitInput)))))",
+   "(globally, (implies, (success, isNight), (next, (or, (success, atCharge), (failure, atCharge)))))",
+   "(globally, (implies, (failure, atCharge), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))",
+   "(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))",
+   "(globally, (implies, (success, fullBattery), (next, (or, (success, getTarget), (failure, getTarget), (running, getTarget)))))",
+   "(globally, (implies, (success, getTarget), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))"
+  ],
+  "bt_pretty": "selector(sequence(isDay, selector(hasInput, waitInput), searchAns), sequence(isNight, selector(atCharge, goToStation), charging), sequence(fullBattery, getTarget, searchTarget))",
+  "tree_file": "trees/waitData.tree",
+  "status": "ok"
+ }
+]

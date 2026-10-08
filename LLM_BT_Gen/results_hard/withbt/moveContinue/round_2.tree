@@ -1,0 +1,63 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env checkReachable_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ checkReachable_v assign{result{checkReachable_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { checkReachable arguments {} read_variables {checkReachable_v} condition{checkReachable_v} }
+}
+actions {
+    action { move1to2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move2to3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move3to4
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { move4to5
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { continueTask
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            checkReachable {}
+            composite {
+                c1 selector
+                children {
+                    move1to2 {}
+                    move2to3 {}
+                    move3to4 {}
+                    move4to5 {}
+                }
+            }
+            continueTask {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, checkReachable), (failure, checkReachable)))}
+    LTLSPEC {(globally, (implies, (success, checkReachable), (next, (or, (success, move1to2), (failure, move1to2), (running, move1to2)))))}
+    LTLSPEC {(globally, (implies, (failure, checkReachable), (next, (or, (success, checkReachable), (failure, checkReachable)))))}
+    LTLSPEC {(globally, (implies, (success, move1to2), (next, (or, (success, continueTask), (failure, continueTask), (running, continueTask)))))}
+    LTLSPEC {(globally, (implies, (success, move2to3), (next, (or, (success, continueTask), (failure, continueTask), (running, continueTask)))))}
+    LTLSPEC {(globally, (implies, (success, move3to4), (next, (or, (success, continueTask), (failure, continueTask), (running, continueTask)))))}
+    LTLSPEC {(globally, (implies, (success, move4to5), (next, (or, (success, continueTask), (failure, continueTask), (running, continueTask)))))}
+    LTLSPEC {(globally, (implies, (success, continueTask), (next, (or, (success, checkReachable), (failure, checkReachable)))))}
+}

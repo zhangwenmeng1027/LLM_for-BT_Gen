@@ -1,0 +1,84 @@
+configuration {} enumerations {} constants {}
+variables {
+}
+environment_update {
+}
+checks {}
+environment_checks {
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putOnTray
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUpFromTray
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { activateProcess
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToParking
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+        composite {
+            c1 sequence
+            children {
+                goToPosA {}
+                pickUp {}
+                putOnTray {}
+            }
+        }
+        composite {
+            c2 sequence
+            children {
+                goToPosC {}
+                pickUpFromTray {}
+                putDown {}
+            }
+        }
+        composite {
+            c3 sequence
+            children {
+                activateProcess {}
+                moveToParking {}
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, putOnTray), (failure, putOnTray), (running, putOnTray)))))}
+    LTLSPEC {(globally, (implies, (success, putOnTray), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, pickUpFromTray), (failure, pickUpFromTray), (running, pickUpFromTray)))))}
+    LTLSPEC {(globally, (implies, (success, pickUpFromTray), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+    LTLSPEC {(globally, (implies, (success, putDown), (next, (or, (success, activateProcess), (failure, activateProcess), (running, activateProcess)))))}
+    LTLSPEC {(globally, (implies, (success, activateProcess), (next, (or, (success, moveToParking), (failure, moveToParking), (running, moveToParking)))))}
+}

@@ -1,0 +1,220 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)));
+LTLSPEC G(((system.goToPosA.status = success) -> X((((system.pickUp.status = success) | (system.pickUp_2.status = success)) | ((system.pickUp.status = failure) | (system.pickUp_2.status = failure)) | ((system.pickUp.status = running) | (system.pickUp_2.status = running))))));
+LTLSPEC G(((system.checkBattery.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.atPosA.status = success) -> X(((system.empty.status = success) | (system.empty.status = failure)))));
+LTLSPEC G(((system.empty.status = success) -> X((((system.pickUp.status = success) | (system.pickUp_2.status = success)) | ((system.pickUp.status = failure) | (system.pickUp_2.status = failure)) | ((system.pickUp.status = running) | (system.pickUp_2.status = running))))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X(((system.doTaskC.status = success) | (system.doTaskC.status = failure) | (system.doTaskC.status = running)))));
+LTLSPEC G(((system.lowBattery.status = success) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.isHungry.status = success) -> X(((system.eatfood.status = success) | (system.eatfood.status = failure) | (system.eatfood.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        goToPosA : success_DEFAULT_module();
+        pickUp : success_DEFAULT_module();
+        checkBattery : success_DEFAULT_module();
+        doTaskA : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_4(goToPosA, pickUp, checkBattery, doTaskA);
+        atPosA : atPosA_module(atPosA_v_stage_0);
+        empty : empty_module(empty_v_stage_0);
+        pickUp_2 : _DEFAULT_module();
+        goToPosB : _DEFAULT_module();
+        putDown : _DEFAULT_module();
+        goToPosC : _DEFAULT_module();
+        doTaskC : _DEFAULT_module();
+        c2 : composite_sequence_without_memory_7(atPosA, empty, pickUp_2, goToPosB, putDown, goToPosC, doTaskC);
+        lowBattery : lowBattery_module(lowBattery_v_stage_0);
+        goToStation : _DEFAULT_module();
+        charging : _DEFAULT_module();
+        isHungry : isHungry_module(isHungry_v_stage_0);
+        eatfood : _DEFAULT_module();
+        c3 : composite_sequence_without_memory_5(lowBattery, goToStation, charging, isHungry, eatfood);
+        followHuman : _DEFAULT_module();
+        c0 : composite_selector_without_memory_4(c1, c2, c3, followHuman);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        atPosA_v_stage_0 : boolean;
+        empty_v_stage_0 : boolean;
+        lowBattery_v_stage_0 : boolean;
+        isHungry_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(atPosA_v_stage_0) := {TRUE, FALSE};
+        init(empty_v_stage_0) := {TRUE, FALSE};
+        init(lowBattery_v_stage_0) := {TRUE, FALSE};
+        init(isHungry_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(atPosA_v_stage_0) :=
+            case
+                !(c0.active) : atPosA_v_stage_0;
+                TRUE : atPosA_v_stage_0;
+            esac;
+        next(empty_v_stage_0) :=
+            case
+                !(c0.active) : empty_v_stage_0;
+                TRUE : empty_v_stage_0;
+            esac;
+        next(lowBattery_v_stage_0) :=
+            case
+                !(c0.active) : lowBattery_v_stage_0;
+                TRUE : lowBattery_v_stage_0;
+            esac;
+        next(isHungry_v_stage_0) :=
+            case
+                !(c0.active) : isHungry_v_stage_0;
+                TRUE : isHungry_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        goToPosA := 2;
+        pickUp := 3;
+        checkBattery := 4;
+        doTaskA := 5;
+        c2 := 6;
+        atPosA := 7;
+        empty := 8;
+        pickUp_2 := 9;
+        goToPosB := 10;
+        putDown := 11;
+        goToPosC := 12;
+        doTaskC := 13;
+        c3 := 14;
+        lowBattery := 15;
+        goToStation := 16;
+        charging := 17;
+        isHungry := 18;
+        eatfood := 19;
+        followHuman := 20;
+MODULE composite_sequence_without_memory_7(child_0, child_1, child_2, child_3, child_4, child_5, child_6)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                !(child_5.internal_status = success) : child_5.internal_status;
+                !(child_6.internal_status = success) : child_6.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+        child_5.active := child_4.status = success;
+        child_6.active := child_5.status = success;
+MODULE composite_selector_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+MODULE composite_sequence_without_memory_5(child_0, child_1, child_2, child_3, child_4)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE atPosA_module(atPosA_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atPosA_v_stage_0) ? success : failure;
+MODULE empty_module(empty_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (empty_v_stage_0) ? success : failure;
+MODULE lowBattery_module(lowBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (lowBattery_v_stage_0) ? success : failure;
+MODULE isHungry_module(isHungry_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isHungry_v_stage_0) ? success : failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

@@ -1,0 +1,121 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env invValid_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env roomKnown_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env atKitchen_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env alarm_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env holdTools_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} }
+    variable_statement{ invValid_v assign{result{invValid_v}} }
+    variable_statement{ roomKnown_v assign{result{roomKnown_v}} }
+    variable_statement{ atKitchen_v assign{result{atKitchen_v}} }
+    variable_statement{ alarm_v assign{result{alarm_v}} }
+    variable_statement{ holdTools_v assign{result{holdTools_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} }
+    environment_check { invValid arguments {} read_variables {invValid_v} condition{invValid_v} }
+    environment_check { roomKnown arguments {} read_variables {roomKnown_v} condition{roomKnown_v} }
+    environment_check { atKitchen arguments {} read_variables {atKitchen_v} condition{atKitchen_v} }
+    environment_check { alarm arguments {} read_variables {alarm_v} condition{alarm_v} }
+    environment_check { holdTools arguments {} read_variables {holdTools_v} condition{holdTools_v} }
+}
+actions {
+    action { computInv
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { acceptInput
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchAns
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToRoom
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { sleeping
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToKitchen
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { useExtinguisher
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    lowBattery {}
+                    composite {
+                        c2 selector
+                        children {
+                            invValid {}
+                            computInv {}
+                        }
+                    }
+                    acceptInput {}
+                    searchAns {}
+                    composite {
+                        c3 selector
+                        children {
+                            composite {
+                                c4 sequence
+                                children {
+                                    roomKnown {}
+                                    goToRoom {}
+                                    sleeping {}
+                                }
+                            }
+                            atKitchen {}
+                            doTaskA {}
+                        }
+                    }
+                }
+            }
+            composite {
+                c5 sequence
+                children {
+                    alarm {}
+                    holdTools {}
+                    goToKitchen {}
+                    useExtinguisher {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, lowBattery), (failure, lowBattery)))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, invValid), (failure, invValid)))))}
+    LTLSPEC {(globally, (implies, (failure, invValid), (next, (or, (success, computInv), (failure, computInv), (running, computInv)))))}
+    LTLSPEC {(globally, (implies, (success, invValid), (next, (or, (success, acceptInput), (failure, acceptInput), (running, acceptInput)))))}
+    LTLSPEC {(globally, (implies, (success, acceptInput), (next, (or, (success, searchAns), (failure, searchAns), (running, searchAns)))))}
+    LTLSPEC {(globally, (implies, (success, roomKnown), (next, (or, (success, goToRoom), (failure, goToRoom), (running, goToRoom)))))}
+    LTLSPEC {(globally, (implies, (success, goToRoom), (next, (or, (success, sleeping), (failure, sleeping), (running, sleeping)))))}
+    LTLSPEC {(globally, (implies, (success, atKitchen), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, alarm), (next, (or, (success, holdTools), (failure, holdTools)))))}
+    LTLSPEC {(globally, (implies, (success, holdTools), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))}
+    LTLSPEC {(globally, (implies, (success, goToKitchen), (next, (or, (success, useExtinguisher), (failure, useExtinguisher), (running, useExtinguisher)))))}
+}

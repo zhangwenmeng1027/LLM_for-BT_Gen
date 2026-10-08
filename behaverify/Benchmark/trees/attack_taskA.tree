@@ -1,0 +1,75 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env atPosA_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env TargetAdjacent_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env taskFinishedA_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ atPosA_v assign{result{atPosA_v}} }
+    variable_statement{ TargetAdjacent_v assign{result{TargetAdjacent_v}} }
+    variable_statement{ taskFinishedA_v assign{result{taskFinishedA_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { atPosA arguments {} read_variables {atPosA_v} condition{atPosA_v} }
+    environment_check { TargetAdjacent arguments {} read_variables {TargetAdjacent_v} condition{TargetAdjacent_v} }
+    environment_check { taskFinishedA arguments {} read_variables {taskFinishedA_v} condition{taskFinishedA_v} }
+}
+actions {
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { getTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToDestination
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { attackTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+        composite {
+            c1 sequence
+            children {
+                atPosA {}
+                doTaskA {}
+            }
+        }
+        composite {
+            c2 sequence
+            children {
+                getTarget {}
+                moveToDestination {}
+            }
+        }
+        composite {
+            c3 sequence
+            children {
+                TargetAdjacent {}
+                attackTarget {}
+            }
+        }
+            taskFinishedA {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, atPosA), (failure, atPosA)))}
+    LTLSPEC {(globally, (implies, (success, atPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, getTarget), (failure, getTarget), (running, getTarget)))))}
+    LTLSPEC {(globally, (implies, (success, getTarget), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))}
+    LTLSPEC {(globally, (implies, (success, moveToDestination), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))}
+    LTLSPEC {(globally, (implies, (success, TargetAdjacent), (next, (or, (success, attackTarget), (failure, attackTarget), (running, attackTarget)))))}
+    LTLSPEC {(globally, (implies, (success, attackTarget), (next, (or, (success, taskFinishedA), (failure, taskFinishedA)))))}
+}

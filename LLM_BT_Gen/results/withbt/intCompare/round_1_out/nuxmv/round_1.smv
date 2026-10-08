@@ -1,0 +1,143 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.acceptInput.status = success) | (system.acceptInput.status = failure) | (system.acceptInput.status = running)));
+LTLSPEC G(((system.acceptInput.status = success) -> X(((system.setValue.status = success) | (system.setValue.status = failure) | (system.setValue.status = running)))));
+LTLSPEC G(((system.setValue.status = success) -> X(((system.compareValue.status = success) | (system.compareValue.status = failure) | (system.compareValue.status = running)))));
+LTLSPEC G(((system.equalVal.status = success) -> X(((system.stopSearch.status = success) | (system.stopSearch.status = failure) | (system.stopSearch.status = running)))));
+LTLSPEC G(((system.equalVal.status = failure) -> X(((system.searchTarget.status = success) | (system.searchTarget.status = failure) | (system.searchTarget.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.goToKitchen.status = success) | (system.goToKitchen.status = failure) | (system.goToKitchen.status = running)))));
+LTLSPEC G(((system.goToKitchen.status = success) -> X(((system.putDown.status = success) | (system.putDown.status = failure) | (system.putDown.status = running)))));
+LTLSPEC G(((system.goToKitchen.status = failure) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        acceptInput : success_DEFAULT_module();
+        setValue : success_DEFAULT_module();
+        compareValue : success_DEFAULT_module();
+        equalVal : equalVal_module(equalVal_v_stage_0);
+        stopSearch : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(equalVal, stopSearch);
+        searchTarget : success_DEFAULT_module();
+        c1 : composite_selector_without_memory_2(c2, searchTarget);
+        pickUp : success_DEFAULT_module();
+        goToKitchen : success_DEFAULT_module();
+        putDown : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_2(goToKitchen, putDown);
+        goToPosA : _DEFAULT_module();
+        doTaskA : _DEFAULT_module();
+        c5 : composite_sequence_without_memory_2(goToPosA, doTaskA);
+        c3 : composite_selector_without_memory_2(c4, c5);
+        c0 : composite_sequence_without_memory_6(acceptInput, setValue, compareValue, c1, pickUp, c3);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        equalVal_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(equalVal_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(equalVal_v_stage_0) :=
+            case
+                !(c0.active) : equalVal_v_stage_0;
+                TRUE : equalVal_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        acceptInput := 1;
+        setValue := 2;
+        compareValue := 3;
+        c1 := 4;
+        c2 := 5;
+        equalVal := 6;
+        stopSearch := 7;
+        searchTarget := 8;
+        pickUp := 9;
+        c3 := 10;
+        c4 := 11;
+        goToKitchen := 12;
+        putDown := 13;
+        c5 := 14;
+        goToPosA := 15;
+        doTaskA := 16;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_sequence_without_memory_6(child_0, child_1, child_2, child_3, child_4, child_5)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                !(child_5.internal_status = success) : child_5.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+        child_5.active := child_4.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE equalVal_module(equalVal_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (equalVal_v_stage_0) ? success : failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

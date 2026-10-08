@@ -1,0 +1,97 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.noFood.status = success | system.noFood.status = failure)  is true
+-- specification  G (system.noFood.status = failure ->  X (system.noFood.status = success | system.noFood.status = failure))  is true
+-- specification  G (system.noFood.status = success ->  X (system.hasApple.status = success | system.hasApple.status = failure))  is true
+-- specification  G (system.hasApple.status = success ->  X ((system.pickApple.status = success | system.pickApple.status = failure) | system.pickApple.status = running))  is true
+-- specification  G (system.pickApple.status = success ->  X (system.noFood.status = success | system.noFood.status = failure))  is true
+-- specification  G (system.hasApple.status = failure ->  X (system.holdKnife.status = success | system.holdKnife.status = failure))  is true
+-- specification  G (system.holdKnife.status = success ->  X ((system.goCow.status = success | system.goCow.status = failure) | system.goCow.status = running))  is true
+-- specification  G (system.holdKnife.status = failure ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is true
+-- specification  G (system.pickUp.status = success ->  X ((system.goCow.status = success | system.goCow.status = failure) | system.goCow.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.noFood_v_stage_0 = TRUE
+    system.hasApple_v_stage_0 = FALSE
+    system.holdKnife_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.killCow_2 = 14
+    system.node_names.goCow_2 = 13
+    system.node_names.pickUp = 12
+    system.node_names.c5 = 11
+    system.node_names.killCow = 10
+    system.node_names.goCow = 9
+    system.node_names.holdKnife = 8
+    system.node_names.c4 = 7
+    system.node_names.c3 = 6
+    system.node_names.pickApple = 5
+    system.node_names.hasApple = 4
+    system.node_names.c2 = 3
+    system.node_names.c1 = 2
+    system.node_names.noFood = 1
+    system.node_names.c0 = 0
+    system.noFood.internal_status = success
+    system.noFood.status = success
+    system.hasApple.internal_status = failure
+    system.hasApple.status = failure
+    system.pickApple.internal_status = success
+    system.pickApple.status = invalid
+    system.pickApple.active = FALSE
+    system.hasApple.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.holdKnife.internal_status = failure
+    system.holdKnife.status = failure
+    system.goCow.internal_status = success
+    system.goCow.status = invalid
+    system.killCow.internal_status = success
+    system.killCow.status = invalid
+    system.killCow.active = FALSE
+    system.goCow.active = FALSE
+    system.holdKnife.active = TRUE
+    system.c4.internal_status = failure
+    system.c4.status = failure
+    system.pickUp.internal_status = success
+    system.pickUp.status = success
+    system.goCow_2.internal_status = success
+    system.goCow_2.status = success
+    system.killCow_2.internal_status = success
+    system.killCow_2.status = success
+    system.killCow_2.active = TRUE
+    system.goCow_2.active = TRUE
+    system.pickUp.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.c5.active = TRUE
+    system.c4.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.c2.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.c1.active = TRUE
+    system.noFood.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.goCow.status = success ->  X ((system.killCow.status = success | system.killCow.status = failure) | system.killCow.status = running))  is true
+-- specification  G (system.killCow.status = success ->  X (system.noFood.status = success | system.noFood.status = failure))  is true

@@ -1,0 +1,43 @@
+System Role
+    You are an expert in Behavior Tree (BT) synthesis and Linear Temporal Logic (LTL). Your task is to generate a valid Behavior Tree program that satisfies both the provided natural language Instruction and the logical constraints of the LTL Formula.
+
+1. Behavior Tree Syntax
+You must output the program following this strict recursive syntax:
+
+Control Nodes:
+
+[>, r1, r2, ...] : Sequence node. Executes child nodes in order until one fails.
+
+[?, r1, r2, ...] : Fallback (Selector) node. Executes child nodes in order until one succeeds.
+
+Leaf Nodes:
+
+Must be chosen strictly from the Condition Library (representing states/propositions) or Action Library (representing executions).
+
+2. Node Libraries
+Condition Library:
+{atPosA, atPosB, atPosC, picked, detectionCompleted, placed, empty, lowBattery, alarm, atCharge, taskFinishedA, taskFinishedB, hasVictim, hasFire, storm, atPos3, atPos2, atPos9, atPos6, atStation, boxFound, boxNear, patroledA, patroledB, patroledC, placedB, placedC, noFood, hasApple, holdKnife, haveData, unBroken, hasSample, holdItem, noCollision, isExplorationComplete, targetChecked, processComplete, checkReachable, isDoorOpen, isFull, TargetAdjacent, checkBattery, roomKnown, atRoom, bottleFound, invValid, bottleLocated, isHungry, estimateCompleted, bottleGripped, InvIsComputed, atKitchen, visitedA, visitedB, visitedC, acceptedMaterial, holdTools, abilityEvaluated, isTargetReached, checkTimeLess5, isProductReady, isReady, isProcessed, equalVal, isSearched, BatteryOK, TargetFound, TargetCaptured, hasInput, noDeliverTask, fullBattery, isCharge, ballFound, ballClose, ballGrasped, binFound, ballPlaced, robotInRoom, KeepArmsForGrasp, RobotAtInvPose, isOnPasture, isDay, isInShed, isNight}
+
+Action Library:
+{goToPosA, goToPosB, goToPosC, pickUp, putDown, goToStation, charging, doTaskA,Rescue, doTaskB, move3to5,doTaskC, doTaskD, moveToTableware, doTaskE, placeB, placeC, saveVictim, useExtinguisher, moveToOtherRoom, generateDetection, unfoldPanels, searchForBox, closeToBox, Hibernate, foldPanels, getData, send, moveRight, moveDown, move1to3, move1to2, move2to3, move3to2,move3to4, move4to5, move3to6, move6to9, move1to5, goToRoomC, patroling, goToRoomB, goToRoomA, goToKitchen, goToBot, FetchBot, findBot, askHelp, pickApple, pickKnife, goCow, killCow, fix, analyze, moveToPanel, moveFingerToTargetPosition, followOperation, moveToParking, goToStationA, goToStationB, goToStationC, generateNextDestination, moveToDestination, pushR, acceptMaterial, pushP, pushC, putOnTray, pickUpFromTray, activateProcess, continue, goToPos1, goToPos2, goToPos3, goToPos4, goToPos5, goToPos6, goToPos7, passThroughDoor, connectToStation, openDoor, closeDoor, passThroughWindow, findFood, findTableware, eatfood, attackTarget, followHuman, openGripper, closeGripper, locateBottle, fetchBottle, goToBottle, goToRoom, computInv, testPerformance, evaluationPerformance, evaluateProcess, moveTo(0-0), moveTo(2-3), moveTo(4-7), moveTo(5-11), activeManipulator, approachTarget, moveToNewConfiguration, tryGrasp, armSleep, goToStateA, putTray, goToStateB, goToStateC, goToStateD, cleanTray, acceptData, setValue, compareValue, stopSearch, Searching, searchTarget, goToTarRoom, sleeping, waitInput, moveDefaultDeliverPos, deliverObj, moveDesignPos, detectObj, stopCharge, waitCharge, findGlass, fetchGlass, pourDrink, getTarget, randomMove, acceptInput, searchAns, outputAns, putDownBall, searchForBall, closeToBall, graspBall, goToInvPose, graspBottle, findBottle, SetInvPoseInvaild, leaveShed, findRandomPastureField, findShed, enterShed}
+
+3. Constraints & Output Format
+Constraint 1: The first element of every list must be a control operator: ? or >.
+Constraint 2: All leaf nodes must be strings from the provided libraries.
+Constraint 3: Output ONLY the resulting list structure. No "Goal" headers, no "Sketch", and no conversational filler.
+
+4. Few-shot Demonstrations
+Instruction: The robot executes the following tasks in sequence. First go to position A, then go to position B.
+LTL: G(goToPosA_s && X(goToPosB_s|| goToPosB_f||goToPosB_r))
+Output: [>, goToPosA, goToPosB]
+
+Instruction: The robot chooses to perform one of the following branch tasks. Either go to position A or go to position B.
+LTL: G(goToPosA_f && X(goToPosB_s|| goToPosB_f||goToPosB_r))
+Output: [?, goToPosA, goToPosB]
+
+Instruction: Check if the robot's battery level is low, and if so, go to the charging station. Otherwise, go to position B.
+LTL: G(lowBattery_s -> X(goToStation_s||goToStation_f||goToStation_r)) && G(lowBattery_f && X(goToPosB_s|| goToPosB_f||goToPosB_r))
+Output: [?, [>, lowBattery, goToStation], goToPosB]
+
+Instruction:
+"""

@@ -1,0 +1,40 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env TargetFound_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ TargetFound_v assign{result{TargetFound_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { TargetFound arguments {} read_variables {TargetFound_v} condition{TargetFound_v} }
+}
+actions {
+    action { moveToDestination
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            moveToDestination {}
+            TargetFound {}
+            pickUp {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, moveToDestination), (failure, moveToDestination)))}
+    LTLSPEC {(globally, (implies, (success, moveToDestination), (next, (or, (success, TargetFound), (failure, TargetFound)))))}
+    LTLSPEC {(globally, (implies, (success, TargetFound), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (failure, TargetFound), (next, (or, (success, moveToDestination), (failure, moveToDestination)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, moveToDestination), (failure, moveToDestination)))))}
+}

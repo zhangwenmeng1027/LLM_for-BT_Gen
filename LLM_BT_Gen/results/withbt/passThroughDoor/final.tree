@@ -1,0 +1,71 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isDoorOpen_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isDoorOpen_v assign{result{isDoorOpen_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isDoorOpen arguments {} read_variables {isDoorOpen_v} condition{isDoorOpen_v} }
+}
+actions {
+    action { passThroughDoor
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeDoor
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { openDoor
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { passThroughDoor_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeDoor_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { passThroughWindow
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    isDoorOpen {}
+                    passThroughDoor {}
+                    closeDoor {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    openDoor {}
+                    passThroughDoor_2 {}
+                    closeDoor_2 {}
+                }
+            }
+            passThroughWindow {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isDoorOpen), (failure, isDoorOpen)))}
+    LTLSPEC {(globally, (implies, (success, isDoorOpen), (next, (or, (or, (success, passThroughDoor), (success, passThroughDoor_2)), (or, (failure, passThroughDoor), (failure, passThroughDoor_2)), (or, (running, passThroughDoor), (running, passThroughDoor_2))))))}
+    LTLSPEC {(globally, (implies, (or, (success, passThroughDoor), (success, passThroughDoor_2)), (next, (or, (or, (success, closeDoor), (success, closeDoor_2)), (or, (failure, closeDoor), (failure, closeDoor_2)), (or, (running, closeDoor), (running, closeDoor_2))))))}
+    LTLSPEC {(globally, (implies, (failure, isDoorOpen), (next, (or, (success, openDoor), (failure, openDoor), (running, openDoor)))))}
+    LTLSPEC {(globally, (implies, (success, openDoor), (next, (or, (or, (success, passThroughDoor), (success, passThroughDoor_2)), (or, (failure, passThroughDoor), (failure, passThroughDoor_2)), (or, (running, passThroughDoor), (running, passThroughDoor_2))))))}
+    LTLSPEC {(globally, (implies, (failure, openDoor), (next, (or, (success, passThroughWindow), (failure, passThroughWindow), (running, passThroughWindow)))))}
+}

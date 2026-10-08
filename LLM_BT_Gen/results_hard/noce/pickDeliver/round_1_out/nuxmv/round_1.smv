@@ -1,0 +1,140 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.moveDefaultDeliverPos.status = success) | (system.moveDefaultDeliverPos.status = failure)));
+LTLSPEC G(((system.moveDefaultDeliverPos.status = success) -> X(((system.deliverObj.status = success) | (system.deliverObj.status = failure) | (system.deliverObj.status = running)))));
+LTLSPEC G(((system.deliverObj.status = success) -> X(((system.moveDefaultDeliverPos.status = success) | (system.moveDefaultDeliverPos.status = failure)))));
+LTLSPEC G(((system.moveDesignPos.status = success) -> X(((system.deliverObj_2.status = success) | (system.deliverObj_2.status = failure) | (system.deliverObj_2.status = running)))));
+LTLSPEC G(((system.deliverObj_2.status = success) -> X(((system.moveDefaultDeliverPos.status = success) | (system.moveDefaultDeliverPos.status = failure)))));
+LTLSPEC G(((system.noDeliverTask.status = success) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.noDeliverTask.status = failure) -> X(((system.approachTarget.status = success) | (system.approachTarget.status = failure) | (system.approachTarget.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.charging.status = success) -> X(((system.moveDefaultDeliverPos.status = success) | (system.moveDefaultDeliverPos.status = failure)))));
+LTLSPEC G(((system.approachTarget.status = success) -> X(((system.detectObj.status = success) | (system.detectObj.status = failure) | (system.detectObj.status = running)))));
+LTLSPEC G(((system.detectObj.status = success) -> X(((system.pickUp.status = success) | (system.pickUp.status = failure) | (system.pickUp.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.moveDefaultDeliverPos.status = success) | (system.moveDefaultDeliverPos.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        moveDefaultDeliverPos : success_DEFAULT_module();
+        deliverObj : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_2(moveDefaultDeliverPos, deliverObj);
+        moveDesignPos : _DEFAULT_module();
+        deliverObj_2 : _DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(moveDesignPos, deliverObj_2);
+        noDeliverTask : noDeliverTask_module(noDeliverTask_v_stage_0);
+        goToStation : _DEFAULT_module();
+        charging : _DEFAULT_module();
+        c3 : composite_sequence_without_memory_3(noDeliverTask, goToStation, charging);
+        approachTarget : _DEFAULT_module();
+        detectObj : _DEFAULT_module();
+        pickUp : _DEFAULT_module();
+        c4 : composite_sequence_without_memory_3(approachTarget, detectObj, pickUp);
+        c0 : composite_selector_without_memory_4(c1, c2, c3, c4);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        noDeliverTask_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(noDeliverTask_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(noDeliverTask_v_stage_0) :=
+            case
+                !(c0.active) : noDeliverTask_v_stage_0;
+                TRUE : noDeliverTask_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        moveDefaultDeliverPos := 2;
+        deliverObj := 3;
+        c2 := 4;
+        moveDesignPos := 5;
+        deliverObj_2 := 6;
+        c3 := 7;
+        noDeliverTask := 8;
+        goToStation := 9;
+        charging := 10;
+        c4 := 11;
+        approachTarget := 12;
+        detectObj := 13;
+        pickUp := 14;
+MODULE composite_selector_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE noDeliverTask_module(noDeliverTask_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (noDeliverTask_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;

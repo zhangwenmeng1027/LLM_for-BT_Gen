@@ -1,0 +1,435 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.isHungry.status = success | system.isHungry.status = failure)  is true
+-- specification  G (system.isHungry.status = success ->  X (system.hasApple.status = success | system.hasApple.status = failure))  is true
+-- specification  G (system.hasApple.status = success ->  X ((system.eatfood.status = success | system.eatfood.status = failure) | system.eatfood.status = running))  is true
+-- specification  G (system.hasApple.status = failure ->  X ((system.pickApple.status = success | system.pickApple.status = failure) | system.pickApple.status = running))  is true
+-- specification  G (system.pickApple.status = success ->  X ((system.eatfood.status = success | system.eatfood.status = failure) | system.eatfood.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.isHungry_v_stage_0 = TRUE
+    system.hasApple_v_stage_0 = FALSE
+    system.noFood_v_stage_0 = FALSE
+    system.isFull_v_stage_0 = FALSE
+    system.empty_v_stage_0 = FALSE
+    system.holdItem_v_stage_0 = FALSE
+    system.isNight_v_stage_0 = FALSE
+    system.hasApple_2_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.goToKitchen = 28
+    system.node_names.isNight = 27
+    system.node_names.c11 = 26
+    system.node_names.closeGripper = 25
+    system.node_names.holdItem = 24
+    system.node_names.c10 = 23
+    system.node_names.putDown = 22
+    system.node_names.goToStation = 21
+    system.node_names.empty = 20
+    system.node_names.c9 = 19
+    system.node_names.c8 = 18
+    system.node_names.isFull = 17
+    system.node_names.c7 = 16
+    system.node_names.pickApple_2 = 15
+    system.node_names.eatfood_2 = 14
+    system.node_names.hasApple_2 = 13
+    system.node_names.c6 = 12
+    system.node_names.c5 = 11
+    system.node_names.findFood = 10
+    system.node_names.noFood = 9
+    system.node_names.c4 = 8
+    system.node_names.pickApple = 7
+    system.node_names.eatfood = 6
+    system.node_names.hasApple = 5
+    system.node_names.c3 = 4
+    system.node_names.c2 = 3
+    system.node_names.isHungry = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.isHungry.internal_status = success
+    system.isHungry.status = success
+    system.hasApple.internal_status = failure
+    system.hasApple.status = failure
+    system.eatfood.internal_status = success
+    system.eatfood.status = invalid
+    system.eatfood.active = FALSE
+    system.hasApple.active = TRUE
+    system.c3.internal_status = failure
+    system.c3.status = failure
+    system.pickApple.internal_status = success
+    system.pickApple.status = success
+    system.pickApple.active = TRUE
+    system.c3.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.c2.active = TRUE
+    system.isHungry.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.noFood.internal_status = failure
+    system.noFood.status = invalid
+    system.findFood.internal_status = success
+    system.findFood.status = invalid
+    system.hasApple_2.internal_status = failure
+    system.hasApple_2.status = invalid
+    system.eatfood_2.internal_status = success
+    system.eatfood_2.status = invalid
+    system.eatfood_2.active = FALSE
+    system.hasApple_2.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.pickApple_2.internal_status = success
+    system.pickApple_2.status = invalid
+    system.pickApple_2.active = FALSE
+    system.c6.active = FALSE
+    system.c5.internal_status = success
+    system.c5.status = invalid
+    system.c5.active = FALSE
+    system.findFood.active = FALSE
+    system.noFood.active = FALSE
+    system.c4.internal_status = failure
+    system.c4.status = invalid
+    system.isFull.internal_status = failure
+    system.isFull.status = invalid
+    system.empty.internal_status = failure
+    system.empty.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.empty.active = FALSE
+    system.c9.internal_status = failure
+    system.c9.status = invalid
+    system.putDown.internal_status = success
+    system.putDown.status = invalid
+    system.putDown.active = FALSE
+    system.c9.active = FALSE
+    system.c8.internal_status = success
+    system.c8.status = invalid
+    system.c8.active = FALSE
+    system.isFull.active = FALSE
+    system.c7.internal_status = failure
+    system.c7.status = invalid
+    system.holdItem.internal_status = failure
+    system.holdItem.status = invalid
+    system.closeGripper.internal_status = success
+    system.closeGripper.status = invalid
+    system.closeGripper.active = FALSE
+    system.holdItem.active = FALSE
+    system.c10.internal_status = failure
+    system.c10.status = invalid
+    system.isNight.internal_status = failure
+    system.isNight.status = invalid
+    system.goToKitchen.internal_status = success
+    system.goToKitchen.status = invalid
+    system.goToKitchen.active = FALSE
+    system.isNight.active = FALSE
+    system.c11.internal_status = failure
+    system.c11.status = invalid
+    system.c11.active = FALSE
+    system.c10.active = FALSE
+    system.c7.active = FALSE
+    system.c4.active = FALSE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.eatfood.status = success ->  X (system.isHungry.status = success | system.isHungry.status = failure))  is true
+-- specification  G (system.isHungry.status = failure ->  X (system.noFood.status = success | system.noFood.status = failure))  is true
+-- specification  G (system.noFood.status = success ->  X ((system.findFood.status = success | system.findFood.status = failure) | system.findFood.status = running))  is true
+-- specification  G (system.findFood.status = success ->  X (system.hasApple_2.status = success | system.hasApple_2.status = failure))  is true
+-- specification  G (system.hasApple_2.status = success ->  X ((system.eatfood_2.status = success | system.eatfood_2.status = failure) | system.eatfood_2.status = running))  is true
+-- specification  G (system.hasApple_2.status = failure ->  X ((system.pickApple_2.status = success | system.pickApple_2.status = failure) | system.pickApple_2.status = running))  is true
+-- specification  G (system.pickApple_2.status = success ->  X ((system.eatfood_2.status = success | system.eatfood_2.status = failure) | system.eatfood_2.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 2.1 <-
+    system.isHungry_v_stage_0 = FALSE
+    system.hasApple_v_stage_0 = FALSE
+    system.noFood_v_stage_0 = TRUE
+    system.isFull_v_stage_0 = FALSE
+    system.empty_v_stage_0 = FALSE
+    system.holdItem_v_stage_0 = FALSE
+    system.isNight_v_stage_0 = FALSE
+    system.hasApple_2_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.goToKitchen = 28
+    system.node_names.isNight = 27
+    system.node_names.c11 = 26
+    system.node_names.closeGripper = 25
+    system.node_names.holdItem = 24
+    system.node_names.c10 = 23
+    system.node_names.putDown = 22
+    system.node_names.goToStation = 21
+    system.node_names.empty = 20
+    system.node_names.c9 = 19
+    system.node_names.c8 = 18
+    system.node_names.isFull = 17
+    system.node_names.c7 = 16
+    system.node_names.pickApple_2 = 15
+    system.node_names.eatfood_2 = 14
+    system.node_names.hasApple_2 = 13
+    system.node_names.c6 = 12
+    system.node_names.c5 = 11
+    system.node_names.findFood = 10
+    system.node_names.noFood = 9
+    system.node_names.c4 = 8
+    system.node_names.pickApple = 7
+    system.node_names.eatfood = 6
+    system.node_names.hasApple = 5
+    system.node_names.c3 = 4
+    system.node_names.c2 = 3
+    system.node_names.isHungry = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.isHungry.internal_status = failure
+    system.isHungry.status = failure
+    system.hasApple.internal_status = failure
+    system.hasApple.status = invalid
+    system.eatfood.internal_status = success
+    system.eatfood.status = invalid
+    system.eatfood.active = FALSE
+    system.hasApple.active = FALSE
+    system.c3.internal_status = failure
+    system.c3.status = invalid
+    system.pickApple.internal_status = success
+    system.pickApple.status = invalid
+    system.pickApple.active = FALSE
+    system.c3.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.c2.active = FALSE
+    system.isHungry.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.noFood.internal_status = success
+    system.noFood.status = success
+    system.findFood.internal_status = success
+    system.findFood.status = success
+    system.hasApple_2.internal_status = failure
+    system.hasApple_2.status = failure
+    system.eatfood_2.internal_status = success
+    system.eatfood_2.status = invalid
+    system.eatfood_2.active = FALSE
+    system.hasApple_2.active = TRUE
+    system.c6.internal_status = failure
+    system.c6.status = failure
+    system.pickApple_2.internal_status = success
+    system.pickApple_2.status = success
+    system.pickApple_2.active = TRUE
+    system.c6.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.c5.active = TRUE
+    system.findFood.active = TRUE
+    system.noFood.active = TRUE
+    system.c4.internal_status = success
+    system.c4.status = success
+    system.isFull.internal_status = failure
+    system.isFull.status = invalid
+    system.empty.internal_status = failure
+    system.empty.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.empty.active = FALSE
+    system.c9.internal_status = failure
+    system.c9.status = invalid
+    system.putDown.internal_status = success
+    system.putDown.status = invalid
+    system.putDown.active = FALSE
+    system.c9.active = FALSE
+    system.c8.internal_status = success
+    system.c8.status = invalid
+    system.c8.active = FALSE
+    system.isFull.active = FALSE
+    system.c7.internal_status = failure
+    system.c7.status = invalid
+    system.holdItem.internal_status = failure
+    system.holdItem.status = invalid
+    system.closeGripper.internal_status = success
+    system.closeGripper.status = invalid
+    system.closeGripper.active = FALSE
+    system.holdItem.active = FALSE
+    system.c10.internal_status = failure
+    system.c10.status = invalid
+    system.isNight.internal_status = failure
+    system.isNight.status = invalid
+    system.goToKitchen.internal_status = success
+    system.goToKitchen.status = invalid
+    system.goToKitchen.active = FALSE
+    system.isNight.active = FALSE
+    system.c11.internal_status = failure
+    system.c11.status = invalid
+    system.c11.active = FALSE
+    system.c10.active = FALSE
+    system.c7.active = FALSE
+    system.c4.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 2.2 <-
+-- specification  G (system.eatfood_2.status = success ->  X (system.isHungry.status = success | system.isHungry.status = failure))  is true
+-- specification  G (system.noFood.status = failure ->  X (system.isFull.status = success | system.isFull.status = failure))  is true
+-- specification  G (system.isFull.status = success ->  X (system.empty.status = success | system.empty.status = failure))  is true
+-- specification  G (system.empty.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))  is true
+-- specification  G (system.empty.status = failure ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))  is true
+-- specification  G (system.putDown.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 3.1 <-
+    system.isHungry_v_stage_0 = FALSE
+    system.hasApple_v_stage_0 = FALSE
+    system.noFood_v_stage_0 = FALSE
+    system.isFull_v_stage_0 = TRUE
+    system.empty_v_stage_0 = FALSE
+    system.holdItem_v_stage_0 = FALSE
+    system.isNight_v_stage_0 = FALSE
+    system.hasApple_2_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.goToKitchen = 28
+    system.node_names.isNight = 27
+    system.node_names.c11 = 26
+    system.node_names.closeGripper = 25
+    system.node_names.holdItem = 24
+    system.node_names.c10 = 23
+    system.node_names.putDown = 22
+    system.node_names.goToStation = 21
+    system.node_names.empty = 20
+    system.node_names.c9 = 19
+    system.node_names.c8 = 18
+    system.node_names.isFull = 17
+    system.node_names.c7 = 16
+    system.node_names.pickApple_2 = 15
+    system.node_names.eatfood_2 = 14
+    system.node_names.hasApple_2 = 13
+    system.node_names.c6 = 12
+    system.node_names.c5 = 11
+    system.node_names.findFood = 10
+    system.node_names.noFood = 9
+    system.node_names.c4 = 8
+    system.node_names.pickApple = 7
+    system.node_names.eatfood = 6
+    system.node_names.hasApple = 5
+    system.node_names.c3 = 4
+    system.node_names.c2 = 3
+    system.node_names.isHungry = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.isHungry.internal_status = failure
+    system.isHungry.status = failure
+    system.hasApple.internal_status = failure
+    system.hasApple.status = invalid
+    system.eatfood.internal_status = success
+    system.eatfood.status = invalid
+    system.eatfood.active = FALSE
+    system.hasApple.active = FALSE
+    system.c3.internal_status = failure
+    system.c3.status = invalid
+    system.pickApple.internal_status = success
+    system.pickApple.status = invalid
+    system.pickApple.active = FALSE
+    system.c3.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.c2.active = FALSE
+    system.isHungry.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.noFood.internal_status = failure
+    system.noFood.status = failure
+    system.findFood.internal_status = success
+    system.findFood.status = invalid
+    system.hasApple_2.internal_status = failure
+    system.hasApple_2.status = invalid
+    system.eatfood_2.internal_status = success
+    system.eatfood_2.status = invalid
+    system.eatfood_2.active = FALSE
+    system.hasApple_2.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.pickApple_2.internal_status = success
+    system.pickApple_2.status = invalid
+    system.pickApple_2.active = FALSE
+    system.c6.active = FALSE
+    system.c5.internal_status = success
+    system.c5.status = invalid
+    system.c5.active = FALSE
+    system.findFood.active = FALSE
+    system.noFood.active = TRUE
+    system.c4.internal_status = failure
+    system.c4.status = failure
+    system.isFull.internal_status = success
+    system.isFull.status = success
+    system.empty.internal_status = failure
+    system.empty.status = failure
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.empty.active = TRUE
+    system.c9.internal_status = failure
+    system.c9.status = failure
+    system.putDown.internal_status = success
+    system.putDown.status = success
+    system.putDown.active = TRUE
+    system.c9.active = TRUE
+    system.c8.internal_status = success
+    system.c8.status = success
+    system.c8.active = TRUE
+    system.isFull.active = TRUE
+    system.c7.internal_status = success
+    system.c7.status = success
+    system.holdItem.internal_status = failure
+    system.holdItem.status = invalid
+    system.closeGripper.internal_status = success
+    system.closeGripper.status = invalid
+    system.closeGripper.active = FALSE
+    system.holdItem.active = FALSE
+    system.c10.internal_status = failure
+    system.c10.status = invalid
+    system.isNight.internal_status = failure
+    system.isNight.status = invalid
+    system.goToKitchen.internal_status = success
+    system.goToKitchen.status = invalid
+    system.goToKitchen.active = FALSE
+    system.isNight.active = FALSE
+    system.c11.internal_status = failure
+    system.c11.status = invalid
+    system.c11.active = FALSE
+    system.c10.active = FALSE
+    system.c7.active = TRUE
+    system.c4.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 3.2 <-
+-- specification  G (system.goToStation.status = success ->  X (system.isHungry.status = success | system.isHungry.status = failure))  is true
+-- specification  G (system.isFull.status = failure ->  X (system.holdItem.status = success | system.holdItem.status = failure))  is true
+-- specification  G (system.holdItem.status = success ->  X ((system.closeGripper.status = success | system.closeGripper.status = failure) | system.closeGripper.status = running))  is true
+-- specification  G (system.closeGripper.status = success ->  X (system.isHungry.status = success | system.isHungry.status = failure))  is true
+-- specification  G (system.holdItem.status = failure ->  X (system.isNight.status = success | system.isNight.status = failure))  is true
+-- specification  G (system.isNight.status = success ->  X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running))  is true
+-- specification  G (system.isNight.status = failure ->  X (system.isHungry.status = success | system.isHungry.status = failure))  is true
+-- specification  G (system.goToKitchen.status = success ->  X (system.isHungry.status = success | system.isHungry.status = failure))  is true

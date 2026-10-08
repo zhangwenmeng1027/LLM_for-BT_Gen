@@ -1,0 +1,99 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.visitedA.status = success | system.visitedA.status = failure)  is true
+-- specification  G (system.visitedA.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.visitedA_v_stage_0 = FALSE
+    system.visitedB_v_stage_0 = FALSE
+    system.visitedC_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.patroling_3 = 15
+    system.node_names.goToPosC = 14
+    system.node_names.c6 = 13
+    system.node_names.visitedC = 12
+    system.node_names.c5 = 11
+    system.node_names.patroling_2 = 10
+    system.node_names.goToPosB = 9
+    system.node_names.c4 = 8
+    system.node_names.visitedB = 7
+    system.node_names.c3 = 6
+    system.node_names.patroling = 5
+    system.node_names.goToPosA = 4
+    system.node_names.c2 = 3
+    system.node_names.visitedA = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.visitedA.internal_status = failure
+    system.visitedA.status = failure
+    system.goToPosA.internal_status = success
+    system.goToPosA.status = invalid
+    system.patroling.internal_status = success
+    system.patroling.status = invalid
+    system.patroling.active = FALSE
+    system.goToPosA.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.c2.active = FALSE
+    system.visitedA.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.visitedB.internal_status = failure
+    system.visitedB.status = invalid
+    system.goToPosB.internal_status = success
+    system.goToPosB.status = invalid
+    system.patroling_2.internal_status = success
+    system.patroling_2.status = invalid
+    system.patroling_2.active = FALSE
+    system.goToPosB.active = FALSE
+    system.c4.internal_status = success
+    system.c4.status = invalid
+    system.c4.active = FALSE
+    system.visitedB.active = FALSE
+    system.c3.internal_status = success
+    system.c3.status = invalid
+    system.visitedC.internal_status = failure
+    system.visitedC.status = invalid
+    system.goToPosC.internal_status = success
+    system.goToPosC.status = invalid
+    system.patroling_3.internal_status = success
+    system.patroling_3.status = invalid
+    system.patroling_3.active = FALSE
+    system.goToPosC.active = FALSE
+    system.c6.internal_status = success
+    system.c6.status = invalid
+    system.c6.active = FALSE
+    system.visitedC.active = FALSE
+    system.c5.internal_status = success
+    system.c5.status = invalid
+    system.c5.active = FALSE
+    system.c3.active = FALSE
+    system.c1.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 1.2 <-
+-- specification  G (system.visitedA.status = success ->  X (system.visitedB.status = success | system.visitedB.status = failure))  is true
+-- specification  G (system.visitedB.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))  is true
+-- specification  G (system.goToPosA.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))  is true
+-- specification  G (system.goToPosB.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))  is true
+-- specification  G (system.visitedB.status = success ->  X (system.visitedC.status = success | system.visitedC.status = failure))  is true
+-- specification  G (system.visitedC.status = failure ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is true
+-- specification  G (system.goToPosC.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))  is true

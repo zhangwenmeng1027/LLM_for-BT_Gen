@@ -1,0 +1,108 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isDay_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isDoorOpen_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env checkReachable_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env picked_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isDay_v assign{result{isDay_v}} }
+    variable_statement{ isDoorOpen_v assign{result{isDoorOpen_v}} }
+    variable_statement{ checkReachable_v assign{result{checkReachable_v}} }
+    variable_statement{ picked_v assign{result{picked_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isDay arguments {} read_variables {isDay_v} condition{isDay_v} }
+    environment_check { isDoorOpen arguments {} read_variables {isDoorOpen_v} condition{isDoorOpen_v} }
+    environment_check { checkReachable arguments {} read_variables {checkReachable_v} condition{checkReachable_v} }
+    environment_check { picked arguments {} read_variables {picked_v} condition{picked_v} }
+}
+actions {
+    action { openDoor
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { askHelp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { placeB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            isDay {}
+            composite {
+                c1 selector
+                children {
+                    isDoorOpen {}
+                    openDoor {}
+                }
+            }
+            composite {
+                c2 selector
+                children {
+                    checkReachable {}
+                    askHelp {}
+                }
+            }
+            goToPosA {}
+            pickUp {}
+            composite {
+                c3 selector
+                children {
+                    picked {}
+                    pickUp_2 {}
+                }
+            }
+            goToPosB {}
+            placeB {}
+            closeGripper {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isDay), (failure, isDay)))}
+    LTLSPEC {(globally, (implies, (success, isDay), (next, (or, (success, isDoorOpen), (failure, isDoorOpen)))))}
+    LTLSPEC {(globally, (implies, (failure, isDay), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, isDoorOpen), (next, (or, (success, checkReachable), (failure, checkReachable)))))}
+    LTLSPEC {(globally, (implies, (failure, isDoorOpen), (next, (or, (success, openDoor), (failure, openDoor), (running, openDoor)))))}
+    LTLSPEC {(globally, (implies, (success, openDoor), (next, (or, (success, checkReachable), (failure, checkReachable)))))}
+    LTLSPEC {(globally, (implies, (success, checkReachable), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (failure, checkReachable), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))}
+    LTLSPEC {(globally, (implies, (success, askHelp), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, picked), (failure, picked)))))}
+    LTLSPEC {(globally, (implies, (success, picked), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (failure, picked), (next, (or, (success, pickUp_2), (failure, pickUp_2), (running, pickUp_2)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp_2), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, placeB), (failure, placeB), (running, placeB)))))}
+    LTLSPEC {(globally, (implies, (success, placeB), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))}
+    LTLSPEC {(globally, (implies, (success, closeGripper), (next, (or, (success, isDay), (failure, isDay)))))}
+}

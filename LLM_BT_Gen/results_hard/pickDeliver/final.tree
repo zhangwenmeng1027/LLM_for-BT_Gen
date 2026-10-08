@@ -1,0 +1,102 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env noDeliverTask_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ noDeliverTask_v assign{result{noDeliverTask_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { noDeliverTask arguments {} read_variables {noDeliverTask_v} condition{noDeliverTask_v} }
+}
+actions {
+    action { moveDefaultDeliverPos
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { deliverObj
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveDesignPos
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { deliverObj_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { approachTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { detectObj
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    moveDefaultDeliverPos {}
+                    deliverObj {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    moveDesignPos {}
+                    deliverObj_2 {}
+                }
+            }
+            composite {
+                c3 sequence
+                children {
+                    noDeliverTask {}
+                    goToStation {}
+                    charging {}
+                }
+            }
+            composite {
+                c4 sequence
+                children {
+                    approachTarget {}
+                    detectObj {}
+                    pickUp {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, moveDefaultDeliverPos), (failure, moveDefaultDeliverPos)))}
+    LTLSPEC {(globally, (implies, (success, moveDefaultDeliverPos), (next, (or, (success, deliverObj), (failure, deliverObj), (running, deliverObj)))))}
+    LTLSPEC {(globally, (implies, (success, deliverObj), (next, (or, (success, moveDefaultDeliverPos), (failure, moveDefaultDeliverPos)))))}
+    LTLSPEC {(globally, (implies, (success, moveDesignPos), (next, (or, (success, deliverObj_2), (failure, deliverObj_2), (running, deliverObj_2)))))}
+    LTLSPEC {(globally, (implies, (success, deliverObj_2), (next, (or, (success, moveDefaultDeliverPos), (failure, moveDefaultDeliverPos)))))}
+    LTLSPEC {(globally, (implies, (success, noDeliverTask), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (failure, noDeliverTask), (next, (or, (success, approachTarget), (failure, approachTarget), (running, approachTarget)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, charging), (next, (or, (success, moveDefaultDeliverPos), (failure, moveDefaultDeliverPos)))))}
+    LTLSPEC {(globally, (implies, (success, approachTarget), (next, (or, (success, detectObj), (failure, detectObj), (running, detectObj)))))}
+    LTLSPEC {(globally, (implies, (success, detectObj), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, moveDefaultDeliverPos), (failure, moveDefaultDeliverPos)))))}
+}

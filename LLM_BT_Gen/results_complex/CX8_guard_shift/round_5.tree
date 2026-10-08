@@ -1,0 +1,205 @@
+configuration {} 
+enumerations {} 
+constants {} 
+variables {
+    variable { env alarm_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env hasFire_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env atStation_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env isDoorOpen_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env hasVictim_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env isDay_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env visitedA_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env visitedB_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env visitedC_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env isNight_v VAR BOOLEAN assign { result { True, False } } }
+    variable { env atStation_2_v VAR BOOLEAN assign { result { True, False } } }
+}
+environment_update {
+    variable_statement{ alarm_v assign{ result { alarm_v } } }
+    variable_statement{ hasFire_v assign{ result { hasFire_v } } }
+    variable_statement{ atStation_v assign{ result { atStation_v } } }
+    variable_statement{ isDoorOpen_v assign{ result { isDoorOpen_v } } }
+    variable_statement{ hasVictim_v assign{ result { hasVictim_v } } }
+    variable_statement{ isDay_v assign{ result { isDay_v } } }
+    variable_statement{ visitedA_v assign{ result { visitedA_v } } }
+    variable_statement{ visitedB_v assign{ result { visitedB_v } } }
+    variable_statement{ visitedC_v assign{ result { visitedC_v } } }
+    variable_statement{ isNight_v assign{ result { isNight_v } } }
+    variable_statement{ atStation_2_v assign{ result { atStation_2_v } } }
+}
+checks {}
+environment_checks {
+    environment_check { alarm arguments {} read_variables { alarm_v } condition { alarm_v } }
+    environment_check { hasFire arguments {} read_variables { hasFire_v } condition { hasFire_v } }
+    environment_check { atStation arguments {} read_variables { atStation_v } condition { atStation_v } }
+    environment_check { isDoorOpen arguments {} read_variables { isDoorOpen_v } condition { isDoorOpen_v } }
+    environment_check { hasVictim arguments {} read_variables { hasVictim_v } condition { hasVictim_v } }
+    environment_check { isDay arguments {} read_variables { isDay_v } condition { isDay_v } }
+    environment_check { visitedA arguments {} read_variables { visitedA_v } condition { visitedA_v } }
+    environment_check { visitedB arguments {} read_variables { visitedB_v } condition { visitedB_v } }
+    environment_check { visitedC arguments {} read_variables { visitedC_v } condition { visitedC_v } }
+    environment_check { isNight arguments {} read_variables { isNight_v } condition { isNight_v } }
+    environment_check { atStation_2 arguments {} read_variables { atStation_2_v } condition { atStation_2_v } }
+}
+actions {
+    action { useExtinguisher arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { goToStation arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { closeDoor arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { askHelp arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { goToPosA arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { patroling arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { goToPosB arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { patroling_2 arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { goToPosC arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { patroling_3 arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { charging arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { closeDoor_2 arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+    action { goToStation_2 arguments {} local_variables{} read_variables{} write_variables{} initial_values{} update { return_statement{ result { success } } } }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    alarm {}
+                    composite {
+                        c2 selector
+                        children {
+                            composite {
+                                c3 sequence
+                                children {
+                                    hasFire {}
+                                    useExtinguisher {}
+                                }
+                            }
+                            success {} // Placeholder node for selector's at least one child rule
+                        }
+                    }
+                    composite {
+                        c4 selector
+                        children {
+                            atStation {}
+                            goToStation {}
+                        }
+                    }
+                    closeDoor {}
+                }
+            }
+            composite {
+                c5 sequence
+                children {
+                    hasVictim {}
+                    askHelp {}
+                }
+            }
+            composite {
+                c6 sequence
+                children {
+                    isDay {}
+                    composite {
+                        c7 selector
+                        children {
+                            visitedA {}
+                            composite {
+                                c8 sequence
+                                children {
+                                    goToPosA {}
+                                    patroling {}
+                                }
+                            }
+                        }
+                    }
+                    composite {
+                        c9 selector
+                        children {
+                            visitedB {}
+                            composite {
+                                c10 sequence
+                                children {
+                                    goToPosB {}
+                                    patroling_2 {}
+                                }
+                            }
+                        }
+                    }
+                    composite {
+                        c11 selector
+                        children {
+                            visitedC {}
+                            composite {
+                                c12 sequence
+                                children {
+                                    goToPosC {}
+                                    patroling_3 {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            composite {
+                c13 sequence
+                children {
+                    isNight {}
+                    composite {
+                        c14 selector
+                        children {
+                            atStation_2 {}
+                            goToStation_2 {}
+                        }
+                    }
+                    charging {}
+                    composite {
+                        c15 selector
+                        children {
+                            isDoorOpen {}
+                            closeDoor_2 {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+tick_prerequisite { True }
+specifications {
+    LTLSPEC {(next, (or, (success, alarm), (failure, alarm)))}
+    LTLSPEC {(globally, (implies, (success, alarm), (next, (or, (success, hasFire), (failure, hasFire)))))}
+    LTLSPEC {(globally, (implies, (failure, alarm), (next, (or, (success, hasVictim), (failure, hasVictim)))))}
+    LTLSPEC {(globally, (implies, (success, hasFire), (next, (or, (success, atStation), (failure, atStation)))))}
+    LTLSPEC {(globally, (implies, (failure, hasFire), (next, (or, (success, useExtinguisher), (failure, useExtinguisher), (running, useExtinguisher)))))}
+    LTLSPEC {(globally, (implies, (success, useExtinguisher), (next, (or, (success, atStation), (failure, atStation)))))}
+    LTLSPEC {(globally, (implies, (success, atStation), (next, (or, (success, closeDoor), (failure, closeDoor), (running, closeDoor)))))}
+    LTLSPEC {(globally, (implies, (failure, atStation), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, closeDoor), (failure, closeDoor), (running, closeDoor)))))}
+    LTLSPEC {(globally, (implies, (success, closeDoor), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, hasVictim), (next, (or, (success, askHelp), (failure, askHelp), (running, askHelp)))))}
+    LTLSPEC {(globally, (implies, (failure, hasVictim), (next, (or, (success, isDay), (failure, isDay)))))}
+    LTLSPEC {(globally, (implies, (success, askHelp), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, isDay), (next, (or, (success, visitedA), (failure, visitedA)))))}
+    LTLSPEC {(globally, (implies, (failure, isDay), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, visitedA), (next, (or, (success, visitedB), (failure, visitedB)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedA), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, patroling), (failure, patroling), (running, patroling)))))}
+    LTLSPEC {(globally, (implies, (success, patroling), (next, (or, (success, visitedB), (failure, visitedB)))))}
+    LTLSPEC {(globally, (implies, (success, visitedB), (next, (or, (success, visitedC), (failure, visitedC)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedB), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, patroling_2), (failure, patroling_2), (running, patroling_2)))))}
+    LTLSPEC {(globally, (implies, (success, patroling_2), (next, (or, (success, visitedC), (failure, visitedC)))))}
+    LTLSPEC {(globally, (implies, (success, visitedC), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (failure, visitedC), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, patroling_3), (failure, patroling_3), (running, patroling_3)))))}
+    LTLSPEC {(globally, (implies, (success, patroling_3), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, isNight), (next, (or, (success, atStation_2), (failure, atStation_2)))))}
+    LTLSPEC {(globally, (implies, (failure, isNight), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, atStation_2), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (failure, atStation_2), (next, (or, (success, goToStation_2), (failure, goToStation_2), (running, goToStation_2)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation_2), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, charging), (next, (or, (success, isDoorOpen), (failure, isDoorOpen)))))}
+    LTLSPEC {(globally, (implies, (success, isDoorOpen), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (failure, isDoorOpen), (next, (or, (success, closeDoor_2), (failure, closeDoor_2), (running, closeDoor_2)))))}
+    LTLSPEC {(globally, (implies, (success, closeDoor_2), (next, (or, (success, alarm), (failure, alarm)))))}
+}

@@ -1,0 +1,149 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.noFood.status = success) | (system.noFood.status = failure)));
+LTLSPEC G(((system.noFood.status = success) -> X(((system.hasApple.status = success) | (system.hasApple.status = failure)))));
+LTLSPEC G(((system.noFood.status = failure) -> X(((system.noFood.status = success) | (system.noFood.status = failure)))));
+LTLSPEC G(((system.hasApple.status = success) -> X(((system.pickApple.status = success) | (system.pickApple.status = failure) | (system.pickApple.status = running)))));
+LTLSPEC G(((system.hasApple.status = failure) -> X(((system.holdKnife.status = success) | (system.holdKnife.status = failure)))));
+LTLSPEC G(((system.pickApple.status = success) -> X(((system.noFood.status = success) | (system.noFood.status = failure)))));
+LTLSPEC G(((system.holdKnife.status = success) -> X(((system.goCow.status = success) | (system.goCow.status = failure) | (system.goCow.status = running)))));
+LTLSPEC G(((system.holdKnife.status = failure) -> X(((system.pickUp.status = success) | (system.pickUp.status = failure) | (system.pickUp.status = running)))));
+LTLSPEC G(((system.pickUp.status = success) -> X(((system.goCow.status = success) | (system.goCow.status = failure) | (system.goCow.status = running)))));
+LTLSPEC G(((system.goCow.status = success) -> X(((system.killCow.status = success) | (system.killCow.status = failure) | (system.killCow.status = running)))));
+LTLSPEC G(((system.killCow.status = success) -> X(((system.noFood.status = success) | (system.noFood.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        noFood : noFood_module(noFood_v_stage_0);
+        hasApple : hasApple_module(hasApple_v_stage_0);
+        pickApple : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(hasApple, pickApple);
+        holdKnife : holdKnife_module(holdKnife_v_stage_0);
+        pickUp : success_DEFAULT_module();
+        c4 : composite_selector_without_memory_2(holdKnife, pickUp);
+        goCow : success_DEFAULT_module();
+        killCow : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_3(c4, goCow, killCow);
+        c1 : composite_selector_without_memory_2(c2, c3);
+        c0 : composite_sequence_without_memory_2(noFood, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        noFood_v_stage_0 : boolean;
+        hasApple_v_stage_0 : boolean;
+        holdKnife_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(noFood_v_stage_0) := {TRUE, FALSE};
+        init(hasApple_v_stage_0) := {TRUE, FALSE};
+        init(holdKnife_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(noFood_v_stage_0) :=
+            case
+                !(c0.active) : noFood_v_stage_0;
+                TRUE : noFood_v_stage_0;
+            esac;
+        next(hasApple_v_stage_0) :=
+            case
+                !(c0.active) : hasApple_v_stage_0;
+                TRUE : hasApple_v_stage_0;
+            esac;
+        next(holdKnife_v_stage_0) :=
+            case
+                !(c0.active) : holdKnife_v_stage_0;
+                TRUE : holdKnife_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        noFood := 1;
+        c1 := 2;
+        c2 := 3;
+        hasApple := 4;
+        pickApple := 5;
+        c3 := 6;
+        c4 := 7;
+        holdKnife := 8;
+        pickUp := 9;
+        goCow := 10;
+        killCow := 11;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE noFood_module(noFood_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (noFood_v_stage_0) ? success : failure;
+MODULE hasApple_module(hasApple_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasApple_v_stage_0) ? success : failure;
+MODULE holdKnife_module(holdKnife_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (holdKnife_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

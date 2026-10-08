@@ -1,0 +1,101 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.acceptInput.status = success | system.acceptInput.status = failure)  is true
+-- specification  G (system.acceptInput.status = success ->  X ((system.setValue.status = success | system.setValue.status = failure) | system.setValue.status = running))  is true
+-- specification  G (system.setValue.status = success ->  X ((system.compareValue.status = success | system.compareValue.status = failure) | system.compareValue.status = running))  is true
+-- specification  G (system.compareValue.status = success ->  X (system.equalVal.status = success | system.equalVal.status = failure))  is true
+-- specification  G (system.equalVal.status = success ->  X ((system.stopSearch.status = success | system.stopSearch.status = failure) | system.stopSearch.status = running))  is true
+-- specification  G (system.equalVal.status = failure ->  X ((system.searchTarget.status = success | system.searchTarget.status = failure) | system.searchTarget.status = running))  is true
+-- specification  G (system.stopSearch.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is true
+-- specification  G (system.searchTarget.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.equalVal_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.doTaskA = 15
+    system.node_names.goToPosA = 14
+    system.node_names.pickUp_2 = 13
+    system.node_names.searchTarget = 12
+    system.node_names.c3 = 11
+    system.node_names.putDown = 10
+    system.node_names.goToKitchen = 9
+    system.node_names.pickUp = 8
+    system.node_names.stopSearch = 7
+    system.node_names.equalVal = 6
+    system.node_names.c2 = 5
+    system.node_names.c1 = 4
+    system.node_names.compareValue = 3
+    system.node_names.setValue = 2
+    system.node_names.acceptInput = 1
+    system.node_names.c0 = 0
+    system.acceptInput.internal_status = success
+    system.acceptInput.status = success
+    system.setValue.internal_status = success
+    system.setValue.status = success
+    system.compareValue.internal_status = success
+    system.compareValue.status = success
+    system.equalVal.internal_status = failure
+    system.equalVal.status = failure
+    system.stopSearch.internal_status = success
+    system.stopSearch.status = invalid
+    system.pickUp.internal_status = success
+    system.pickUp.status = invalid
+    system.goToKitchen.internal_status = success
+    system.goToKitchen.status = invalid
+    system.putDown.internal_status = success
+    system.putDown.status = invalid
+    system.putDown.active = FALSE
+    system.goToKitchen.active = FALSE
+    system.pickUp.active = FALSE
+    system.stopSearch.active = FALSE
+    system.equalVal.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.searchTarget.internal_status = success
+    system.searchTarget.status = success
+    system.pickUp_2.internal_status = success
+    system.pickUp_2.status = success
+    system.goToPosA.internal_status = success
+    system.goToPosA.status = success
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = success
+    system.doTaskA.active = TRUE
+    system.goToPosA.active = TRUE
+    system.pickUp_2.active = TRUE
+    system.searchTarget.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.c2.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.c1.active = TRUE
+    system.compareValue.active = TRUE
+    system.setValue.active = TRUE
+    system.acceptInput.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.pickUp.status = success ->  X ((system.goToKitchen.status = success | system.goToKitchen.status = failure) | system.goToKitchen.status = running))  is true
+-- specification  G (system.goToKitchen.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))  is true
+-- specification  G (system.putDown.status = success ->  X (system.acceptInput.status = success | system.acceptInput.status = failure))  is true
+-- specification  G (system.goToPosA.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))  is true
+-- specification  G (system.doTaskA.status = success ->  X (system.acceptInput.status = success | system.acceptInput.status = failure))  is true

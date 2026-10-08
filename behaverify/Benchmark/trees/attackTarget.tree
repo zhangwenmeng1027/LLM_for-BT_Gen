@@ -1,0 +1,98 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env TargetAdjacent_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isHungry_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ TargetAdjacent_v assign{result{TargetAdjacent_v}} }
+    variable_statement{ isHungry_v assign{result{isHungry_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { TargetAdjacent arguments {} read_variables {TargetAdjacent_v} condition{TargetAdjacent_v} }
+    environment_check { isHungry arguments {} read_variables {isHungry_v} condition{isHungry_v} }
+}
+actions {
+    action { getTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { attackTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findFood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findTableware
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { eatfood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { followHuman
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+        composite {
+            c1 sequence
+            children {
+                getTarget {}
+                goToPosA {}
+            composite {
+                c2 selector
+                children {
+                    TargetAdjacent {}
+                    attackTarget {}
+                }
+            }
+            }
+        }
+        composite {
+            c3 selector
+            children {
+            composite {
+                c4 sequence
+                children {
+                    isHungry {}
+                    findFood {}
+                    goToPosB {}
+                    findTableware {}
+                    eatfood {}
+                }
+            }
+                followHuman {}
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, getTarget), (failure, getTarget), (running, getTarget)))}
+    LTLSPEC {(globally, (implies, (success, getTarget), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))}
+    LTLSPEC {(globally, (implies, (success, TargetAdjacent), (next, (or, (success, attackTarget), (failure, attackTarget), (running, attackTarget)))))}
+    LTLSPEC {(globally, (implies, (success, isHungry), (next, (or, (success, findFood), (failure, findFood), (running, findFood)))))}
+    LTLSPEC {(globally, (implies, (success, findFood), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, findTableware), (failure, findTableware), (running, findTableware)))))}
+    LTLSPEC {(globally, (implies, (success, findTableware), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))}
+    LTLSPEC {(globally, (implies, (failure, isHungry), (next, (or, (success, followHuman), (failure, followHuman), (running, followHuman)))))}
+}

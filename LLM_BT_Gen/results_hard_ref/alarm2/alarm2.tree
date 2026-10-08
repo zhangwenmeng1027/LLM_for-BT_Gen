@@ -1,0 +1,84 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env alarm_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ alarm_v assign{result{alarm_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { alarm arguments {} read_variables {alarm_v} condition{alarm_v} }
+}
+actions {
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { placeB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { placeC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+        composite {
+            c1 sequence
+            children {
+                goToPosA {}
+                pickUp {}
+            }
+        }
+        composite {
+            c2 selector
+            children {
+            composite {
+                c3 sequence
+                children {
+                    alarm {}
+                    goToPosB {}
+                    placeB {}
+                }
+            }
+            composite {
+                c4 sequence
+                children {
+                    goToPosC {}
+                    placeC {}
+                }
+            }
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, goToPosA), (failure, goToPosA)))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, alarm), (failure, alarm)))))}
+    LTLSPEC {(globally, (implies, (success, alarm), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (failure, alarm), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, placeB), (failure, placeB), (running, placeB)))))}
+    LTLSPEC {(globally, (implies, (success, placeB), (next, (or, (success, goToPosA), (failure, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, placeC), (failure, placeC), (running, placeC)))))}
+    LTLSPEC {(globally, (implies, (success, placeC), (next, (or, (success, goToPosA), (failure, goToPosA)))))}
+}

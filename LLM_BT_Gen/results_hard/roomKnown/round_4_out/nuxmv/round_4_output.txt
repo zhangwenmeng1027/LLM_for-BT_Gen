@@ -1,0 +1,222 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.roomKnown.status = success | system.roomKnown.status = failure)  is true
+-- specification  G (system.roomKnown.status = success ->  X ((system.goToTarRoom.status = success | system.goToTarRoom.status = failure) | system.goToTarRoom.status = running))  is true
+-- specification  G (system.goToTarRoom.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))  is true
+-- specification  G (system.doTaskA.status = success ->  X ((system.doTaskB.status = success | system.doTaskB.status = failure) | system.doTaskB.status = running))  is true
+-- specification  G (system.doTaskB.status = success ->  X ((system.doTaskC.status = success | system.doTaskC.status = failure) | system.doTaskC.status = running))  is true
+-- specification  G (system.doTaskC.status = success ->  X (system.roomKnown.status = success | system.roomKnown.status = failure))  is true
+-- specification  G (system.roomKnown.status = failure ->  X (system.invValid.status = success | system.invValid.status = failure))  is true
+-- specification  G (system.invValid.status = success ->  X ((system.acceptData.status = success | system.acceptData.status = failure) | system.acceptData.status = running))  is true
+-- specification  G (system.acceptData.status = success ->  X ((system.searchTarget.status = success | system.searchTarget.status = failure) | system.searchTarget.status = running))  is true
+-- specification  G (system.invValid.status = failure ->  X ((system.pushP.status = success | system.pushP.status = failure) | system.pushP.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.roomKnown_v_stage_0 = FALSE
+    system.invValid_v_stage_0 = FALSE
+    system.TargetAdjacent_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.sleeping = 20
+    system.node_names.goToStation = 19
+    system.node_names.pushP_2 = 18
+    system.node_names.c5 = 17
+    system.node_names.pushP = 16
+    system.node_names.attackTarget = 15
+    system.node_names.activateProcess = 14
+    system.node_names.TargetAdjacent = 13
+    system.node_names.c4 = 12
+    system.node_names.c3 = 11
+    system.node_names.searchTarget = 10
+    system.node_names.acceptData = 9
+    system.node_names.invValid = 8
+    system.node_names.c2 = 7
+    system.node_names.doTaskC = 6
+    system.node_names.doTaskB = 5
+    system.node_names.doTaskA = 4
+    system.node_names.goToTarRoom = 3
+    system.node_names.roomKnown = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.roomKnown.internal_status = failure
+    system.roomKnown.status = failure
+    system.goToTarRoom.internal_status = success
+    system.goToTarRoom.status = invalid
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = invalid
+    system.doTaskB.internal_status = success
+    system.doTaskB.status = invalid
+    system.doTaskC.internal_status = success
+    system.doTaskC.status = invalid
+    system.doTaskC.active = FALSE
+    system.doTaskB.active = FALSE
+    system.doTaskA.active = FALSE
+    system.goToTarRoom.active = FALSE
+    system.roomKnown.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.invValid.internal_status = failure
+    system.invValid.status = failure
+    system.acceptData.internal_status = success
+    system.acceptData.status = invalid
+    system.searchTarget.internal_status = success
+    system.searchTarget.status = invalid
+    system.TargetAdjacent.internal_status = failure
+    system.TargetAdjacent.status = invalid
+    system.activateProcess.internal_status = success
+    system.activateProcess.status = invalid
+    system.attackTarget.internal_status = success
+    system.attackTarget.status = invalid
+    system.attackTarget.active = FALSE
+    system.activateProcess.active = FALSE
+    system.TargetAdjacent.active = FALSE
+    system.c4.internal_status = failure
+    system.c4.status = invalid
+    system.pushP.internal_status = success
+    system.pushP.status = invalid
+    system.pushP.active = FALSE
+    system.c4.active = FALSE
+    system.c3.internal_status = success
+    system.c3.status = invalid
+    system.c3.active = FALSE
+    system.searchTarget.active = FALSE
+    system.acceptData.active = FALSE
+    system.invValid.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.pushP_2.internal_status = success
+    system.pushP_2.status = success
+    system.goToStation.internal_status = success
+    system.goToStation.status = success
+    system.sleeping.internal_status = success
+    system.sleeping.status = success
+    system.sleeping.active = TRUE
+    system.goToStation.active = TRUE
+    system.pushP_2.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.c5.active = TRUE
+    system.c2.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.searchTarget.status = success ->  X (system.TargetAdjacent.status = success | system.TargetAdjacent.status = failure))  is true
+-- specification  G (system.TargetAdjacent.status = success ->  X ((system.activateProcess.status = success | system.activateProcess.status = failure) | system.activateProcess.status = running))  is true
+-- specification  G (system.TargetAdjacent.status = failure ->  X ((system.pushP.status = success | system.pushP.status = failure) | system.pushP.status = running))  is true
+-- specification  G (system.activateProcess.status = success ->  X ((system.attackTarget.status = success | system.attackTarget.status = failure) | system.attackTarget.status = running))  is true
+-- specification  G (system.attackTarget.status = success ->  X (system.roomKnown.status = success | system.roomKnown.status = failure))  is true
+-- specification  G (system.pushP.status = success ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 2.1 <-
+    system.roomKnown_v_stage_0 = FALSE
+    system.invValid_v_stage_0 = TRUE
+    system.TargetAdjacent_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.sleeping = 20
+    system.node_names.goToStation = 19
+    system.node_names.pushP_2 = 18
+    system.node_names.c5 = 17
+    system.node_names.pushP = 16
+    system.node_names.attackTarget = 15
+    system.node_names.activateProcess = 14
+    system.node_names.TargetAdjacent = 13
+    system.node_names.c4 = 12
+    system.node_names.c3 = 11
+    system.node_names.searchTarget = 10
+    system.node_names.acceptData = 9
+    system.node_names.invValid = 8
+    system.node_names.c2 = 7
+    system.node_names.doTaskC = 6
+    system.node_names.doTaskB = 5
+    system.node_names.doTaskA = 4
+    system.node_names.goToTarRoom = 3
+    system.node_names.roomKnown = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.roomKnown.internal_status = failure
+    system.roomKnown.status = failure
+    system.goToTarRoom.internal_status = success
+    system.goToTarRoom.status = invalid
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = invalid
+    system.doTaskB.internal_status = success
+    system.doTaskB.status = invalid
+    system.doTaskC.internal_status = success
+    system.doTaskC.status = invalid
+    system.doTaskC.active = FALSE
+    system.doTaskB.active = FALSE
+    system.doTaskA.active = FALSE
+    system.goToTarRoom.active = FALSE
+    system.roomKnown.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.invValid.internal_status = success
+    system.invValid.status = success
+    system.acceptData.internal_status = success
+    system.acceptData.status = success
+    system.searchTarget.internal_status = success
+    system.searchTarget.status = success
+    system.TargetAdjacent.internal_status = failure
+    system.TargetAdjacent.status = failure
+    system.activateProcess.internal_status = success
+    system.activateProcess.status = invalid
+    system.attackTarget.internal_status = success
+    system.attackTarget.status = invalid
+    system.attackTarget.active = FALSE
+    system.activateProcess.active = FALSE
+    system.TargetAdjacent.active = TRUE
+    system.c4.internal_status = failure
+    system.c4.status = failure
+    system.pushP.internal_status = success
+    system.pushP.status = success
+    system.pushP.active = TRUE
+    system.c4.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.searchTarget.active = TRUE
+    system.acceptData.active = TRUE
+    system.invValid.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.pushP_2.internal_status = success
+    system.pushP_2.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.sleeping.internal_status = success
+    system.sleeping.status = invalid
+    system.sleeping.active = FALSE
+    system.goToStation.active = FALSE
+    system.pushP_2.active = FALSE
+    system.c5.internal_status = success
+    system.c5.status = invalid
+    system.c5.active = FALSE
+    system.c2.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 2.2 <-
+-- specification  G (system.goToStation.status = success ->  X ((system.sleeping.status = success | system.sleeping.status = failure) | system.sleeping.status = running))  is true
+-- specification  G (system.sleeping.status = success ->  X (system.roomKnown.status = success | system.roomKnown.status = failure))  is true

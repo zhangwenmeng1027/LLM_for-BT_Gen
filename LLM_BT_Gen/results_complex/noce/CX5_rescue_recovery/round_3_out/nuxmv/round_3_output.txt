@@ -1,0 +1,297 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.hasVictim.status = success | system.hasVictim.status = failure)  is true
+-- specification  G (system.hasVictim.status = failure ->  X (system.hasVictim.status = success | system.hasVictim.status = failure))  is true
+-- specification  G (system.hasVictim.status = success ->  X (system.checkReachable.status = success | system.checkReachable.status = failure))  is true
+-- specification  G (system.checkReachable.status = success ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is true
+-- specification  G (system.goToPosC.status = success ->  X (system.TargetAdjacent.status = success | system.TargetAdjacent.status = failure))  is true
+-- specification  G (system.TargetAdjacent.status = success ->  X ((system.saveVictim.status = success | system.saveVictim.status = failure) | system.saveVictim.status = running))  is true
+-- specification  G (system.saveVictim.status = success ->  X (system.placed.status = success | system.placed.status = failure))  is true
+-- specification  G (system.checkReachable.status = failure ->  X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running))  is true
+-- specification  G (system.askHelp.status = success ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.hasVictim_v_stage_0 = TRUE
+    system.checkReachable_v_stage_0 = FALSE
+    system.TargetAdjacent_v_stage_0 = FALSE
+    system.placed_v_stage_0 = FALSE
+    system.hasData_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.askHelp = 18
+    system.node_names.goToPosC_2 = 17
+    system.node_names.putDown = 16
+    system.node_names.send = 15
+    system.node_names.hasData = 14
+    system.node_names.c7 = 13
+    system.node_names.placed = 12
+    system.node_names.c6 = 11
+    system.node_names.c5 = 10
+    system.node_names.saveVictim = 9
+    system.node_names.TargetAdjacent = 8
+    system.node_names.c4 = 7
+    system.node_names.c3 = 6
+    system.node_names.goToPosC = 5
+    system.node_names.checkReachable = 4
+    system.node_names.c2 = 3
+    system.node_names.c1 = 2
+    system.node_names.hasVictim = 1
+    system.node_names.c0 = 0
+    system.hasVictim.internal_status = success
+    system.hasVictim.status = success
+    system.checkReachable.internal_status = failure
+    system.checkReachable.status = failure
+    system.goToPosC.internal_status = success
+    system.goToPosC.status = invalid
+    system.TargetAdjacent.internal_status = failure
+    system.TargetAdjacent.status = invalid
+    system.saveVictim.internal_status = success
+    system.saveVictim.status = invalid
+    system.placed.internal_status = failure
+    system.placed.status = invalid
+    system.hasData.internal_status = failure
+    system.hasData.status = invalid
+    system.send.internal_status = success
+    system.send.status = invalid
+    system.send.active = FALSE
+    system.hasData.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.placed.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.putDown.internal_status = success
+    system.putDown.status = invalid
+    system.putDown.active = FALSE
+    system.c6.active = FALSE
+    system.c5.internal_status = success
+    system.c5.status = invalid
+    system.c5.active = FALSE
+    system.saveVictim.active = FALSE
+    system.TargetAdjacent.active = FALSE
+    system.c4.internal_status = failure
+    system.c4.status = invalid
+    system.goToPosC_2.internal_status = success
+    system.goToPosC_2.status = invalid
+    system.goToPosC_2.active = FALSE
+    system.c4.active = FALSE
+    system.c3.internal_status = success
+    system.c3.status = invalid
+    system.c3.active = FALSE
+    system.goToPosC.active = FALSE
+    system.checkReachable.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.askHelp.internal_status = success
+    system.askHelp.status = success
+    system.askHelp.active = TRUE
+    system.c2.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.c1.active = TRUE
+    system.hasVictim.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.TargetAdjacent.status = failure ->  X ((system.goToPosC_2.status = success | system.goToPosC_2.status = failure) | system.goToPosC_2.status = running))  is true
+-- specification  G (system.goToPosC_2.status = success ->  X ((system.saveVictim.status = success | system.saveVictim.status = failure) | system.saveVictim.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 2.1 <-
+    system.hasVictim_v_stage_0 = TRUE
+    system.checkReachable_v_stage_0 = TRUE
+    system.TargetAdjacent_v_stage_0 = FALSE
+    system.placed_v_stage_0 = FALSE
+    system.hasData_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.askHelp = 18
+    system.node_names.goToPosC_2 = 17
+    system.node_names.putDown = 16
+    system.node_names.send = 15
+    system.node_names.hasData = 14
+    system.node_names.c7 = 13
+    system.node_names.placed = 12
+    system.node_names.c6 = 11
+    system.node_names.c5 = 10
+    system.node_names.saveVictim = 9
+    system.node_names.TargetAdjacent = 8
+    system.node_names.c4 = 7
+    system.node_names.c3 = 6
+    system.node_names.goToPosC = 5
+    system.node_names.checkReachable = 4
+    system.node_names.c2 = 3
+    system.node_names.c1 = 2
+    system.node_names.hasVictim = 1
+    system.node_names.c0 = 0
+    system.hasVictim.internal_status = success
+    system.hasVictim.status = success
+    system.checkReachable.internal_status = success
+    system.checkReachable.status = success
+    system.goToPosC.internal_status = success
+    system.goToPosC.status = success
+    system.TargetAdjacent.internal_status = failure
+    system.TargetAdjacent.status = failure
+    system.saveVictim.internal_status = success
+    system.saveVictim.status = invalid
+    system.placed.internal_status = failure
+    system.placed.status = invalid
+    system.hasData.internal_status = failure
+    system.hasData.status = invalid
+    system.send.internal_status = success
+    system.send.status = invalid
+    system.send.active = FALSE
+    system.hasData.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.placed.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.putDown.internal_status = success
+    system.putDown.status = invalid
+    system.putDown.active = FALSE
+    system.c6.active = FALSE
+    system.c5.internal_status = success
+    system.c5.status = invalid
+    system.c5.active = FALSE
+    system.saveVictim.active = FALSE
+    system.TargetAdjacent.active = TRUE
+    system.c4.internal_status = failure
+    system.c4.status = failure
+    system.goToPosC_2.internal_status = success
+    system.goToPosC_2.status = success
+    system.goToPosC_2.active = TRUE
+    system.c4.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.goToPosC.active = TRUE
+    system.checkReachable.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.askHelp.internal_status = success
+    system.askHelp.status = invalid
+    system.askHelp.active = FALSE
+    system.c2.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.c1.active = TRUE
+    system.hasVictim.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 2.2 <-
+-- specification  G (system.placed.status = success ->  X (system.hasData.status = success | system.hasData.status = failure))  is true
+-- specification  G (system.placed.status = failure ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))  is true
+-- specification  G (system.putDown.status = success ->  X (system.hasData.status = success | system.hasData.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 3.1 <-
+    system.hasVictim_v_stage_0 = TRUE
+    system.checkReachable_v_stage_0 = TRUE
+    system.TargetAdjacent_v_stage_0 = TRUE
+    system.placed_v_stage_0 = FALSE
+    system.hasData_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.askHelp = 18
+    system.node_names.goToPosC_2 = 17
+    system.node_names.putDown = 16
+    system.node_names.send = 15
+    system.node_names.hasData = 14
+    system.node_names.c7 = 13
+    system.node_names.placed = 12
+    system.node_names.c6 = 11
+    system.node_names.c5 = 10
+    system.node_names.saveVictim = 9
+    system.node_names.TargetAdjacent = 8
+    system.node_names.c4 = 7
+    system.node_names.c3 = 6
+    system.node_names.goToPosC = 5
+    system.node_names.checkReachable = 4
+    system.node_names.c2 = 3
+    system.node_names.c1 = 2
+    system.node_names.hasVictim = 1
+    system.node_names.c0 = 0
+    system.hasVictim.internal_status = success
+    system.hasVictim.status = success
+    system.checkReachable.internal_status = success
+    system.checkReachable.status = success
+    system.goToPosC.internal_status = success
+    system.goToPosC.status = success
+    system.TargetAdjacent.internal_status = success
+    system.TargetAdjacent.status = success
+    system.saveVictim.internal_status = success
+    system.saveVictim.status = success
+    system.placed.internal_status = failure
+    system.placed.status = failure
+    system.hasData.internal_status = failure
+    system.hasData.status = invalid
+    system.send.internal_status = success
+    system.send.status = invalid
+    system.send.active = FALSE
+    system.hasData.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.c7.active = FALSE
+    system.placed.active = TRUE
+    system.c6.internal_status = failure
+    system.c6.status = failure
+    system.putDown.internal_status = success
+    system.putDown.status = success
+    system.putDown.active = TRUE
+    system.c6.active = TRUE
+    system.c5.internal_status = success
+    system.c5.status = success
+    system.c5.active = TRUE
+    system.saveVictim.active = TRUE
+    system.TargetAdjacent.active = TRUE
+    system.c4.internal_status = success
+    system.c4.status = success
+    system.goToPosC_2.internal_status = success
+    system.goToPosC_2.status = invalid
+    system.goToPosC_2.active = FALSE
+    system.c4.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.c3.active = TRUE
+    system.goToPosC.active = TRUE
+    system.checkReachable.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.askHelp.internal_status = success
+    system.askHelp.status = invalid
+    system.askHelp.active = FALSE
+    system.c2.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.c1.active = TRUE
+    system.hasVictim.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 3.2 <-
+-- specification  G (system.hasData.status = success ->  X (system.hasVictim.status = success | system.hasVictim.status = failure))  is true
+-- specification  G (system.hasData.status = failure ->  X ((system.send.status = success | system.send.status = failure) | system.send.status = running))  is true
+-- specification  G (system.send.status = success ->  X (system.hasVictim.status = success | system.hasVictim.status = failure))  is true

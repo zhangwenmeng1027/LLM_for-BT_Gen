@@ -1,0 +1,115 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.waitInput.status = success) | (system.waitInput.status = failure)));
+LTLSPEC G(((system.waitInput.status = success) -> X(((system.hasInput.status = success) | (system.hasInput.status = failure)))));
+LTLSPEC G(((system.hasInput.status = success) -> X(((system.acceptInput.status = success) | (system.acceptInput.status = failure) | (system.acceptInput.status = running)))));
+LTLSPEC G(((system.hasInput.status = failure) -> X(((system.waitInput.status = success) | (system.waitInput.status = failure)))));
+LTLSPEC G(((system.acceptInput.status = success) -> X(((system.searchAns.status = success) | (system.searchAns.status = failure) | (system.searchAns.status = running)))));
+LTLSPEC G(((system.searchAns.status = success) -> X(((system.outputAns.status = success) | (system.outputAns.status = failure) | (system.outputAns.status = running)))));
+LTLSPEC G(((system.outputAns.status = success) -> X(((system.waitInput.status = success) | (system.waitInput.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        waitInput : success_DEFAULT_module();
+        hasInput : hasInput_module(hasInput_v_stage_0);
+        acceptInput : success_DEFAULT_module();
+        searchAns : success_DEFAULT_module();
+        outputAns : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_4(hasInput, acceptInput, searchAns, outputAns);
+        waitInput_2 : success_DEFAULT_module();
+        c1 : composite_selector_without_memory_2(c2, waitInput_2);
+        c0 : composite_sequence_without_memory_2(waitInput, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        hasInput_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(hasInput_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(hasInput_v_stage_0) :=
+            case
+                !(c0.active) : hasInput_v_stage_0;
+                TRUE : hasInput_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        waitInput := 1;
+        c1 := 2;
+        c2 := 3;
+        hasInput := 4;
+        acceptInput := 5;
+        searchAns := 6;
+        outputAns := 7;
+        waitInput_2 := 8;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE hasInput_module(hasInput_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasInput_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

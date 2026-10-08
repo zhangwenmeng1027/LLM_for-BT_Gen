@@ -1,0 +1,207 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.hasFire.status = success | system.hasFire.status = failure)  is true
+-- specification  G (system.hasFire.status = success ->  X (system.TargetAdjacent.status = success | system.TargetAdjacent.status = failure))  is true
+-- specification  G (system.TargetAdjacent.status = success ->  X ((system.useExtinguisher.status = success | system.useExtinguisher.status = failure) | system.useExtinguisher.status = running))  is true
+-- specification  G (system.TargetAdjacent.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))  is true
+-- specification  G (system.goToPosA.status = success ->  X ((system.useExtinguisher.status = success | system.useExtinguisher.status = failure) | system.useExtinguisher.status = running))  is true
+-- specification  G (system.useExtinguisher.status = success ->  X (system.hasFire.status = success | system.hasFire.status = failure))  is true
+-- specification  G (system.hasFire.status = failure ->  X (system.hasVictim.status = success | system.hasVictim.status = failure))  is true
+-- specification  G (system.hasVictim.status = success ->  X (system.checkReachable.status = success | system.checkReachable.status = failure))  is true
+-- specification  G (system.checkReachable.status = success ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.hasFire_v_stage_0 = FALSE
+    system.hasVictim_v_stage_0 = TRUE
+    system.alarm_v_stage_0 = FALSE
+    system.lowBattery_v_stage_0 = FALSE
+    system.isHungry_v_stage_0 = FALSE
+    system.empty_v_stage_0 = FALSE
+    system.TargetAdjacent_v_stage_0 = FALSE
+    system.checkReachable_v_stage_0 = TRUE
+    system.atStation_v_stage_0 = FALSE
+    system.atCharge_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.doTaskA = 34
+    system.node_names.goToPosB = 33
+    system.node_names.empty = 32
+    system.node_names.c11 = 31
+    system.node_names.eatfood = 30
+    system.node_names.findFood = 29
+    system.node_names.isHungry = 28
+    system.node_names.c10 = 27
+    system.node_names.charging = 26
+    system.node_names.goToStation_2 = 25
+    system.node_names.atCharge = 24
+    system.node_names.c9 = 23
+    system.node_names.lowBattery = 22
+    system.node_names.c8 = 21
+    system.node_names.closeDoor = 20
+    system.node_names.goToStation = 19
+    system.node_names.atStation = 18
+    system.node_names.c7 = 17
+    system.node_names.alarm = 16
+    system.node_names.c6 = 15
+    system.node_names.saveVictim = 14
+    system.node_names.goToPosC = 13
+    system.node_names.askHelp = 12
+    system.node_names.c5 = 11
+    system.node_names.checkReachable = 10
+    system.node_names.c4 = 9
+    system.node_names.hasVictim = 8
+    system.node_names.c3 = 7
+    system.node_names.useExtinguisher = 6
+    system.node_names.goToPosA = 5
+    system.node_names.TargetAdjacent = 4
+    system.node_names.c2 = 3
+    system.node_names.hasFire = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.hasFire.internal_status = failure
+    system.hasFire.status = failure
+    system.TargetAdjacent.internal_status = failure
+    system.TargetAdjacent.status = invalid
+    system.goToPosA.internal_status = success
+    system.goToPosA.status = invalid
+    system.goToPosA.active = FALSE
+    system.TargetAdjacent.active = FALSE
+    system.c2.internal_status = success
+    system.c2.status = invalid
+    system.useExtinguisher.internal_status = success
+    system.useExtinguisher.status = invalid
+    system.useExtinguisher.active = FALSE
+    system.c2.active = FALSE
+    system.hasFire.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.hasVictim.internal_status = success
+    system.hasVictim.status = success
+    system.checkReachable.internal_status = success
+    system.checkReachable.status = success
+    system.askHelp.internal_status = success
+    system.askHelp.status = invalid
+    system.goToPosC.internal_status = success
+    system.goToPosC.status = invalid
+    system.goToPosC.active = FALSE
+    system.askHelp.active = FALSE
+    system.c5.internal_status = success
+    system.c5.status = invalid
+    system.c5.active = FALSE
+    system.checkReachable.active = TRUE
+    system.c4.internal_status = success
+    system.c4.status = success
+    system.saveVictim.internal_status = success
+    system.saveVictim.status = success
+    system.saveVictim.active = TRUE
+    system.c4.active = TRUE
+    system.hasVictim.active = TRUE
+    system.c3.internal_status = success
+    system.c3.status = success
+    system.alarm.internal_status = failure
+    system.alarm.status = invalid
+    system.atStation.internal_status = failure
+    system.atStation.status = invalid
+    system.goToStation.internal_status = success
+    system.goToStation.status = invalid
+    system.goToStation.active = FALSE
+    system.atStation.active = FALSE
+    system.c7.internal_status = success
+    system.c7.status = invalid
+    system.closeDoor.internal_status = success
+    system.closeDoor.status = invalid
+    system.closeDoor.active = FALSE
+    system.c7.active = FALSE
+    system.alarm.active = FALSE
+    system.c6.internal_status = failure
+    system.c6.status = invalid
+    system.lowBattery.internal_status = failure
+    system.lowBattery.status = invalid
+    system.atCharge.internal_status = failure
+    system.atCharge.status = invalid
+    system.goToStation_2.internal_status = success
+    system.goToStation_2.status = invalid
+    system.goToStation_2.active = FALSE
+    system.atCharge.active = FALSE
+    system.c9.internal_status = success
+    system.c9.status = invalid
+    system.charging.internal_status = success
+    system.charging.status = invalid
+    system.charging.active = FALSE
+    system.c9.active = FALSE
+    system.lowBattery.active = FALSE
+    system.c8.internal_status = failure
+    system.c8.status = invalid
+    system.isHungry.internal_status = failure
+    system.isHungry.status = invalid
+    system.findFood.internal_status = success
+    system.findFood.status = invalid
+    system.eatfood.internal_status = success
+    system.eatfood.status = invalid
+    system.eatfood.active = FALSE
+    system.findFood.active = FALSE
+    system.isHungry.active = FALSE
+    system.c10.internal_status = failure
+    system.c10.status = invalid
+    system.empty.internal_status = failure
+    system.empty.status = invalid
+    system.goToPosB.internal_status = success
+    system.goToPosB.status = invalid
+    system.doTaskA.internal_status = success
+    system.doTaskA.status = invalid
+    system.doTaskA.active = FALSE
+    system.goToPosB.active = FALSE
+    system.empty.active = FALSE
+    system.c11.internal_status = failure
+    system.c11.status = invalid
+    system.c11.active = FALSE
+    system.c10.active = FALSE
+    system.c8.active = FALSE
+    system.c6.active = FALSE
+    system.c3.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.checkReachable.status = failure ->  X ((system.askHelp.status = success | system.askHelp.status = failure) | system.askHelp.status = running))  is true
+-- specification  G (system.askHelp.status = success ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is true
+-- specification  G (system.goToPosC.status = success ->  X ((system.saveVictim.status = success | system.saveVictim.status = failure) | system.saveVictim.status = running))  is true
+-- specification  G (system.saveVictim.status = success ->  X (system.hasFire.status = success | system.hasFire.status = failure))  is true
+-- specification  G (system.hasVictim.status = failure ->  X (system.alarm.status = success | system.alarm.status = failure))  is true
+-- specification  G (system.alarm.status = success ->  X (system.atStation.status = success | system.atStation.status = failure))  is true
+-- specification  G (system.atStation.status = success ->  X ((system.closeDoor.status = success | system.closeDoor.status = failure) | system.closeDoor.status = running))  is true
+-- specification  G (system.atStation.status = failure ->  X ((system.goToStation.status = success | system.goToStation.status = failure) | system.goToStation.status = running))  is true
+-- specification  G (system.goToStation.status = success ->  X ((system.closeDoor.status = success | system.closeDoor.status = failure) | system.closeDoor.status = running))  is true
+-- specification  G (system.closeDoor.status = success ->  X (system.hasFire.status = success | system.hasFire.status = failure))  is true
+-- specification  G (system.alarm.status = failure ->  X (system.lowBattery.status = success | system.lowBattery.status = failure))  is true
+-- specification  G (system.lowBattery.status = success ->  X (system.atCharge.status = success | system.atCharge.status = failure))  is true
+-- specification  G (system.atCharge.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))  is true
+-- specification  G (system.atCharge.status = failure ->  X ((system.goToStation_2.status = success | system.goToStation_2.status = failure) | system.goToStation_2.status = running))  is true
+-- specification  G (system.goToStation_2.status = success ->  X ((system.charging.status = success | system.charging.status = failure) | system.charging.status = running))  is true
+-- specification  G (system.charging.status = success ->  X (system.hasFire.status = success | system.hasFire.status = failure))  is true
+-- specification  G (system.lowBattery.status = failure ->  X (system.isHungry.status = success | system.isHungry.status = failure))  is true
+-- specification  G (system.isHungry.status = success ->  X ((system.findFood.status = success | system.findFood.status = failure) | system.findFood.status = running))  is true
+-- specification  G (system.findFood.status = success ->  X ((system.eatfood.status = success | system.eatfood.status = failure) | system.eatfood.status = running))  is true
+-- specification  G (system.eatfood.status = success ->  X (system.hasFire.status = success | system.hasFire.status = failure))  is true
+-- specification  G (system.isHungry.status = failure ->  X (system.empty.status = success | system.empty.status = failure))  is true
+-- specification  G (system.empty.status = success ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))  is true
+-- specification  G (system.empty.status = failure ->  X (system.hasFire.status = success | system.hasFire.status = failure))  is true
+-- specification  G (system.goToPosB.status = success ->  X ((system.doTaskA.status = success | system.doTaskA.status = failure) | system.doTaskA.status = running))  is true
+-- specification  G (system.doTaskA.status = success ->  X (system.hasFire.status = success | system.hasFire.status = failure))  is true

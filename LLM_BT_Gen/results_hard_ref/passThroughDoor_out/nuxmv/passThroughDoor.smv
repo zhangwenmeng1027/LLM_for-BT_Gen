@@ -1,0 +1,112 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.isDoorOpen.status = success) | (system.isDoorOpen.status = failure)));
+LTLSPEC G(((system.isDoorOpen.status = success) -> X(((system.passThroughDoor.status = success) | (system.passThroughDoor.status = failure) | (system.passThroughDoor.status = running)))));
+LTLSPEC G(((system.isDoorOpen.status = failure) -> X(((system.openDoor.status = success) | (system.openDoor.status = failure) | (system.openDoor.status = running)))));
+LTLSPEC G(((system.passThroughDoor.status = success) -> X(((system.closeDoor.status = success) | (system.closeDoor.status = failure) | (system.closeDoor.status = running)))));
+LTLSPEC G(((system.closeDoor.status = success) -> X(((system.isDoorOpen.status = success) | (system.isDoorOpen.status = failure)))));
+LTLSPEC G(((system.openDoor.status = success) -> X(((system.passThroughDoor_2.status = success) | (system.passThroughDoor_2.status = failure) | (system.passThroughDoor_2.status = running)))));
+LTLSPEC G(((system.passThroughDoor_2.status = success) -> X(((system.closeDoor_2.status = success) | (system.closeDoor_2.status = failure) | (system.closeDoor_2.status = running)))));
+LTLSPEC G(((system.closeDoor_2.status = success) -> X(((system.isDoorOpen.status = success) | (system.isDoorOpen.status = failure)))));
+LTLSPEC G(((system.passThroughWindow.status = success) -> X(((system.isDoorOpen.status = success) | (system.isDoorOpen.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        isDoorOpen : isDoorOpen_module(isDoorOpen_v_stage_0);
+        passThroughDoor : success_DEFAULT_module();
+        closeDoor : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_3(isDoorOpen, passThroughDoor, closeDoor);
+        openDoor : success_DEFAULT_module();
+        passThroughDoor_2 : success_DEFAULT_module();
+        closeDoor_2 : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_3(openDoor, passThroughDoor_2, closeDoor_2);
+        passThroughWindow : _DEFAULT_module();
+        c0 : composite_selector_without_memory_3(c1, c2, passThroughWindow);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        isDoorOpen_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(isDoorOpen_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(isDoorOpen_v_stage_0) :=
+            case
+                !(c0.active) : isDoorOpen_v_stage_0;
+                TRUE : isDoorOpen_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        isDoorOpen := 2;
+        passThroughDoor := 3;
+        closeDoor := 4;
+        c2 := 5;
+        openDoor := 6;
+        passThroughDoor_2 := 7;
+        closeDoor_2 := 8;
+        passThroughWindow := 9;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_selector_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+MODULE isDoorOpen_module(isDoorOpen_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isDoorOpen_v_stage_0) ? success : failure;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

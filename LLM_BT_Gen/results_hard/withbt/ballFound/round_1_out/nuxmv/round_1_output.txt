@@ -1,0 +1,35 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.ballFound.status = success | system.ballFound.status = failure)  is true
+-- specification  G (system.ballFound.status = failure ->  X ((system.searchForBall.status = success | system.searchForBall.status = failure) | system.searchForBall.status = running))  is true
+-- specification  G (system.ballFound.status = success ->  X (system.ballClose.status = success | system.ballClose.status = failure))  is true
+-- specification  G (system.searchForBall.status = success ->  X (system.ballClose.status = success | system.ballClose.status = failure))  is true
+-- specification  G (system.ballClose.status = failure ->  X ((system.closeToBall.status = success | system.closeToBall.status = failure) | system.closeToBall.status = running))  is true
+-- specification  G (system.ballClose.status = success ->  X (system.ballGrasped.status = success | system.ballGrasped.status = failure))  is true
+-- specification  G (system.closeToBall.status = success ->  X (system.ballGrasped.status = success | system.ballGrasped.status = failure))  is true
+-- specification  G (system.ballGrasped.status = failure ->  X ((system.graspBall.status = success | system.graspBall.status = failure) | system.graspBall.status = running))  is true
+-- specification  G (system.ballGrasped.status = success ->  X (system.boxFound.status = success | system.boxFound.status = failure))  is true
+-- specification  G (system.graspBall.status = success ->  X (system.boxFound.status = success | system.boxFound.status = failure))  is true
+-- specification  G (system.boxFound.status = success ->  X (system.ballFound.status = success | system.ballFound.status = failure))  is true
+-- specification  G (system.boxFound.status = failure ->  X ((system.searchForBox.status = success | system.searchForBox.status = failure) | system.searchForBox.status = running))  is true
+-- specification  G (system.searchForBox.status = success ->  X (system.boxNear.status = success | system.boxNear.status = failure))  is true
+-- specification  G (system.boxNear.status = success ->  X (system.ballFound.status = success | system.ballFound.status = failure))  is true
+-- specification  G (system.boxNear.status = failure ->  X ((system.closeToBox.status = success | system.closeToBox.status = failure) | system.closeToBox.status = running))  is true
+-- specification  G (system.closeToBox.status = success ->  X (system.ballPlaced.status = success | system.ballPlaced.status = failure))  is true
+-- specification  G (system.ballPlaced.status = success ->  X (system.ballFound.status = success | system.ballFound.status = failure))  is true
+-- specification  G (system.ballPlaced.status = failure ->  X ((system.putDownBall.status = success | system.putDownBall.status = failure) | system.putDownBall.status = running))  is true
+-- specification  G (system.putDownBall.status = success ->  X (system.ballFound.status = success | system.ballFound.status = failure))  is true

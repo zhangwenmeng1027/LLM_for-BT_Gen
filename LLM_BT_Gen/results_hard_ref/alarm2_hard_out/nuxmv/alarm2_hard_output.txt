@@ -1,0 +1,81 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.goToPosA.status = success | system.goToPosA.status = failure)  is true
+-- specification  G (system.goToPosA.status = success ->  X ((system.pickUp.status = success | system.pickUp.status = failure) | system.pickUp.status = running))  is true
+-- specification  G (system.pickUp.status = success ->  X (system.alarm.status = success | system.alarm.status = failure))  is true
+-- specification  G (system.alarm.status = success ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))  is true
+-- specification  G (system.alarm.status = failure ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.alarm_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.placeC = 11
+    system.node_names.goToPosC = 10
+    system.node_names.c4 = 9
+    system.node_names.placeB = 8
+    system.node_names.goToPosB = 7
+    system.node_names.alarm = 6
+    system.node_names.c3 = 5
+    system.node_names.c2 = 4
+    system.node_names.pickUp = 3
+    system.node_names.goToPosA = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.goToPosA.internal_status = success
+    system.goToPosA.status = success
+    system.pickUp.internal_status = success
+    system.pickUp.status = success
+    system.pickUp.active = TRUE
+    system.goToPosA.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.alarm.internal_status = failure
+    system.alarm.status = failure
+    system.goToPosB.internal_status = success
+    system.goToPosB.status = invalid
+    system.placeB.internal_status = success
+    system.placeB.status = invalid
+    system.placeB.active = FALSE
+    system.goToPosB.active = FALSE
+    system.alarm.active = TRUE
+    system.c3.internal_status = failure
+    system.c3.status = failure
+    system.goToPosC.internal_status = success
+    system.goToPosC.status = invalid
+    system.placeC.internal_status = success
+    system.placeC.status = invalid
+    system.placeC.active = FALSE
+    system.goToPosC.active = FALSE
+    system.c4.internal_status = success
+    system.c4.status = invalid
+    system.c4.active = FALSE
+    system.c3.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.c2.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 1.2 <-
+-- specification  G (system.goToPosB.status = success ->  X ((system.placeB.status = success | system.placeB.status = failure) | system.placeB.status = running))  is true
+-- specification  G (system.placeB.status = success ->  X (system.goToPosA.status = success | system.goToPosA.status = failure))  is true
+-- specification  G (system.goToPosC.status = success ->  X ((system.placeC.status = success | system.placeC.status = failure) | system.placeC.status = running))  is true
+-- specification  G (system.placeC.status = success ->  X (system.goToPosA.status = success | system.goToPosA.status = failure))  is true

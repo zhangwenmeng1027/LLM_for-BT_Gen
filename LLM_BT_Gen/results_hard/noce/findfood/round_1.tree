@@ -1,0 +1,69 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env isFull_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isFull_v assign{result{isFull_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isFull arguments {} read_variables {isFull_v} condition{isFull_v} }
+}
+actions {
+    action { findFood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToDestination
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findTableware
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToTableware
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { eatfood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            findFood {}
+            moveToDestination {}
+            pickUp {}
+            findTableware {}
+            moveToTableware {}
+            composite {
+                c1 selector
+                children {
+                    isFull {}
+                    eatfood {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, findFood), (failure, findFood)))}
+    LTLSPEC {(globally, (implies, (success, findFood), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))}
+    LTLSPEC {(globally, (implies, (success, moveToDestination), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, findTableware), (failure, findTableware), (running, findTableware)))))}
+    LTLSPEC {(globally, (implies, (success, findTableware), (next, (or, (success, moveToTableware), (failure, moveToTableware), (running, moveToTableware)))))}
+    LTLSPEC {(globally, (implies, (success, moveToTableware), (next, (or, (success, isFull), (failure, isFull)))))}
+    LTLSPEC {(globally, (implies, (success, isFull), (next, (or, (success, findFood), (failure, findFood)))))}
+    LTLSPEC {(globally, (implies, (failure, isFull), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))}
+    LTLSPEC {(globally, (implies, (success, eatfood), (next, (or, (success, findFood), (failure, findFood)))))}
+}

@@ -1,0 +1,152 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env bottleFound_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env bottleFound_2_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env bottleFound_3_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env bottleFound_4_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env TargetAdjacent_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env TargetAdjacent_2_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ bottleFound_v assign{result{bottleFound_v}} }
+    variable_statement{ bottleFound_2_v assign{result{bottleFound_2_v}} }
+    variable_statement{ bottleFound_3_v assign{result{bottleFound_3_v}} }
+    variable_statement{ bottleFound_4_v assign{result{bottleFound_4_v}} }
+    variable_statement{ TargetAdjacent_v assign{result{TargetAdjacent_v}} }
+    variable_statement{ TargetAdjacent_2_v assign{result{TargetAdjacent_2_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { bottleFound arguments {} read_variables {bottleFound_v} condition{bottleFound_v} }
+    environment_check { bottleFound_2 arguments {} read_variables {bottleFound_2_v} condition{bottleFound_2_v} }
+    environment_check { bottleFound_3 arguments {} read_variables {bottleFound_3_v} condition{bottleFound_3_v} }
+    environment_check { bottleFound_4 arguments {} read_variables {bottleFound_4_v} condition{bottleFound_4_v} }
+    environment_check { TargetAdjacent arguments {} read_variables {TargetAdjacent_v} condition{TargetAdjacent_v} }
+    environment_check { TargetAdjacent_2 arguments {} read_variables {TargetAdjacent_2_v} condition{TargetAdjacent_2_v} }
+}
+actions {
+    action { holdItem
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { fetchBottle
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPos3
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToKitchen
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    bottleFound {}
+                    composite {
+                        c2 selector
+                        children {
+                            holdItem {}
+                            fetchBottle {}
+                        }
+                    }
+                }
+            }
+            composite {
+                c3 sequence
+                children {
+                    bottleFound_2 {}
+                    composite {
+                        c4 sequence
+                        children {
+                            goToPosB {}
+                            composite {
+                                c5 selector
+                                children {
+                                    TargetAdjacent {}
+                                    goToPosB_2 {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            composite {
+                c6 sequence
+                children {
+                    bottleFound_3 {}
+                    composite {
+                        c7 sequence
+                        children {
+                            goToPosC {}
+                            composite {
+                                c8 selector
+                                children {
+                                    TargetAdjacent_2 {}
+                                    goToPosC_2 {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            composite {
+                c9 sequence
+                children {
+                    bottleFound_4 {}
+                    goToPos3 {}
+                }
+            }
+            goToKitchen {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, bottleFound), (failure, bottleFound)))}
+    LTLSPEC {(globally, (implies, (success, bottleFound), (next, (or, (success, holdItem), (failure, holdItem)))))}
+    LTLSPEC {(globally, (implies, (failure, bottleFound), (next, (or, (success, bottleFound_2), (failure, bottleFound_2)))))}
+    LTLSPEC {(globally, (implies, (success, holdItem), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+    LTLSPEC {(globally, (implies, (failure, holdItem), (next, (or, (success, fetchBottle), (failure, fetchBottle), (running, fetchBottle)))))}
+    LTLSPEC {(globally, (implies, (success, fetchBottle), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+    LTLSPEC {(globally, (implies, (success, bottleFound_2), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (failure, bottleFound_2), (next, (or, (success, bottleFound_3), (failure, bottleFound_3)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))}
+    LTLSPEC {(globally, (implies, (success, TargetAdjacent), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+    LTLSPEC {(globally, (implies, (failure, TargetAdjacent), (next, (or, (success, goToPosB_2), (failure, goToPosB_2), (running, goToPosB_2)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB_2), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+    LTLSPEC {(globally, (implies, (success, bottleFound_3), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (failure, bottleFound_3), (next, (or, (success, bottleFound_4), (failure, bottleFound_4)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, TargetAdjacent_2), (failure, TargetAdjacent_2)))))}
+    LTLSPEC {(globally, (implies, (success, TargetAdjacent_2), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+    LTLSPEC {(globally, (implies, (failure, TargetAdjacent_2), (next, (or, (success, goToPosC_2), (failure, goToPosC_2), (running, goToPosC_2)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC_2), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+    LTLSPEC {(globally, (implies, (success, bottleFound_4), (next, (or, (success, goToPos3), (failure, goToPos3), (running, goToPos3)))))}
+    LTLSPEC {(globally, (implies, (failure, bottleFound_4), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))}
+    LTLSPEC {(globally, (implies, (success, goToPos3), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+    LTLSPEC {(globally, (implies, (success, goToKitchen), (next, (or, (success, bottleFound), (failure, bottleFound)))))}
+}

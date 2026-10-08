@@ -1,0 +1,203 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)));
+LTLSPEC G(((system.lowBattery.status = success) -> X(((system.closeGripper.status = success) | (system.closeGripper.status = failure) | (system.closeGripper.status = running)))));
+LTLSPEC G(((system.lowBattery.status = failure) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.closeGripper.status = success) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.charging.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.doTaskA.status = success) | (system.doTaskA.status = failure) | (system.doTaskA.status = running)))));
+LTLSPEC G(((system.doTaskA.status = success) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.doTaskB.status = success) | (system.doTaskB.status = failure) | (system.doTaskB.status = running)))));
+LTLSPEC G(((system.doTaskB.status = success) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X(((system.doTaskC.status = success) | (system.doTaskC.status = failure) | (system.doTaskC.status = running)))));
+LTLSPEC G(((system.doTaskC.status = success) -> X(((system.hasInput.status = success) | (system.hasInput.status = failure)))));
+LTLSPEC G(((system.hasInput.status = success) -> X(((system.invValid.status = success) | (system.invValid.status = failure)))));
+LTLSPEC G(((system.hasInput.status = failure) -> X(((system.waitInput.status = success) | (system.waitInput.status = failure) | (system.waitInput.status = running)))));
+LTLSPEC G(((system.waitInput.status = success) -> X(((system.invValid.status = success) | (system.invValid.status = failure)))));
+LTLSPEC G(((system.invValid.status = success) -> X(((system.searchTarget.status = success) | (system.searchTarget.status = failure) | (system.searchTarget.status = running)))));
+LTLSPEC G(((system.invValid.status = failure) -> X(((system.computInv.status = success) | (system.computInv.status = failure) | (system.computInv.status = running)))));
+LTLSPEC G(((system.computInv.status = success) -> X(((system.searchTarget.status = success) | (system.searchTarget.status = failure) | (system.searchTarget.status = running)))));
+LTLSPEC G(((system.searchTarget.status = success) -> X(((system.activeManipulator.status = success) | (system.activeManipulator.status = failure) | (system.activeManipulator.status = running)))));
+LTLSPEC G(((system.activeManipulator.status = success) -> X(((system.lowBattery.status = success) | (system.lowBattery.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        lowBattery : lowBattery_module(lowBattery_v_stage_0);
+        closeGripper : success_DEFAULT_module();
+        goToStation : success_DEFAULT_module();
+        charging : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_4(lowBattery, closeGripper, goToStation, charging);
+        goToPosA : success_DEFAULT_module();
+        doTaskA : success_DEFAULT_module();
+        goToPosB : success_DEFAULT_module();
+        doTaskB : success_DEFAULT_module();
+        goToPosC : success_DEFAULT_module();
+        doTaskC : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_6(goToPosA, doTaskA, goToPosB, doTaskB, goToPosC, doTaskC);
+        hasInput : hasInput_module(hasInput_v_stage_0);
+        waitInput : success_DEFAULT_module();
+        c4 : composite_selector_without_memory_2(hasInput, waitInput);
+        invValid : invValid_module(invValid_v_stage_0);
+        computInv : success_DEFAULT_module();
+        c5 : composite_selector_without_memory_2(invValid, computInv);
+        searchTarget : success_DEFAULT_module();
+        activeManipulator : success_DEFAULT_module();
+        c6 : composite_sequence_without_memory_2(searchTarget, activeManipulator);
+        c2 : composite_sequence_without_memory_4(c3, c4, c5, c6);
+        c0 : composite_selector_without_memory_2(c1, c2);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        lowBattery_v_stage_0 : boolean;
+        hasInput_v_stage_0 : boolean;
+        invValid_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(lowBattery_v_stage_0) := {TRUE, FALSE};
+        init(hasInput_v_stage_0) := {TRUE, FALSE};
+        init(invValid_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(lowBattery_v_stage_0) :=
+            case
+                !(c0.active) : lowBattery_v_stage_0;
+                TRUE : lowBattery_v_stage_0;
+            esac;
+        next(hasInput_v_stage_0) :=
+            case
+                !(c0.active) : hasInput_v_stage_0;
+                TRUE : hasInput_v_stage_0;
+            esac;
+        next(invValid_v_stage_0) :=
+            case
+                !(c0.active) : invValid_v_stage_0;
+                TRUE : invValid_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        lowBattery := 2;
+        closeGripper := 3;
+        goToStation := 4;
+        charging := 5;
+        c2 := 6;
+        c3 := 7;
+        goToPosA := 8;
+        doTaskA := 9;
+        goToPosB := 10;
+        doTaskB := 11;
+        goToPosC := 12;
+        doTaskC := 13;
+        c4 := 14;
+        hasInput := 15;
+        waitInput := 16;
+        c5 := 17;
+        invValid := 18;
+        computInv := 19;
+        c6 := 20;
+        searchTarget := 21;
+        activeManipulator := 22;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_sequence_without_memory_6(child_0, child_1, child_2, child_3, child_4, child_5)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                !(child_4.internal_status = success) : child_4.internal_status;
+                !(child_5.internal_status = success) : child_5.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+        child_4.active := child_3.status = success;
+        child_5.active := child_4.status = success;
+MODULE lowBattery_module(lowBattery_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (lowBattery_v_stage_0) ? success : failure;
+MODULE hasInput_module(hasInput_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasInput_v_stage_0) ? success : failure;
+MODULE invValid_module(invValid_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (invValid_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

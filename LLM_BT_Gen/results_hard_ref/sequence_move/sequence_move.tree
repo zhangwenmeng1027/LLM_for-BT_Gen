@@ -1,0 +1,46 @@
+configuration {} enumerations {} constants {}
+variables {
+}
+environment_update {
+}
+checks {}
+environment_checks {
+}
+actions {
+    action { goToStationA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStationB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStationC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToParking
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            goToStationA {}
+            goToStationB {}
+            goToStationC {}
+            moveToParking {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, goToStationA), (failure, goToStationA)))}
+    LTLSPEC {(globally, (implies, (success, goToStationA), (next, (or, (success, goToStationB), (failure, goToStationB), (running, goToStationB)))))}
+    LTLSPEC {(globally, (implies, (success, goToStationB), (next, (or, (success, goToStationC), (failure, goToStationC), (running, goToStationC)))))}
+    LTLSPEC {(globally, (implies, (success, goToStationC), (next, (or, (success, moveToParking), (failure, moveToParking), (running, moveToParking)))))}
+    LTLSPEC {(globally, (implies, (success, moveToParking), (next, (or, (success, goToStationA), (failure, goToStationA)))))}
+}

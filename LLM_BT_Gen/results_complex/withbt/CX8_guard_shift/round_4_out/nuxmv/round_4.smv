@@ -1,0 +1,302 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.alarm.status = success) | (system.alarm.status = failure)));
+LTLSPEC G(((system.alarm.status = success) -> X(((system.hasFire.status = success) | (system.hasFire.status = failure)))));
+LTLSPEC G(((system.alarm.status = failure) -> X(((system.hasVictim.status = success) | (system.hasVictim.status = failure)))));
+LTLSPEC G(((system.hasFire.status = success) -> X(((system.atStation.status = success) | (system.atStation.status = failure)))));
+LTLSPEC G(((system.hasFire.status = failure) -> X(((system.useExtinguisher.status = success) | (system.useExtinguisher.status = failure) | (system.useExtinguisher.status = running)))));
+LTLSPEC G(((system.useExtinguisher.status = success) -> X(((system.atStation.status = success) | (system.atStation.status = failure)))));
+LTLSPEC G(((system.atStation.status = success) -> X(((system.closeDoor.status = success) | (system.closeDoor.status = failure) | (system.closeDoor.status = running)))));
+LTLSPEC G(((system.atStation.status = failure) -> X(((system.goToStation.status = success) | (system.goToStation.status = failure) | (system.goToStation.status = running)))));
+LTLSPEC G(((system.goToStation.status = success) -> X(((system.closeDoor.status = success) | (system.closeDoor.status = failure) | (system.closeDoor.status = running)))));
+LTLSPEC G(((system.closeDoor.status = success) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.hasVictim.status = success) -> X(((system.askHelp.status = success) | (system.askHelp.status = failure) | (system.askHelp.status = running)))));
+LTLSPEC G(((system.hasVictim.status = failure) -> X(((system.isDay.status = success) | (system.isDay.status = failure)))));
+LTLSPEC G(((system.askHelp.status = success) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.isDay.status = success) -> X(((system.visitedA.status = success) | (system.visitedA.status = failure)))));
+LTLSPEC G(((system.isDay.status = failure) -> X(((system.isNight.status = success) | (system.isNight.status = failure)))));
+LTLSPEC G(((system.visitedA.status = success) -> X(((system.visitedB.status = success) | (system.visitedB.status = failure)))));
+LTLSPEC G(((system.visitedA.status = failure) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X(((system.patroling.status = success) | (system.patroling.status = failure) | (system.patroling.status = running)))));
+LTLSPEC G(((system.patroling.status = success) -> X(((system.visitedB.status = success) | (system.visitedB.status = failure)))));
+LTLSPEC G(((system.visitedB.status = success) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.visitedB.status = failure) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.patroling_2.status = success) | (system.patroling_2.status = failure) | (system.patroling_2.status = running)))));
+LTLSPEC G(((system.patroling_2.status = success) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.isNight.status = success) -> X(((system.atStation_2.status = success) | (system.atStation_2.status = failure)))));
+LTLSPEC G(((system.isNight.status = failure) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+LTLSPEC G(((system.atStation_2.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.atStation_2.status = failure) -> X(((system.goToStation_2.status = success) | (system.goToStation_2.status = failure) | (system.goToStation_2.status = running)))));
+LTLSPEC G(((system.goToStation_2.status = success) -> X(((system.charging.status = success) | (system.charging.status = failure) | (system.charging.status = running)))));
+LTLSPEC G(((system.charging.status = success) -> X(((system.alarm.status = success) | (system.alarm.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        alarm : alarm_module(alarm_v_stage_0);
+        hasFire : hasFire_module(hasFire_v_stage_0);
+        useExtinguisher : success_DEFAULT_module();
+        c3 : composite_sequence_without_memory_2(hasFire, useExtinguisher);
+        atStation : atStation_module(atStation_v_stage_0);
+        goToStation : success_DEFAULT_module();
+        c4 : composite_selector_without_memory_2(atStation, goToStation);
+        c2 : composite_selector_without_memory_2(c3, c4);
+        closeDoor : success_DEFAULT_module();
+        c1 : composite_sequence_without_memory_3(alarm, c2, closeDoor);
+        hasVictim : hasVictim_module(hasVictim_v_stage_0);
+        askHelp : success_DEFAULT_module();
+        c5 : composite_sequence_without_memory_2(hasVictim, askHelp);
+        isDay : isDay_module(isDay_v_stage_0);
+        visitedA : visitedA_module(visitedA_v_stage_0);
+        goToPosA : success_DEFAULT_module();
+        patroling : success_DEFAULT_module();
+        c8 : composite_sequence_without_memory_2(goToPosA, patroling);
+        c7 : composite_selector_without_memory_2(visitedA, c8);
+        visitedB : visitedB_module(visitedB_v_stage_0);
+        goToPosB : success_DEFAULT_module();
+        patroling_2 : success_DEFAULT_module();
+        c10 : composite_sequence_without_memory_2(goToPosB, patroling_2);
+        c9 : composite_selector_without_memory_2(visitedB, c10);
+        c6 : composite_sequence_without_memory_3(isDay, c7, c9);
+        isNight : isNight_module(isNight_v_stage_0);
+        atStation_2 : atStation_2_module(atStation_2_v_stage_0);
+        goToStation_2 : success_DEFAULT_module();
+        c12 : composite_selector_without_memory_2(atStation_2, goToStation_2);
+        charging : success_DEFAULT_module();
+        c11 : composite_sequence_without_memory_3(isNight, c12, charging);
+        c0 : composite_selector_without_memory_4(c1, c5, c6, c11);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        alarm_v_stage_0 : boolean;
+        hasFire_v_stage_0 : boolean;
+        hasVictim_v_stage_0 : boolean;
+        isDay_v_stage_0 : boolean;
+        isNight_v_stage_0 : boolean;
+        visitedA_v_stage_0 : boolean;
+        visitedB_v_stage_0 : boolean;
+        atStation_v_stage_0 : boolean;
+        atStation_2_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(alarm_v_stage_0) := {TRUE, FALSE};
+        init(hasFire_v_stage_0) := {TRUE, FALSE};
+        init(hasVictim_v_stage_0) := {TRUE, FALSE};
+        init(isDay_v_stage_0) := {TRUE, FALSE};
+        init(isNight_v_stage_0) := {TRUE, FALSE};
+        init(visitedA_v_stage_0) := {TRUE, FALSE};
+        init(visitedB_v_stage_0) := {TRUE, FALSE};
+        init(atStation_v_stage_0) := {TRUE, FALSE};
+        init(atStation_2_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(alarm_v_stage_0) :=
+            case
+                !(c0.active) : alarm_v_stage_0;
+                TRUE : alarm_v_stage_0;
+            esac;
+        next(hasFire_v_stage_0) :=
+            case
+                !(c0.active) : hasFire_v_stage_0;
+                TRUE : hasFire_v_stage_0;
+            esac;
+        next(hasVictim_v_stage_0) :=
+            case
+                !(c0.active) : hasVictim_v_stage_0;
+                TRUE : hasVictim_v_stage_0;
+            esac;
+        next(isDay_v_stage_0) :=
+            case
+                !(c0.active) : isDay_v_stage_0;
+                TRUE : isDay_v_stage_0;
+            esac;
+        next(isNight_v_stage_0) :=
+            case
+                !(c0.active) : isNight_v_stage_0;
+                TRUE : isNight_v_stage_0;
+            esac;
+        next(visitedA_v_stage_0) :=
+            case
+                !(c0.active) : visitedA_v_stage_0;
+                TRUE : visitedA_v_stage_0;
+            esac;
+        next(visitedB_v_stage_0) :=
+            case
+                !(c0.active) : visitedB_v_stage_0;
+                TRUE : visitedB_v_stage_0;
+            esac;
+        next(atStation_v_stage_0) :=
+            case
+                !(c0.active) : atStation_v_stage_0;
+                TRUE : atStation_v_stage_0;
+            esac;
+        next(atStation_2_v_stage_0) :=
+            case
+                !(c0.active) : atStation_2_v_stage_0;
+                TRUE : atStation_2_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        alarm := 2;
+        c2 := 3;
+        c3 := 4;
+        hasFire := 5;
+        useExtinguisher := 6;
+        c4 := 7;
+        atStation := 8;
+        goToStation := 9;
+        closeDoor := 10;
+        c5 := 11;
+        hasVictim := 12;
+        askHelp := 13;
+        c6 := 14;
+        isDay := 15;
+        c7 := 16;
+        visitedA := 17;
+        c8 := 18;
+        goToPosA := 19;
+        patroling := 20;
+        c9 := 21;
+        visitedB := 22;
+        c10 := 23;
+        goToPosB := 24;
+        patroling_2 := 25;
+        c11 := 26;
+        isNight := 27;
+        c12 := 28;
+        atStation_2 := 29;
+        goToStation_2 := 30;
+        charging := 31;
+MODULE composite_sequence_without_memory_3(child_0, child_1, child_2)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE alarm_module(alarm_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (alarm_v_stage_0) ? success : failure;
+MODULE hasFire_module(hasFire_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasFire_v_stage_0) ? success : failure;
+MODULE atStation_module(atStation_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atStation_v_stage_0) ? success : failure;
+MODULE hasVictim_module(hasVictim_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (hasVictim_v_stage_0) ? success : failure;
+MODULE isDay_module(isDay_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isDay_v_stage_0) ? success : failure;
+MODULE visitedA_module(visitedA_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (visitedA_v_stage_0) ? success : failure;
+MODULE visitedB_module(visitedB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (visitedB_v_stage_0) ? success : failure;
+MODULE isNight_module(isNight_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (isNight_v_stage_0) ? success : failure;
+MODULE atStation_2_module(atStation_2_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (atStation_2_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

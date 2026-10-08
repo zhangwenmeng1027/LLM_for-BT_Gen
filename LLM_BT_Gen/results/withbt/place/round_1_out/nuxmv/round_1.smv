@@ -1,0 +1,158 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.picked.status = success) | (system.picked.status = failure)));
+LTLSPEC G(((system.picked.status = failure) -> X(((system.goToPosA.status = success) | (system.goToPosA.status = failure) | (system.goToPosA.status = running)))));
+LTLSPEC G(((system.goToPosA.status = success) -> X((((system.pickUp.status = success) | (system.pickUp_2.status = success)) | ((system.pickUp.status = failure) | (system.pickUp_2.status = failure)) | ((system.pickUp.status = running) | (system.pickUp_2.status = running))))));
+LTLSPEC G(((system.placedB.status = failure) -> X(((system.goToPosB.status = success) | (system.goToPosB.status = failure) | (system.goToPosB.status = running)))));
+LTLSPEC G(((system.goToPosB.status = success) -> X(((system.placeB.status = success) | (system.placeB.status = failure) | (system.placeB.status = running)))));
+LTLSPEC G(((system.placeB.status = success) -> X((((system.pickUp.status = success) | (system.pickUp_2.status = success)) | ((system.pickUp.status = failure) | (system.pickUp_2.status = failure)) | ((system.pickUp.status = running) | (system.pickUp_2.status = running))))));
+LTLSPEC G(((system.placedC.status = failure) -> X(((system.goToPosC.status = success) | (system.goToPosC.status = failure) | (system.goToPosC.status = running)))));
+LTLSPEC G(((system.goToPosC.status = success) -> X(((system.placeC.status = success) | (system.placeC.status = failure) | (system.placeC.status = running)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        picked : picked_module(picked_v_stage_0);
+        goToPosA : success_DEFAULT_module();
+        pickUp : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(goToPosA, pickUp);
+        c1 : composite_selector_without_memory_2(picked, c2);
+        placedB : placedB_module(placedB_v_stage_0);
+        goToPosB : success_DEFAULT_module();
+        placeB : success_DEFAULT_module();
+        c4 : composite_sequence_without_memory_2(goToPosB, placeB);
+        c3 : composite_selector_without_memory_2(placedB, c4);
+        pickUp_2 : success_DEFAULT_module();
+        placedC : placedC_module(placedC_v_stage_0);
+        goToPosC : success_DEFAULT_module();
+        placeC : success_DEFAULT_module();
+        c6 : composite_sequence_without_memory_2(goToPosC, placeC);
+        c5 : composite_selector_without_memory_2(placedC, c6);
+        c0 : composite_sequence_without_memory_4(c1, c3, pickUp_2, c5);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        picked_v_stage_0 : boolean;
+        placedB_v_stage_0 : boolean;
+        placedC_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(picked_v_stage_0) := {TRUE, FALSE};
+        init(placedB_v_stage_0) := {TRUE, FALSE};
+        init(placedC_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(picked_v_stage_0) :=
+            case
+                !(c0.active) : picked_v_stage_0;
+                TRUE : picked_v_stage_0;
+            esac;
+        next(placedB_v_stage_0) :=
+            case
+                !(c0.active) : placedB_v_stage_0;
+                TRUE : placedB_v_stage_0;
+            esac;
+        next(placedC_v_stage_0) :=
+            case
+                !(c0.active) : placedC_v_stage_0;
+                TRUE : placedC_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        c1 := 1;
+        picked := 2;
+        c2 := 3;
+        goToPosA := 4;
+        pickUp := 5;
+        c3 := 6;
+        placedB := 7;
+        c4 := 8;
+        goToPosB := 9;
+        placeB := 10;
+        pickUp_2 := 11;
+        c5 := 12;
+        placedC := 13;
+        c6 := 14;
+        goToPosC := 15;
+        placeC := 16;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE composite_selector_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+MODULE composite_sequence_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                !(child_2.internal_status = success) : child_2.internal_status;
+                !(child_3.internal_status = success) : child_3.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+        child_2.active := child_1.status = success;
+        child_3.active := child_2.status = success;
+MODULE picked_module(picked_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (picked_v_stage_0) ? success : failure;
+MODULE placedB_module(placedB_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (placedB_v_stage_0) ? success : failure;
+MODULE placedC_module(placedC_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (placedC_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;

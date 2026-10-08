@@ -1,0 +1,57 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env TargetAdjacent_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ TargetAdjacent_v assign{result{TargetAdjacent_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { TargetAdjacent arguments {} read_variables {TargetAdjacent_v} condition{TargetAdjacent_v} }
+}
+actions {
+    action { getTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveToDestination
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { attackTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { randomMove
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    getTarget {}
+                    moveToDestination {}
+                    TargetAdjacent {}
+                    attackTarget {}
+                }
+            }
+            randomMove {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, getTarget), (failure, getTarget)))}
+    LTLSPEC {(globally, (implies, (success, getTarget), (next, (or, (success, moveToDestination), (failure, moveToDestination), (running, moveToDestination)))))}
+    LTLSPEC {(globally, (implies, (success, moveToDestination), (next, (or, (success, TargetAdjacent), (failure, TargetAdjacent)))))}
+    LTLSPEC {(globally, (implies, (success, TargetAdjacent), (next, (or, (success, attackTarget), (failure, attackTarget), (running, attackTarget)))))}
+    LTLSPEC {(globally, (implies, (failure, TargetAdjacent), (next, (or, (success, randomMove), (failure, randomMove), (running, randomMove)))))}
+    LTLSPEC {(globally, (implies, (success, attackTarget), (next, (or, (success, getTarget), (failure, getTarget)))))}
+    LTLSPEC {(globally, (implies, (success, randomMove), (next, (or, (success, getTarget), (failure, getTarget)))))}
+}

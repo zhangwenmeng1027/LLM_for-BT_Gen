@@ -1,0 +1,25 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.visitedA.status = success | system.visitedA.status = failure)  is true
+-- specification  G (system.visitedA.status = failure ->  X ((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running))  is true
+-- specification  G (system.visitedA.status = success ->  X (system.visitedB.status = success | system.visitedB.status = failure))  is true
+-- specification  G (system.visitedB.status = failure ->  X ((system.goToPosB.status = success | system.goToPosB.status = failure) | system.goToPosB.status = running))  is true
+-- specification  G (system.goToPosA.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))  is true
+-- specification  G (system.goToPosB.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))  is true
+-- specification  G (system.visitedB.status = success ->  X (system.visitedC.status = success | system.visitedC.status = failure))  is true
+-- specification  G (system.visitedC.status = failure ->  X ((system.goToPosC.status = success | system.goToPosC.status = failure) | system.goToPosC.status = running))  is true
+-- specification  G (system.goToPosC.status = success ->  X ((((system.patroling.status = success | system.patroling_2.status = success) | system.patroling_3.status = success) | ((system.patroling.status = failure | system.patroling_2.status = failure) | system.patroling_3.status = failure)) | ((system.patroling.status = running | system.patroling_2.status = running) | system.patroling_3.status = running)))  is true

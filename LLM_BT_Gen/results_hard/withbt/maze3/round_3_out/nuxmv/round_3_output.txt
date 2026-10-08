@@ -1,0 +1,164 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.atPos9.status = success | system.atPos9.status = failure)  is true
+-- specification  G (system.atPos9.status = success ->  X (system.atPos9.status = success | system.atPos9.status = failure))  is true
+-- specification  G (system.atPos9.status = failure ->  X ((system.move6to9.status = success | system.move6to9.status = failure) | system.move6to9.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.atPos9_v_stage_0 = FALSE
+    system.atPos6_v_stage_0 = FALSE
+    system.atPos2_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.move6to9 = 8
+    system.node_names.move3to6 = 7
+    system.node_names.move1to2 = 6
+    system.node_names.atPos2 = 5
+    system.node_names.c2 = 4
+    system.node_names.atPos6 = 3
+    system.node_names.c1 = 2
+    system.node_names.atPos9 = 1
+    system.node_names.c0 = 0
+    system.atPos9.internal_status = failure
+    system.atPos9.status = failure
+    system.atPos6.internal_status = failure
+    system.atPos6.status = failure
+    system.atPos2.internal_status = failure
+    system.atPos2.status = failure
+    system.move1to2.internal_status = success
+    system.move1to2.status = invalid
+    system.move1to2.active = FALSE
+    system.atPos2.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.move3to6.internal_status = success
+    system.move3to6.status = success
+    system.move3to6.active = TRUE
+    system.c2.active = TRUE
+    system.atPos6.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.move6to9.internal_status = invalid
+    system.move6to9.status = invalid
+    system.move6to9.active = FALSE
+    system.c1.active = TRUE
+    system.atPos9.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 1.2 <-
+-- specification  G (system.move6to9.status = success ->  X (system.atPos9.status = success | system.atPos9.status = failure))  is true
+-- specification  G (system.atPos6.status = success ->  X (system.atPos9.status = success | system.atPos9.status = failure))  is true
+-- specification  G (system.atPos6.status = failure ->  X ((system.move3to6.status = success | system.move3to6.status = failure) | system.move3to6.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 2.1 <-
+    system.atPos9_v_stage_0 = FALSE
+    system.atPos6_v_stage_0 = FALSE
+    system.atPos2_v_stage_0 = TRUE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.move6to9 = 8
+    system.node_names.move3to6 = 7
+    system.node_names.move1to2 = 6
+    system.node_names.atPos2 = 5
+    system.node_names.c2 = 4
+    system.node_names.atPos6 = 3
+    system.node_names.c1 = 2
+    system.node_names.atPos9 = 1
+    system.node_names.c0 = 0
+    system.atPos9.internal_status = failure
+    system.atPos9.status = failure
+    system.atPos6.internal_status = failure
+    system.atPos6.status = failure
+    system.atPos2.internal_status = success
+    system.atPos2.status = success
+    system.move1to2.internal_status = success
+    system.move1to2.status = success
+    system.move1to2.active = TRUE
+    system.atPos2.active = TRUE
+    system.c2.internal_status = success
+    system.c2.status = success
+    system.move3to6.internal_status = success
+    system.move3to6.status = invalid
+    system.move3to6.active = FALSE
+    system.c2.active = TRUE
+    system.atPos6.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.move6to9.internal_status = invalid
+    system.move6to9.status = invalid
+    system.move6to9.active = FALSE
+    system.c1.active = TRUE
+    system.atPos9.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 2.2 <-
+-- specification  G (system.move3to6.status = success ->  X (system.atPos9.status = success | system.atPos9.status = failure))  is true
+-- specification  G (system.atPos2.status = success ->  X (system.atPos9.status = success | system.atPos9.status = failure))  is true
+-- specification  G (system.atPos2.status = failure ->  X ((system.move1to2.status = success | system.move1to2.status = failure) | system.move1to2.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 3.1 <-
+    system.atPos9_v_stage_0 = FALSE
+    system.atPos6_v_stage_0 = FALSE
+    system.atPos2_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.move6to9 = 8
+    system.node_names.move3to6 = 7
+    system.node_names.move1to2 = 6
+    system.node_names.atPos2 = 5
+    system.node_names.c2 = 4
+    system.node_names.atPos6 = 3
+    system.node_names.c1 = 2
+    system.node_names.atPos9 = 1
+    system.node_names.c0 = 0
+    system.atPos9.internal_status = failure
+    system.atPos9.status = failure
+    system.atPos6.internal_status = failure
+    system.atPos6.status = failure
+    system.atPos2.internal_status = failure
+    system.atPos2.status = failure
+    system.move1to2.internal_status = success
+    system.move1to2.status = invalid
+    system.move1to2.active = FALSE
+    system.atPos2.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.move3to6.internal_status = success
+    system.move3to6.status = success
+    system.move3to6.active = TRUE
+    system.c2.active = TRUE
+    system.atPos6.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.move6to9.internal_status = invalid
+    system.move6to9.status = invalid
+    system.move6to9.active = FALSE
+    system.c1.active = TRUE
+    system.atPos9.active = TRUE
+    system.c0.internal_status = success
+    system.c0.status = success
+  -> State: 3.2 <-
+-- specification  G (system.move1to2.status = success ->  X (system.atPos9.status = success | system.atPos9.status = failure))  is true

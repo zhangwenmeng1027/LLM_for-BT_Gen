@@ -1,0 +1,85 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env noFood_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env hasApple_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env holdKnife_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ noFood_v assign{result{noFood_v}} }
+    variable_statement{ hasApple_v assign{result{hasApple_v}} }
+    variable_statement{ holdKnife_v assign{result{holdKnife_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { noFood arguments {} read_variables {noFood_v} condition{noFood_v} }
+    environment_check { hasApple arguments {} read_variables {hasApple_v} condition{hasApple_v} }
+    environment_check { holdKnife arguments {} read_variables {holdKnife_v} condition{holdKnife_v} }
+}
+actions {
+    action { pickApple
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickUp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goCow
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { killCow
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            noFood {}
+        composite {
+            c1 selector
+            children {
+            composite {
+                c2 sequence
+                children {
+                    hasApple {}
+                    pickApple {}
+                }
+            }
+            composite {
+                c3 sequence
+                children {
+                composite {
+                    c4 selector
+                    children {
+                        holdKnife {}
+                        pickUp {}
+                    }
+                }
+                composite {
+                    c5 sequence
+                    children {
+                        goCow {}
+                        killCow {}
+                    }
+                }
+                }
+            }
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, noFood), (failure, noFood)))}
+    LTLSPEC {(globally, (implies, (success, noFood), (next, (or, (success, hasApple), (failure, hasApple)))))}
+    LTLSPEC {(globally, (implies, (success, hasApple), (next, (or, (success, pickApple), (failure, pickApple), (running, pickApple)))))}
+    LTLSPEC {(globally, (implies, (failure, hasApple), (next, (or, (success, holdKnife), (failure, holdKnife)))))}
+    LTLSPEC {(globally, (implies, (failure, holdKnife), (next, (or, (success, pickUp), (failure, pickUp), (running, pickUp)))))}
+    LTLSPEC {(globally, (implies, (success, pickUp), (next, (or, (success, goCow), (failure, goCow), (running, goCow)))))}
+    LTLSPEC {(globally, (implies, (success, goCow), (next, (or, (success, killCow), (failure, killCow), (running, killCow)))))}
+}

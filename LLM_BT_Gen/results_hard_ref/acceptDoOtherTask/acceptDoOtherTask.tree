@@ -1,0 +1,148 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env hasInput_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env invValid_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} }
+    variable_statement{ hasInput_v assign{result{hasInput_v}} }
+    variable_statement{ invValid_v assign{result{invValid_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} }
+    environment_check { hasInput arguments {} read_variables {hasInput_v} condition{hasInput_v} }
+    environment_check { invValid arguments {} read_variables {invValid_v} condition{invValid_v} }
+}
+actions {
+    action { closeGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskB
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { doTaskC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { waitInput
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { computInv
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { searchTarget
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { activeManipulator
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+        composite {
+            c1 sequence
+            children {
+                lowBattery {}
+                closeGripper {}
+                goToStation {}
+                charging {}
+            }
+        }
+        composite {
+            c2 sequence
+            children {
+            composite {
+                c3 sequence
+                children {
+                    goToPosA {}
+                    doTaskA {}
+                    goToPosB {}
+                    doTaskB {}
+                    goToPosC {}
+                    doTaskC {}
+                }
+            }
+            composite {
+                c4 selector
+                children {
+                    hasInput {}
+                    waitInput {}
+                }
+            }
+            composite {
+                c5 selector
+                children {
+                    invValid {}
+                    computInv {}
+                }
+            }
+            composite {
+                c6 sequence
+                children {
+                    searchTarget {}
+                    activeManipulator {}
+                }
+            }
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, lowBattery), (failure, lowBattery)))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))}
+    LTLSPEC {(globally, (implies, (failure, lowBattery), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, closeGripper), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, charging), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, doTaskA), (failure, doTaskA), (running, doTaskA)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskA), (next, (or, (success, goToPosB), (failure, goToPosB), (running, goToPosB)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosB), (next, (or, (success, doTaskB), (failure, doTaskB), (running, doTaskB)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskB), (next, (or, (success, goToPosC), (failure, goToPosC), (running, goToPosC)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosC), (next, (or, (success, doTaskC), (failure, doTaskC), (running, doTaskC)))))}
+    LTLSPEC {(globally, (implies, (success, doTaskC), (next, (or, (success, hasInput), (failure, hasInput)))))}
+    LTLSPEC {(globally, (implies, (success, hasInput), (next, (or, (success, invValid), (failure, invValid)))))}
+    LTLSPEC {(globally, (implies, (failure, hasInput), (next, (or, (success, waitInput), (failure, waitInput), (running, waitInput)))))}
+    LTLSPEC {(globally, (implies, (success, waitInput), (next, (or, (success, invValid), (failure, invValid)))))}
+    LTLSPEC {(globally, (implies, (success, invValid), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))}
+    LTLSPEC {(globally, (implies, (failure, invValid), (next, (or, (success, computInv), (failure, computInv), (running, computInv)))))}
+    LTLSPEC {(globally, (implies, (success, computInv), (next, (or, (success, searchTarget), (failure, searchTarget), (running, searchTarget)))))}
+    LTLSPEC {(globally, (implies, (success, searchTarget), (next, (or, (success, activeManipulator), (failure, activeManipulator), (running, activeManipulator)))))}
+    LTLSPEC {(globally, (implies, (success, activeManipulator), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+}

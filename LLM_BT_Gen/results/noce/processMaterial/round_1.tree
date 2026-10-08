@@ -1,0 +1,59 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env acceptedMaterial_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isProcessed_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ acceptedMaterial_v assign{result{acceptedMaterial_v}} }
+    variable_statement{ isProcessed_v assign{result{isProcessed_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { acceptedMaterial arguments {} read_variables {acceptedMaterial_v} condition{acceptedMaterial_v} }
+    environment_check { isProcessed arguments {} read_variables {isProcessed_v} condition{isProcessed_v} }
+}
+actions {
+    action { pushR
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pushP
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pushC
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            pushR {}
+            composite {
+                c1 sequence
+                children {
+                    acceptedMaterial {}
+                    pushP {}
+                }
+            }
+            composite {
+                c2 sequence
+                children {
+                    isProcessed {}
+                    pushC {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, pushR), (failure, pushR), (running, pushR)))}
+    LTLSPEC {(globally, (implies, (success, pushR), (next, (or, (success, acceptedMaterial), (failure, acceptedMaterial)))))}
+    LTLSPEC {(globally, (implies, (success, acceptedMaterial), (next, (or, (success, pushP), (failure, pushP), (running, pushP)))))}
+    LTLSPEC {(globally, (implies, (success, pushP), (next, (or, (success, isProcessed), (failure, isProcessed)))))}
+    LTLSPEC {(globally, (implies, (success, isProcessed), (next, (or, (success, pushC), (failure, pushC), (running, pushC)))))}
+}

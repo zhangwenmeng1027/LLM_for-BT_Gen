@@ -1,0 +1,86 @@
+configuration {} enumerations {} constants {}
+variables {
+    variable { env fullBattery_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isCharge_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env lowBattery_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ fullBattery_v assign{result{fullBattery_v}} }
+    variable_statement{ isCharge_v assign{result{isCharge_v}} }
+    variable_statement{ lowBattery_v assign{result{lowBattery_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { fullBattery arguments {} read_variables {fullBattery_v} condition{fullBattery_v} }
+    environment_check { isCharge arguments {} read_variables {isCharge_v} condition{isCharge_v} }
+    environment_check { lowBattery arguments {} read_variables {lowBattery_v} condition{lowBattery_v} }
+}
+actions {
+    action { stopCharge
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { connectToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { charging
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { askHelp
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { waitCharge
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+        composite {
+            c1 sequence
+            children {
+                fullBattery {}
+                isCharge {}
+                stopCharge {}
+            }
+        }
+        composite {
+            c2 sequence
+            children {
+                lowBattery {}
+                connectToStation {}
+                charging {}
+            }
+        }
+        composite {
+            c3 sequence
+            children {
+                askHelp {}
+                goToStation {}
+                waitCharge {}
+            }
+        }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, fullBattery), (failure, fullBattery)))}
+    LTLSPEC {(globally, (implies, (success, fullBattery), (next, (or, (success, isCharge), (failure, isCharge)))))}
+    LTLSPEC {(globally, (implies, (success, isCharge), (next, (or, (success, stopCharge), (failure, stopCharge), (running, stopCharge)))))}
+    LTLSPEC {(globally, (implies, (failure, fullBattery), (next, (or, (success, lowBattery), (failure, lowBattery)))))}
+    LTLSPEC {(globally, (implies, (success, lowBattery), (next, (or, (success, connectToStation), (failure, connectToStation), (running, connectToStation)))))}
+    LTLSPEC {(globally, (implies, (success, connectToStation), (next, (or, (success, charging), (failure, charging), (running, charging)))))}
+    LTLSPEC {(globally, (implies, (success, askHelp), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, waitCharge), (failure, waitCharge), (running, waitCharge)))))}
+}

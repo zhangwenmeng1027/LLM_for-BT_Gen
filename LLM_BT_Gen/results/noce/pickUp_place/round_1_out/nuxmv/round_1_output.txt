@@ -1,0 +1,24 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.placedB.status = success | system.placedB.status = failure)  is true
+-- specification  G (system.empty.status = success ->  X (system.atPosA.status = success | system.atPosA.status = failure))  is true
+-- specification  G (system.picked.status = success ->  X (system.atPosB.status = success | system.atPosB.status = failure))  is true
+-- specification  G ((system.noCollision.status = success | system.noCollision_2.status = success) ->  X (((((system.goToPosA.status = success | system.goToPosA.status = failure) | system.goToPosA.status = running) | system.goToPosB.status = success) | system.goToPosB.status = failure) | system.goToPosB.status = running))  is true
+-- specification  G (system.atPosB.status = failure ->  X ((system.noCollision.status = success | system.noCollision_2.status = success) | (system.noCollision.status = failure | system.noCollision_2.status = failure)))  is true
+-- specification  G (system.atPosA.status = failure ->  X ((system.noCollision.status = success | system.noCollision_2.status = success) | (system.noCollision.status = failure | system.noCollision_2.status = failure)))  is true
+-- specification  G (system.atPosB.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))  is true
+-- specification  G (system.goToPosB.status = success ->  X ((system.putDown.status = success | system.putDown.status = failure) | system.putDown.status = running))  is true

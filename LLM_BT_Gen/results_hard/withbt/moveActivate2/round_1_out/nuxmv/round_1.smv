@@ -1,0 +1,124 @@
+MODULE main
+    VAR
+        system : system_module;
+--------------SPECIFICATIONS
+
+LTLSPEC X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)));
+LTLSPEC G(((system.checkReachable.status = success) -> X(((system.move1to2.status = success) | (system.move1to2.status = failure) | (system.move1to2.status = running)))));
+LTLSPEC G(((system.checkReachable.status = failure) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+LTLSPEC G(((system.move1to2.status = success) -> X(((system.activeManipulator.status = success) | (system.activeManipulator.status = failure) | (system.activeManipulator.status = running)))));
+LTLSPEC G(((system.activeManipulator.status = success) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+LTLSPEC G(((system.move2to3.status = success) -> X(((system.activeManipulator_2.status = success) | (system.activeManipulator_2.status = failure) | (system.activeManipulator_2.status = running)))));
+LTLSPEC G(((system.activeManipulator_2.status = success) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+LTLSPEC G(((system.move3to4.status = success) -> X(((system.activeManipulator_3.status = success) | (system.activeManipulator_3.status = failure) | (system.activeManipulator_3.status = running)))));
+LTLSPEC G(((system.activeManipulator_3.status = success) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+LTLSPEC G(((system.move4to5.status = success) -> X(((system.activeManipulator_4.status = success) | (system.activeManipulator_4.status = failure) | (system.activeManipulator_4.status = running)))));
+LTLSPEC G(((system.activeManipulator_4.status = success) -> X(((system.checkReachable.status = success) | (system.checkReachable.status = failure)))));
+
+--------------END OF SPECIFICATIONS
+
+MODULE system_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        resume_from_here_in_subtree__c0 := -3;
+        c0.active := TRUE;
+        --START OF BLACKBOARD DEFINITIONS
+        --END OF BLACKBOARD DEFINITIONS
+    VAR
+        node_names : define_nodes;
+        checkReachable : checkReachable_module(checkReachable_v_stage_0);
+        move1to2 : success_DEFAULT_module();
+        activeManipulator : success_DEFAULT_module();
+        c2 : composite_sequence_without_memory_2(move1to2, activeManipulator);
+        move2to3 : _DEFAULT_module();
+        activeManipulator_2 : _DEFAULT_module();
+        c3 : composite_sequence_without_memory_2(move2to3, activeManipulator_2);
+        move3to4 : _DEFAULT_module();
+        activeManipulator_3 : _DEFAULT_module();
+        c4 : composite_sequence_without_memory_2(move3to4, activeManipulator_3);
+        move4to5 : _DEFAULT_module();
+        activeManipulator_4 : _DEFAULT_module();
+        c5 : composite_sequence_without_memory_2(move4to5, activeManipulator_4);
+        c1 : composite_selector_without_memory_4(c2, c3, c4, c5);
+        c0 : composite_sequence_without_memory_2(checkReachable, c1);
+        --START OF BLACKBOARD VARIABLES DECLARATION
+        checkReachable_v_stage_0 : boolean;
+        --END OF BLACKBOARD VARIABLES DECLARATION
+    ASSIGN
+        --START OF BLACKBOARD VARIABLES INITIALIZATION
+        init(checkReachable_v_stage_0) := {TRUE, FALSE};
+        --END OF BLACKBOARD VARIABLES INITIALIZATION
+        --START OF BLACKBOARD VARIABLES TRANSITION
+        next(checkReachable_v_stage_0) :=
+            case
+                !(c0.active) : checkReachable_v_stage_0;
+                TRUE : checkReachable_v_stage_0;
+            esac;
+        --END OF BLACKBOARD VARIABLES TRANSITION
+
+MODULE define_nodes
+    DEFINE
+        c0 := 0;
+        checkReachable := 1;
+        c1 := 2;
+        c2 := 3;
+        move1to2 := 4;
+        activeManipulator := 5;
+        c3 := 6;
+        move2to3 := 7;
+        activeManipulator_2 := 8;
+        c4 := 9;
+        move3to4 := 10;
+        activeManipulator_3 := 11;
+        c5 := 12;
+        move4to5 := 13;
+        activeManipulator_4 := 14;
+MODULE composite_selector_without_memory_4(child_0, child_1, child_2, child_3)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = failure) : child_0.internal_status;
+                !(child_1.internal_status = failure) : child_1.internal_status;
+                !(child_2.internal_status = failure) : child_2.internal_status;
+                !(child_3.internal_status = failure) : child_3.internal_status;
+                TRUE : failure;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = failure;
+        child_2.active := child_1.status = failure;
+        child_3.active := child_2.status = failure;
+MODULE composite_sequence_without_memory_2(child_0, child_1)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status :=
+            case
+                !(child_0.internal_status = success) : child_0.internal_status;
+                !(child_1.internal_status = success) : child_1.internal_status;
+                TRUE : success;
+            esac;
+        child_0.active := active;
+        child_1.active := child_0.status = success;
+MODULE checkReachable_module(checkReachable_v_stage_0)
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := (checkReachable_v_stage_0) ? success : failure;
+MODULE success_DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := active ? internal_status : invalid;
+        internal_status := success;
+MODULE _DEFAULT_module
+    CONSTANTS
+        success, failure, running, invalid;
+    DEFINE
+        status := invalid;
+        internal_status := invalid;

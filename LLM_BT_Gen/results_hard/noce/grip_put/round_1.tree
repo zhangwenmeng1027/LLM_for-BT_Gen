@@ -1,0 +1,49 @@
+configuration {} enumerations {} constants {}
+variables {}
+environment_update {}
+checks {}
+environment_checks {}
+actions {
+    action { openGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { moveFingerToTargetPosition
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToPosA
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 sequence
+        children {
+            openGripper {}
+            moveFingerToTargetPosition {}
+            closeGripper {}
+            goToPosA {}
+            putDown {}
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, openGripper), (failure, openGripper)))}
+    LTLSPEC {(globally, (implies, (success, openGripper), (next, (or, (success, moveFingerToTargetPosition), (failure, moveFingerToTargetPosition), (running, moveFingerToTargetPosition)))))}
+    LTLSPEC {(globally, (implies, (success, moveFingerToTargetPosition), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))}
+    LTLSPEC {(globally, (implies, (success, closeGripper), (next, (or, (success, goToPosA), (failure, goToPosA), (running, goToPosA)))))}
+    LTLSPEC {(globally, (implies, (success, goToPosA), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+    LTLSPEC {(globally, (implies, (success, putDown), (next, (or, (success, openGripper), (failure, openGripper)))))}
+}

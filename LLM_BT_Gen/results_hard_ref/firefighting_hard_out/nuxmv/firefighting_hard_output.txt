@@ -1,0 +1,123 @@
+*** This is NuSMV 2.7.1 (compiled on Mon Sep 29 16:07:59 2025)
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2025, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+*** This version of NuSMV is linked to the MiniSat SAT solver. 
+*** See http://minisat.se/MiniSat.html
+*** Copyright (c) 2003-2006, Niklas Een, Niklas Sorensson
+*** Copyright (c) 2007-2010, Niklas Sorensson
+
+-- specification  X (system.hasVictim.status = success | system.hasVictim.status = failure)  is true
+-- specification  G (system.hasVictim.status = success ->  X ((system.saveVictim.status = success | system.saveVictim.status = failure) | system.saveVictim.status = running))  is true
+-- specification  G (system.saveVictim.status = success ->  X (system.hasVictim.status = success | system.hasVictim.status = failure))  is true
+-- specification  G (system.hasVictim.status = failure ->  X (system.hasFire.status = success | system.hasFire.status = failure))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 1.1 <-
+    system.hasVictim_v_stage_0 = FALSE
+    system.hasFire_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.Rescue = 9
+    system.node_names.moveToOtherRoom = 8
+    system.node_names.c3 = 7
+    system.node_names.useExtinguisher = 6
+    system.node_names.hasFire = 5
+    system.node_names.c2 = 4
+    system.node_names.saveVictim = 3
+    system.node_names.hasVictim = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.hasVictim.internal_status = failure
+    system.hasVictim.status = failure
+    system.saveVictim.internal_status = success
+    system.saveVictim.status = invalid
+    system.saveVictim.active = FALSE
+    system.hasVictim.active = TRUE
+    system.c1.internal_status = failure
+    system.c1.status = failure
+    system.hasFire.internal_status = failure
+    system.hasFire.status = invalid
+    system.useExtinguisher.internal_status = success
+    system.useExtinguisher.status = invalid
+    system.useExtinguisher.active = FALSE
+    system.hasFire.active = FALSE
+    system.c2.internal_status = failure
+    system.c2.status = invalid
+    system.moveToOtherRoom.internal_status = success
+    system.moveToOtherRoom.status = invalid
+    system.Rescue.internal_status = success
+    system.Rescue.status = invalid
+    system.Rescue.active = FALSE
+    system.moveToOtherRoom.active = FALSE
+    system.c3.internal_status = success
+    system.c3.status = invalid
+    system.c3.active = FALSE
+    system.c2.active = FALSE
+    system.c1.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 1.2 <-
+-- specification  G (system.hasFire.status = success ->  X ((system.useExtinguisher.status = success | system.useExtinguisher.status = failure) | system.useExtinguisher.status = running))  is true
+-- specification  G (system.hasFire.status = failure ->  X ((system.moveToOtherRoom.status = success | system.moveToOtherRoom.status = failure) | system.moveToOtherRoom.status = running))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -- Loop starts here
+  -> State: 2.1 <-
+    system.hasVictim_v_stage_0 = TRUE
+    system.hasFire_v_stage_0 = FALSE
+    system.c0.active = TRUE
+    system.resume_from_here_in_subtree__c0 = -3
+    system.node_names.Rescue = 9
+    system.node_names.moveToOtherRoom = 8
+    system.node_names.c3 = 7
+    system.node_names.useExtinguisher = 6
+    system.node_names.hasFire = 5
+    system.node_names.c2 = 4
+    system.node_names.saveVictim = 3
+    system.node_names.hasVictim = 2
+    system.node_names.c1 = 1
+    system.node_names.c0 = 0
+    system.hasVictim.internal_status = success
+    system.hasVictim.status = success
+    system.saveVictim.internal_status = success
+    system.saveVictim.status = success
+    system.saveVictim.active = TRUE
+    system.hasVictim.active = TRUE
+    system.c1.internal_status = success
+    system.c1.status = success
+    system.hasFire.internal_status = failure
+    system.hasFire.status = failure
+    system.useExtinguisher.internal_status = success
+    system.useExtinguisher.status = invalid
+    system.useExtinguisher.active = FALSE
+    system.hasFire.active = TRUE
+    system.c2.internal_status = failure
+    system.c2.status = failure
+    system.moveToOtherRoom.internal_status = success
+    system.moveToOtherRoom.status = invalid
+    system.Rescue.internal_status = success
+    system.Rescue.status = invalid
+    system.Rescue.active = FALSE
+    system.moveToOtherRoom.active = FALSE
+    system.c3.internal_status = success
+    system.c3.status = invalid
+    system.c3.active = FALSE
+    system.c2.active = TRUE
+    system.c1.active = TRUE
+    system.c0.internal_status = failure
+    system.c0.status = failure
+  -> State: 2.2 <-
+-- specification  G (system.useExtinguisher.status = success ->  X (system.hasVictim.status = success | system.hasVictim.status = failure))  is true
+-- specification  G (system.moveToOtherRoom.status = success ->  X ((system.Rescue.status = success | system.Rescue.status = failure) | system.Rescue.status = running))  is true
+-- specification  G (system.Rescue.status = success ->  X (system.hasVictim.status = success | system.hasVictim.status = failure))  is true

@@ -1,0 +1,34 @@
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== Virtual environment (26k files, never upload) =====
+behaverify_venv/
+
+# ===== IDE =====
+.idea/
+
+# ===== PyInstaller intermediate build artifacts =====
+LLM_BT_Gen/build/
+
+# ===== Extracted dist folder (compressed BTRun-linux-x64.tar.gz is kept) =====
+LLM_BT_Gen/dist/BTRun-linux/
+LLM_BT_Gen/dist/BTRun/
+
+# ===== Nested behaverify repo: only local additions are uploaded =====
+# (upstream behaverify code already lives on its own GitHub; local clone stays on disk)
+behaverify/*
+!behaverify/Benchmark/
+!behaverify/LLM_BT_Gen/
+!behaverify/AGENTS.md
+behaverify/.git/
+
+# ===== Oversized generated scale-test data (>40MB each) =====
+behaverify/examples/ANSR_behaverify_A_star_net/scale/dense_fixed/49_800_1/ANSRtFilled_49_800_1.tree
+behaverify/examples/ANSR_behaverify_A_star_net/scale/dense_fixed/49_800_1/design_time/ANSRtFilled_49_800_1.tree
+behaverify/examples/ANSR_behaverify_A_star_net/scale/dense_fixed/49_800_1/design_time/tableFilled_49_800_1.txt
+
+# ===== OS junk =====
+Thumbs.db
+Desktop.ini

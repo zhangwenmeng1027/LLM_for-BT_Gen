@@ -1,0 +1,191 @@
+configuration {} 
+enumerations {} 
+constants {}
+variables {
+    variable { env isHungry_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env hasApple_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env hasApple_2_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env noFood_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isFull_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env empty_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env holdItem_v VAR BOOLEAN assign{result{True, False}} }
+    variable { env isNight_v VAR BOOLEAN assign{result{True, False}} }
+}
+environment_update {
+    variable_statement{ isHungry_v assign{result{isHungry_v}} }
+    variable_statement{ hasApple_v assign{result{hasApple_v}} }
+    variable_statement{ hasApple_2_v assign{result{hasApple_2_v}} }
+    variable_statement{ noFood_v assign{result{noFood_v}} }
+    variable_statement{ isFull_v assign{result{isFull_v}} }
+    variable_statement{ empty_v assign{result{empty_v}} }
+    variable_statement{ holdItem_v assign{result{holdItem_v}} }
+    variable_statement{ isNight_v assign{result{isNight_v}} }
+}
+checks {}
+environment_checks {
+    environment_check { isHungry arguments {} read_variables {isHungry_v} condition{isHungry_v} }
+    environment_check { hasApple arguments {} read_variables {hasApple_v} condition{hasApple_v} }
+    environment_check { hasApple_2 arguments {} read_variables {hasApple_2_v} condition{hasApple_2_v} }
+    environment_check { noFood arguments {} read_variables {noFood_v} condition{noFood_v} }
+    environment_check { isFull arguments {} read_variables {isFull_v} condition{isFull_v} }
+    environment_check { empty arguments {} read_variables {empty_v} condition{empty_v} }
+    environment_check { holdItem arguments {} read_variables {holdItem_v} condition{holdItem_v} }
+    environment_check { isNight arguments {} read_variables {isNight_v} condition{isNight_v} }
+}
+actions {
+    action { eatfood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { eatfood_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { findFood
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickApple
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { pickApple_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToStation_2
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { putDown
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { closeGripper
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+    action { goToKitchen
+        arguments {} local_variables{} read_variables{} write_variables{} initial_values{}
+        update { return_statement{result{success}} }
+    }
+}
+sub_trees {}
+tree {
+    composite {
+        c0 selector
+        children {
+            composite {
+                c1 sequence
+                children {
+                    isHungry {}
+                    composite {
+                        c2 selector
+                        children {
+                            composite {
+                                c3 sequence
+                                children {
+                                    hasApple {}
+                                    eatfood {}
+                                }
+                            }
+                            pickApple {}
+                        }
+                    }
+                }
+            }
+            composite {
+                c4 sequence
+                children {
+                    noFood {}
+                    findFood {}
+                    composite {
+                        c5 selector
+                        children {
+                            composite {
+                                c6 sequence
+                                children {
+                                    hasApple_2 {}
+                                    eatfood_2 {}
+                                }
+                            }
+                            pickApple_2 {}
+                        }
+                    }
+                }
+            }
+            composite {
+                c7 sequence
+                children {
+                    isFull {}
+                    composite {
+                        c8 selector
+                        children {
+                            composite {
+                                c9 sequence
+                                children {
+                                    empty {}
+                                    goToStation {}
+                                }
+                            }
+                            composite {
+                                c10 sequence
+                                children {
+                                    putDown {}
+                                    goToStation_2 {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            composite {
+                c11 sequence
+                children {
+                    holdItem {}
+                    closeGripper {}
+                }
+            }
+            composite {
+                c12 sequence
+                children {
+                    isNight {}
+                    goToKitchen {}
+                }
+            }
+        }
+    }
+}
+tick_prerequisite {True}
+specifications {
+    LTLSPEC {(next, (or, (success, isHungry), (failure, isHungry)))}
+    LTLSPEC {(globally, (implies, (success, isHungry), (next, (or, (success, hasApple), (failure, hasApple)))))}
+    LTLSPEC {(globally, (implies, (failure, isHungry), (next, (or, (success, noFood), (failure, noFood)))))}
+    LTLSPEC {(globally, (implies, (success, hasApple), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))}
+    LTLSPEC {(globally, (implies, (failure, hasApple), (next, (or, (success, pickApple), (failure, pickApple), (running, pickApple)))))}
+    LTLSPEC {(globally, (implies, (success, pickApple), (next, (or, (success, eatfood), (failure, eatfood), (running, eatfood)))))}
+    LTLSPEC {(globally, (implies, (success, eatfood), (next, (or, (success, isHungry), (failure, isHungry)))))}
+    LTLSPEC {(globally, (implies, (success, noFood), (next, (or, (success, findFood), (failure, findFood), (running, findFood)))))}
+    LTLSPEC {(globally, (implies, (failure, noFood), (next, (or, (success, isFull), (failure, isFull)))))}
+    LTLSPEC {(globally, (implies, (success, findFood), (next, (or, (success, hasApple_2), (failure, hasApple_2)))))}
+    LTLSPEC {(globally, (implies, (success, hasApple_2), (next, (or, (success, eatfood_2), (failure, eatfood_2), (running, eatfood_2)))))}
+    LTLSPEC {(globally, (implies, (failure, hasApple_2), (next, (or, (success, pickApple_2), (failure, pickApple_2), (running, pickApple_2)))))}
+    LTLSPEC {(globally, (implies, (success, pickApple_2), (next, (or, (success, eatfood_2), (failure, eatfood_2), (running, eatfood_2)))))}
+    LTLSPEC {(globally, (implies, (success, eatfood_2), (next, (or, (success, isHungry), (failure, isHungry)))))}
+    LTLSPEC {(globally, (implies, (success, isFull), (next, (or, (success, empty), (failure, empty)))))}
+    LTLSPEC {(globally, (implies, (failure, isFull), (next, (or, (success, holdItem), (failure, holdItem)))))}
+    LTLSPEC {(globally, (implies, (success, empty), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (failure, empty), (next, (or, (success, putDown), (failure, putDown), (running, putDown)))))}
+    LTLSPEC {(globally, (implies, (success, putDown), (next, (or, (success, goToStation), (failure, goToStation), (running, goToStation)))))}
+    LTLSPEC {(globally, (implies, (success, goToStation), (next, (or, (success, isHungry), (failure, isHungry)))))}
+    LTLSPEC {(globally, (implies, (success, holdItem), (next, (or, (success, closeGripper), (failure, closeGripper), (running, closeGripper)))))}
+    LTLSPEC {(globally, (implies, (failure, holdItem), (next, (or, (success, isNight), (failure, isNight)))))}
+    LTLSPEC {(globally, (implies, (success, closeGripper), (next, (or, (success, isHungry), (failure, isHungry)))))}
+    LTLSPEC {(globally, (implies, (success, isNight), (next, (or, (success, goToKitchen), (failure, goToKitchen), (running, goToKitchen)))))}
+    LTLSPEC {(globally, (implies, (failure, isNight), (next, (or, (success, isHungry), (failure, isHungry)))))}
+    LTLSPEC {(globally, (implies, (success, goToKitchen), (next, (or, (success, isHungry), (failure, isHungry)))))}
+}
